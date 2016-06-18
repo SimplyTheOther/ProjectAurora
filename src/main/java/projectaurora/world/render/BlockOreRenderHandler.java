@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.IBlockAccess;
 import projectaurora.core.ClientProxy;
+import projectaurora.world.WorldModule;
 import projectaurora.world.block.BlockOre;
 
 public class BlockOreRenderHandler implements ISimpleBlockRenderingHandler {
@@ -92,9 +93,7 @@ public class BlockOreRenderHandler implements ISimpleBlockRenderingHandler {
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId,
 			RenderBlocks renderer) {
-		System.out.println("Called renderWorldBlock");
 		if(this.getRenderId() != modelId) {
-			System.out.println("Returned false?");
 			return false;
 		}
 		
@@ -102,14 +101,13 @@ public class BlockOreRenderHandler implements ISimpleBlockRenderingHandler {
 			case 0:
 				if(Minecraft.getMinecraft().theWorld.provider.dimensionId == 1) {
 					renderer.renderStandardBlock(Blocks.end_stone, x, y, z);
-				} else if(Minecraft.getMinecraft().theWorld.provider.dimensionId == -1) {
+				} else if(Minecraft.getMinecraft().theWorld.provider.dimensionId == -1 || Minecraft.getMinecraft().theWorld.provider.dimensionId == WorldModule.vulcanID) {
 					renderer.renderStandardBlock(Blocks.netherrack, x, y, z);
 				} else {
 					renderer.renderStandardBlock(Blocks.stone, x, y, z);
 				}
 			default:
 				renderer.renderStandardBlock(block, x, y, z);
-				System.out.println("Rendered overlay");
 		}
 		return true;
 	}

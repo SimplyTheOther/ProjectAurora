@@ -49,6 +49,15 @@ public class AuroraBiome extends BiomeGenBase {
 	public static BiomeGenBase lavaRiver;
 	public static BiomeGenBase vulcan;
 	
+	public static final float deepOcean = -1.9F;
+	public static final float river = -0.5F;
+	public static final float deepSwamp = -0.3F;
+	public static final float shores = -0.025F;
+	public static final float shoresTop = 0.025F;
+	public static final float lowPlains = 0.075F;
+	public static final float highPlains = 0.4F;
+	public static final float hill = 1.5F;
+	
 	public AuroraBiomeDecorator decorator;
 	public int topBlockMeta = 0;
 	public int fillerBlockMeta = 0;
@@ -100,9 +109,9 @@ public class AuroraBiome extends BiomeGenBase {
 	}
 	
 	public static void initBiomes() {
-		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(-1F, 0.3F).setColor(1).setBiomeName("lavaOcean");
-		lavaRiver = new BiomeVulcanRiver(1).setTemperatureRainfall(2F, 0F).setMinMaxHeight(-0.5F, 0.0F).setColor(32234).setBiomeName("vulcanRiver");
-		vulcan = new BiomeVulcan(2).setTemperatureRainfall(2F, 0F).setMinMaxHeight(0F, 0.2F).setColor(0).setBiomeName("vulcanMain");
+		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(deepOcean, shoresTop).setColor(1).setBiomeName("lavaOcean");
+		lavaRiver = new BiomeVulcanRiver(1).setTemperatureRainfall(2F, 0F).setMinMaxHeight(river, river).setColor(32234).setBiomeName("vulcanRiver");
+		vulcan = new BiomeVulcan(2).setTemperatureRainfall(2F, 0F).setMinMaxHeight(shoresTop, highPlains).setColor(0).setBiomeName("vulcanMain");
 	}
 	
 	protected void addBiomeVariant(AuroraBiomeVariant variant) {

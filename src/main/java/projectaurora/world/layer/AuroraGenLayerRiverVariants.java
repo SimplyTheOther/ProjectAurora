@@ -46,7 +46,7 @@ public class AuroraGenLayerRiverVariants extends BaseGenLayer {
 		        		ints[l] = AuroraBiome.corruptRiver.biomeID;
 		        	}*/
 		        } else {
-		        	ints[l] = AuroraBiome.river.biomeID;
+		        	ints[l] = AuroraBiome.lavaRiver.biomeID;
 		        }
 	        } else {
 	        	ints[l] = biomeID;

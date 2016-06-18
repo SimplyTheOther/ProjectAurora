@@ -28,7 +28,6 @@ public class ItemTeleporter extends Item {
 		setHasSubtypes(true);
 		setMaxDamage(0);
 		setCreativeTab(Aurora.tabWorld);
-		System.out.println("Registered teleporter");
 	}
 	
 	@Override
@@ -38,14 +37,12 @@ public class ItemTeleporter extends Item {
 		
 		for(int i = 0; i < 2; i++) {
 			icons[i] = register.registerIcon(Reference.modid + ":teleporter" + i);
-			System.out.println("registerIcons called");
 		}
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int meta) {
-		System.out.println("getIconFromDamage called");
 		return icons[meta];
 	}
 	
@@ -55,21 +52,17 @@ public class ItemTeleporter extends Item {
 		switch(stack.getItemDamage()) {
 			case 0: {
 				name = "overworld";
-				System.out.println("overworld");
 				break;
 			}
 			case 1: {
 				name = "vulcan";
-				System.out.println("vulcan");
 				break;
 			}
 			default: {
 				name = "broken";
-				System.out.println("broken");
 				break;
 			}
 		}
-		System.out.println(super.getUnlocalizedName() + "." + name);
 		return super.getUnlocalizedName() + "." + name;
 	}
 	
@@ -78,7 +71,6 @@ public class ItemTeleporter extends Item {
 	public void getSubItems(Item item, CreativeTabs tab, List list) {
 		for(int i = 0; i < 2; i++) {
 			list.add(new ItemStack(item, 1, i));
-			System.out.println("getSubItems");
 		}
 	}
 	

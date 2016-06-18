@@ -42,10 +42,6 @@ public class GenLayerVulcan extends BaseGenLayer {
 				int l1 = (currentBiomeID & 3840) >> 8;
 				currentBiomeID &= -3841;
 				
-				System.out.println("currentBiomeID = " + currentBiomeID);
-				System.out.println("ocean biome" + AuroraBiome.lavaOcean);
-				System.out.println("ocean biome id = " + AuroraBiome.lavaOcean.biomeID);
-				
 				if(currentBiomeID == AuroraBiome.lavaOcean.biomeID) {
 					outputBiomeIDs[j1 + i1 * width] = currentBiomeID;
 				} else if(currentBiomeID == 1) {

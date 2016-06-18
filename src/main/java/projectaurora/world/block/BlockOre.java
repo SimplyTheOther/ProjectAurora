@@ -16,7 +16,7 @@ import projectaurora.core.Aurora;
 import projectaurora.core.ClientProxy;
 import projectaurora.core.Reference;
 
-public class BlockOre extends Block { //NOTE TO SELF: Quartz? Tin. Platinum? Cobalt? Ardite? Uranium/Yellorite? Iridium? Apatite? Zinc?
+public class BlockOre extends Block { // TODO NOTE TO SELF: Quartz? Tin. Platinum? Cobalt? Ardite? Uranium/Yellorite? Iridium? Apatite? Zinc?
 
 	@SideOnly(Side.CLIENT)
 	public IIcon[] icons = new IIcon[texNames.length];
