@@ -1,5 +1,7 @@
 package projectaurora.core;
 
+import java.util.Calendar;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -11,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
 import projectaurora.compat.Compat;
-import projectaurora.world.WorldTypeAurora;
+import projectaurora.world.WorldModule;
 
 @Mod(modid = Reference.modid, name = Reference.name, version = Reference.version, dependencies = "required-after:Forge;")
 public class Aurora {
@@ -22,19 +24,22 @@ public class Aurora {
 	@SidedProxy(clientSide = "projectaurora.core.ClientProxy", serverSide = "projectaurora.core.CommonProxy")
 	public static CommonProxy proxy;
 	
-	public static WorldType worldTypeAurora;
+	private static PacketHandler packetHandler;
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		worldTypeAurora = new WorldTypeAurora("aurora");
 		Content.preInit();
 		Compat.preInit();
+		WorldModule.preInit();
 	}
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		packetHandler = new PacketHandler();
+		
 		Content.init();
 		Compat.init();
+		WorldModule.init();
 		proxy.renderCrap();
 	}
 	
@@ -56,4 +61,56 @@ public class Aurora {
 			return new ItemStack(Content.ore, 1, 0);
 		}
 	};
+
+	public static boolean isChristmas() {
+		Calendar calendar = Calendar.getInstance();
+		
+		if(calendar.get(2) == 11) {
+			int date = calendar.get(5);
+			
+			if(date == 24 || date == 25 || date == 26) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isNewYears() {
+		Calendar calendar = Calendar.getInstance();
+		
+		if(calendar.get(2) == 0) {
+			int date = calendar.get(5);
+			
+			if(date == 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isAprilFools() {
+		Calendar calendar = Calendar.getInstance();
+		
+		if(calendar.get(2) == 3) {
+			int date = calendar.get(5);
+			
+			if(date == 1) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isHalloween() {
+		Calendar calendar = Calendar.getInstance();
+		
+		if(calendar.get(2) == 9) {
+			int date = calendar.get(5);
+			
+			if(date == 31) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
