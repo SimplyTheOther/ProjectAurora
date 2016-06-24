@@ -11,5 +11,9 @@ public class BiomeVulcan extends AuroraBiome {
 		this.topBlockMeta = 0;
 		this.fillerBlock = Blocks.netherrack; //TODO better filler than netherrack?
 		this.fillerBlockMeta = 0;
+		this.stoneBlock = Blocks.sandstone;//TODO for testing purposes, change to netherrack?
+		this.stoneBlockMeta = 0;
+		this.dominantFluidBlock = Blocks.lava;
+		this.dominantFluidMeta = 0;
 	}
 }

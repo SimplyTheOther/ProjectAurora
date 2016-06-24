@@ -63,6 +63,8 @@ public class AuroraBiome extends BiomeGenBase {
 	public int fillerBlockMeta = 0;
 	public Block stoneBlock = Blocks.stone;
 	public int stoneBlockMeta = 0;
+	public Block dominantFluidBlock = Blocks.water;
+	public int dominantFluidMeta = 0;
 	private List<AuroraBiomeVariant> biomeVariantsSmall = new ArrayList();
 	private List<AuroraBiomeVariant> biomeVariantsLarge = new ArrayList();
 	public float variantChance = 0.4F;
@@ -85,7 +87,7 @@ public class AuroraBiome extends BiomeGenBase {
 	
 	public BiomeTerrain biomeTerrain = new BiomeTerrain(this);
 	
-	private static Color waterColorNorth = new Color(602979);
+	private static Color waterColorNorth = new Color(602979); //TODO water colours?
 	private static Color waterColorSouth = new Color(4973293);
 	private static int waterLimitNorth = -40000;
 	private static int waterLimitSouth = 160000;
@@ -262,7 +264,7 @@ public class AuroraBiome extends BiomeGenBase {
 	    return this.banditEntityClass;
 	}*/
 
-	public void addBiomeF3Info(List info, World world, AuroraBiomeVariant variant, int i, int j, int k) {
+	public void addBiomeF3(List info, World world, AuroraBiomeVariant variant, int i, int j, int k) {
 	    int colorRGB = this.color & 0xFFFFFF;
 	    String colorString = Integer.toHexString(colorRGB);
 	    
@@ -307,6 +309,10 @@ public class AuroraBiome extends BiomeGenBase {
 	    byte topMeta = (byte)this.topBlockMeta;
 	    Block filler = this.fillerBlock;
 	    byte fillerMeta = (byte)this.fillerBlockMeta;
+	    Block stone = this.stoneBlock;//TODO fix stone glitch
+	    byte stoneMeta = (byte)this.stoneBlockMeta;
+	    Block fluid = this.dominantFluidBlock;
+	    byte fluidMeta = (byte)this.dominantFluidMeta;
 
 	    if (this.enablePodzol) {
 	    	boolean podzol = false;
@@ -363,9 +369,11 @@ public class AuroraBiome extends BiomeGenBase {
 	    			int index = xzIndex * ySize + j;
 	         
 	    			if ((blocks[index] == null) || (blocks[index].getMaterial() != Material.air)) {
-	    				if ((j != seaLevel - 1) || (blocks[index] == Blocks.water))
+	    				if ((j != seaLevel - 1) || (blocks[index] == fluid && meta[index] == fluidMeta))
 	    					break;
-	    				blocks[index] = Blocks.water; break;
+	    				blocks[index] = fluid;
+	    				meta[index] = fluidMeta;
+	    				break;
 	    			}
 	    		}
 	    	}
@@ -375,19 +383,20 @@ public class AuroraBiome extends BiomeGenBase {
 	    	int index = xzIndex * ySize + j;
 	      
 	    	if (j <= 0 + random.nextInt(5)) {
-	    		blocks[index] = Blocks.bedrock;
+	    		blocks[index] = Blocks.bedrock;//TODO replace bedrock?
 	    	} else {
 	    		Block block = blocks[index];
+	    		int metadata = meta[index];
 	        
 	    		if (block == Blocks.air) {
 	    			fillerDepth = -1;
-	    		} else if (block == Blocks.stone) {
+	    		} else if (block == stone/*Blocks.stone*/ && metadata == stoneMeta) {
 	    			if (fillerDepth == -1) {
 	    				if (fillerDepthBase <= 0) {
 	    					top = Blocks.air;
 	    					topMeta = 0;
-	    					filler = Blocks.stone;
-	    					fillerMeta = 0;
+	    					filler = stone/*Blocks.stone*/;
+	    					fillerMeta = stoneMeta;
 	    				} else if ((j >= seaLevel - 4) && (j <= seaLevel + 1)) {
 	    					top = this.topBlock;
 	    					topMeta = (byte)this.topBlockMeta;
@@ -396,8 +405,8 @@ public class AuroraBiome extends BiomeGenBase {
 	    				}
 
 	    				if ((j < seaLevel) && (top == Blocks.air)) {
-	    					top = Blocks.water;
-	    					topMeta = 0;
+	    					top = fluid;
+	    					topMeta = fluidMeta;
 	    				}
 
 	    				fillerDepth = fillerDepthBase;
@@ -414,7 +423,7 @@ public class AuroraBiome extends BiomeGenBase {
 	    				blocks[index] = filler;
 	    				meta[index] = fillerMeta;
 
-	    				if ((fillerDepth == 0) && (filler == Blocks.sand)) {
+	    				/*if ((fillerDepth == 0) && (filler == Blocks.sand)) {
 	    					if (fillerMeta == 1) {
 	    						//TODO Own desert fillers?
 	    						filler = Blocks.hardened_clay;
@@ -422,10 +431,11 @@ public class AuroraBiome extends BiomeGenBase {
 	    					} else {
 	    						filler = Blocks.sandstone;
 	    						fillerMeta = 0;
+	    						System.out.println("purposefully coded sandstone inclusion");
 	    					}
 	    					
 	    					fillerDepth = 10 + random.nextInt(4);
-	    				}
+	    				}*/
 	    				
 	    				/*if ((((this instanceof BiomeGenWhiteRock)) || ((this instanceof BiomeGenWhiteRock2)) || ((this instanceof BiomeGenWhiteRock3))) && (fillerDepth == 0) && (filler == this.fillerBlock)) {
 	    					fillerDepth = 8 + random.nextInt(3);

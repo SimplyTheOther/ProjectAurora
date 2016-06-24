@@ -24,6 +24,7 @@ import projectaurora.world.biome.AuroraBiomeVariant;
 import projectaurora.world.biome.AuroraBiomeVariantStorage;
 import projectaurora.world.gen.MapGenCaves;
 import projectaurora.world.gen.MapGenRavine;
+import projectaurora.world.BaseChunkManager;
 
 public class VulcanChunkProvider implements IChunkProvider {
 	private World worldObj;
@@ -126,7 +127,15 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    							//int tmp576_575 = (j2 + s); 
 	    							//j2 = tmp576_575; 
 	    							//blocks[tmp576_575] = Blocks.stone;
-	    							blocks[j2 += s] = Blocks.stone;//TODO Vulcan won't have stone as a base
+	    							if (((AuroraBiome)((VulcanWorldProvider)this.worldObj.provider).getBiomeGenForCoords(x, z)).stoneBlock == Blocks.sandstone) {
+	    								System.out.println("WTF thinks that this is sandstone");
+	    								blocks[j2 += s] = Blocks.stone;
+	    							} else {
+	    								//blocks[j2 += s] = ((AuroraBiome)this.worldObj.provider.getBiomeGenForCoords(x, z)).stoneBlock;
+	    								blocks[j2 += s] = ((AuroraBiome)((VulcanWorldProvider)this.worldObj.provider).getBiomeGenForCoords(x, z)).stoneBlock;
+	    								//blocks[j2 += s] = ((AuroraBiome)((BaseChunkManager)this.worldObj.getWorldChunkManager()).getBiomeGenAt(x, z)).stoneBlock;
+	    								//blocks[j2 += s] = ((AuroraBiome)this.worldObj.getBiomeGenForCoords(x, z)).stoneBlock;//TODO something with meta?
+	    							}
 	    						} else if (k1 * 8 + l1 <= 62) {
 	    							//int d11 = (j2 + s); 
 	    							//j2 = d11; 

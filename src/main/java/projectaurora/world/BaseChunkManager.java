@@ -5,6 +5,7 @@ import java.util.List;
 import cpw.mods.fml.common.FMLLog;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeCache;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.chunk.Chunk;
@@ -22,6 +23,17 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	protected static int LAYER_VARIANTS_SMALL = 2;
 	protected static int LAYER_VARIANTS_LAKES = 3;
 	protected World worldObj;
+	protected BiomeCache biomeCacheAurora;
+	
+	@Override
+	public BiomeGenBase getBiomeGenAt(int x, int z) {
+		return this.biomeCacheAurora.getBiomeGenAt(x, z);
+	}
+	
+	@Override
+	public void cleanupCache() {
+	    this.biomeCacheAurora.cleanupCache();
+	}
 	
 	public AuroraBiomeVariant[] getVariantsChunkGen(AuroraBiomeVariant[] variants, int i, int k, int xSize, int zSize, BiomeGenBase[] biomeSource) {
 	    return getBiomeVariantsFromLayers(variants, i, k, xSize, zSize, biomeSource, true);

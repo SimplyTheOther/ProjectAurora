@@ -25,12 +25,11 @@ import projectaurora.world.layer.AuroraGenLayerZoomVoronoi;
 import projectaurora.world.layer.BaseGenLayer;
 
 public class VulcanChunkManager extends BaseChunkManager {
-	private BiomeCache biomeCache;
 	private static int LAYER_BIOME = 0;
 	
 	public VulcanChunkManager(World world) {
 		this.worldObj = world;
-		this.biomeCache = new BiomeCache(this);
+		this.biomeCacheAurora = new BiomeCache(this);
 		setupGenLayers();
 	}
 
@@ -54,11 +53,6 @@ public class VulcanChunkManager extends BaseChunkManager {
 	    	this.worldLayers[i].initWorldGenSeed(seed);
 	    }
     }
-	
-	@Override
-	public BiomeGenBase getBiomeGenAt(int x, int z) {
-		return this.biomeCache.getBiomeGenAt(x, z);
-	}
 	
 	@Override
 	public float[] getRainfall(float[] arrayToReuse, int x, int z, int width, int length) {
@@ -120,7 +114,7 @@ public class VulcanChunkManager extends BaseChunkManager {
 	    }
 
 	    if ((useCache) && (xSize == 16) && (zSize == 16) && ((i & 0xF) == 0) && ((k & 0xF) == 0)) {
-	    	BiomeGenBase[] cachedBiomes = this.biomeCache.getCachedBiomes(i, k);
+	    	BiomeGenBase[] cachedBiomes = this.biomeCacheAurora.getCachedBiomes(i, k);
 	    	System.arraycopy(cachedBiomes, 0, biomes, 0, xSize * zSize);
 	    	return biomes;
 	    }
@@ -182,9 +176,4 @@ public class VulcanChunkManager extends BaseChunkManager {
 
 	    return chunkpos;
     }
-
-	@Override
-	public void cleanupCache() {
-	    this.biomeCache.cleanupCache();
-	}
 }
