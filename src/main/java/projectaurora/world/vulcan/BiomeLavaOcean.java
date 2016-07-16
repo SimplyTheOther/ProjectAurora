@@ -4,17 +4,18 @@ import java.util.Random;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import projectaurora.core.Content;
 import projectaurora.world.biome.AuroraBiome;
 
 public class BiomeLavaOcean extends AuroraBiome {
 
 	public BiomeLavaOcean(int id) {
 		super(id);
-		this.topBlock = Blocks.netherrack;//TODO better top block than netherrack?
+		this.topBlock = Content.dust;
 		this.topBlockMeta = 0;
-		this.fillerBlock = Blocks.netherrack; //TODO better filler than netherrack?
+		this.fillerBlock = Content.rock; 
 		this.fillerBlockMeta = 0;
-		this.stoneBlock = Blocks.sandstone;//TODO for testing purposes, change to netherrack?
+		this.stoneBlock = Blocks.stone;//TODO for testing purposes, change to netherrack?
 		this.stoneBlockMeta = 0;
 		this.dominantFluidBlock = Blocks.lava;
 		this.dominantFluidMeta = 0;

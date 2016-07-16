@@ -299,6 +299,11 @@ public class AuroraBiome extends BiomeGenBase {
 	public boolean getEnableRiver() {
 	    return true;
 	}
+	
+	@Override
+    public void genTerrainBlocks(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise) {
+        //this.generateBiomeTerrain(world, random, blocks, meta, i, k, stoneNoise, AuroraBiomeVariant.BOULDERS_RED);
+    }
 
 	public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, AuroraBiomeVariant variant) {
 	    int seaLevel = 63;
@@ -309,10 +314,6 @@ public class AuroraBiome extends BiomeGenBase {
 	    byte topMeta = (byte)this.topBlockMeta;
 	    Block filler = this.fillerBlock;
 	    byte fillerMeta = (byte)this.fillerBlockMeta;
-	    Block stone = this.stoneBlock;//TODO fix stone glitch
-	    byte stoneMeta = (byte)this.stoneBlockMeta;
-	    Block fluid = this.dominantFluidBlock;
-	    byte fluidMeta = (byte)this.dominantFluidMeta;
 
 	    if (this.enablePodzol) {
 	    	boolean podzol = false;
@@ -369,10 +370,10 @@ public class AuroraBiome extends BiomeGenBase {
 	    			int index = xzIndex * ySize + j;
 	         
 	    			if ((blocks[index] == null) || (blocks[index].getMaterial() != Material.air)) {
-	    				if ((j != seaLevel - 1) || (blocks[index] == fluid && meta[index] == fluidMeta))
+	    				if ((j != seaLevel - 1) || (blocks[index] == this.dominantFluidBlock && meta[index] == this.dominantFluidMeta))
 	    					break;
-	    				blocks[index] = fluid;
-	    				meta[index] = fluidMeta;
+	    				blocks[index] = this.dominantFluidBlock;
+	    				meta[index] = (byte)this.dominantFluidMeta;
 	    				break;
 	    			}
 	    		}
@@ -382,7 +383,7 @@ public class AuroraBiome extends BiomeGenBase {
 	    for (int j = ySize - 1; j >= 0; j--) {
 	    	int index = xzIndex * ySize + j;
 	      
-	    	if (j <= 0 + random.nextInt(5)) {
+	    	if (j <= 0 + random.nextInt(1)) {
 	    		blocks[index] = Blocks.bedrock;//TODO replace bedrock?
 	    	} else {
 	    		Block block = blocks[index];
@@ -390,13 +391,13 @@ public class AuroraBiome extends BiomeGenBase {
 	        
 	    		if (block == Blocks.air) {
 	    			fillerDepth = -1;
-	    		} else if (block == stone/*Blocks.stone*/ && metadata == stoneMeta) {
+	    		} else if (block == this.stoneBlock/*Blocks.stone*/ && metadata == this.stoneBlockMeta) {
 	    			if (fillerDepth == -1) {
 	    				if (fillerDepthBase <= 0) {
 	    					top = Blocks.air;
 	    					topMeta = 0;
-	    					filler = stone/*Blocks.stone*/;
-	    					fillerMeta = stoneMeta;
+	    					filler = this.stoneBlock/*Blocks.stone*/;
+	    					fillerMeta = (byte)this.stoneBlockMeta;
 	    				} else if ((j >= seaLevel - 4) && (j <= seaLevel + 1)) {
 	    					top = this.topBlock;
 	    					topMeta = (byte)this.topBlockMeta;
@@ -405,8 +406,8 @@ public class AuroraBiome extends BiomeGenBase {
 	    				}
 
 	    				if ((j < seaLevel) && (top == Blocks.air)) {
-	    					top = fluid;
-	    					topMeta = fluidMeta;
+	    					top = this.dominantFluidBlock;
+	    					topMeta = (byte)this.dominantFluidMeta;
 	    				}
 
 	    				fillerDepth = fillerDepthBase;

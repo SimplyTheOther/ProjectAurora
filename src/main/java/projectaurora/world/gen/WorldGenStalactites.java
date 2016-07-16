@@ -17,9 +17,9 @@ public class WorldGenStalactites extends WorldGenerator {
 			
 			if(world.isAirBlock(i1, j1, k1)) {
 				if(world.getBlock(i1, j1 + 1, k1) == Blocks.stone) {
-					world.setBlock(i1, j1, k1, Blocks.furnace, 0, 2);//TODO placeholder stalactites
+					world.setBlock(i1, j1, k1, Blocks.brick_block, 0, 2);//TODO placeholder stalactites
 				} else if(world.getBlock(i1, j1 - 1, k1) == Blocks.stone) {
-					world.setBlock(i1, j1, k1, Blocks.lit_furnace, 0, 2);
+					world.setBlock(i1, j1, k1, Blocks.stonebrick, 0, 2);
 				}
 			}
 		}

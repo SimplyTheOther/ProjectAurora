@@ -27,6 +27,8 @@ import projectaurora.world.gen.MapGenRavine;
 import projectaurora.world.BaseChunkManager;
 
 public class VulcanChunkProvider implements IChunkProvider {
+	//TODO could be: (most likely) Kepler-10b, or less likely COROT-7b, or Kepler-78b
+	//TODO note: if Kepler-10b, 1833K (~1560C), above iron melting point
 	private World worldObj;
 	private Random rand;
 	private BiomeGenBase[] biomesForGeneration;
@@ -127,14 +129,10 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    							//int tmp576_575 = (j2 + s); 
 	    							//j2 = tmp576_575; 
 	    							//blocks[tmp576_575] = Blocks.stone;
-	    							if (((AuroraBiome)((VulcanWorldProvider)this.worldObj.provider).getBiomeGenForCoords(x, z)).stoneBlock == Blocks.sandstone) {
-	    								System.out.println("WTF thinks that this is sandstone");
-	    								blocks[j2 += s] = Blocks.stone;
-	    							} else {
-	    								//blocks[j2 += s] = ((AuroraBiome)this.worldObj.provider.getBiomeGenForCoords(x, z)).stoneBlock;
-	    								blocks[j2 += s] = ((AuroraBiome)((VulcanWorldProvider)this.worldObj.provider).getBiomeGenForCoords(x, z)).stoneBlock;
-	    								//blocks[j2 += s] = ((AuroraBiome)((BaseChunkManager)this.worldObj.getWorldChunkManager()).getBiomeGenAt(x, z)).stoneBlock;
-	    								//blocks[j2 += s] = ((AuroraBiome)this.worldObj.getBiomeGenForCoords(x, z)).stoneBlock;//TODO something with meta?
+	    							BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
+	    							
+	    							if(biome instanceof AuroraBiome) {
+    									blocks[j2 += s] = ((AuroraBiome)biome).stoneBlock;//TODO something with meta?
 	    							}
 	    						} else if (k1 * 8 + l1 <= 62) {
 	    							//int d11 = (j2 + s); 
@@ -175,11 +173,11 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    	xzNoiseScale = noiseCentralBiome.biomeTerrain.getXZScale();
 	    }
 
-	    this.noise5 = this.noiseGen5.generateNoiseOctaves(this.noise5, i, k, xSize, zSize, 1.121D, 1.121D, 0.5D);
-	    this.noise6 = this.noiseGen6.generateNoiseOctaves(this.noise6, i, k, xSize, zSize, 200.0D, 200.0D, 0.5D);
-	    this.noise3 = this.noiseGen3.generateNoiseOctaves(this.noise3, i, j, k, xSize, ySize, zSize, 684.41200000000003D / xzNoiseScale, 0.0002D, 684.41200000000003D / xzNoiseScale);
 	    this.noise1 = this.noiseGen1.generateNoiseOctaves(this.noise1, i, j, k, xSize, ySize, zSize, 684.41200000000003D, 1.0D, 684.41200000000003D);
 	    this.noise2 = this.noiseGen2.generateNoiseOctaves(this.noise2, i, j, k, xSize, ySize, zSize, 684.41200000000003D, 1.0D, 684.41200000000003D);
+	    this.noise3 = this.noiseGen3.generateNoiseOctaves(this.noise3, i, j, k, xSize, ySize, zSize, 684.41200000000003D / xzNoiseScale, 0.0002D, 684.41200000000003D / xzNoiseScale);
+	    this.noise5 = this.noiseGen5.generateNoiseOctaves(this.noise5, i, k, xSize, zSize, 1.121D, 1.121D, 0.5D);
+	    this.noise6 = this.noiseGen6.generateNoiseOctaves(this.noise6, i, k, xSize, zSize, 200.0D, 200.0D, 0.5D);
 
 	    int noiseIndexXZ = 0;
 	    int noiseIndex = 0;
