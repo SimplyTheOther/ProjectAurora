@@ -12,10 +12,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.MinecraftForge;
 import projectaurora.compat.Compat;
 import projectaurora.world.WorldModule;
 
-@Mod(modid = Reference.modid, name = Reference.name, version = Reference.version, dependencies = "required-after:Forge;")
+@Mod(modid = Reference.modid, name = Reference.name, version = Reference.version, dependencies = "required-after:Forge;after:TConstruct;after:ImmersiveEngineering")
 public class Aurora {
 
 	@Mod.Instance(Reference.modid)
@@ -36,6 +37,7 @@ public class Aurora {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		packetHandler = new PacketHandler();
+		MinecraftForge.EVENT_BUS.register(new EventHandler());
 		
 		Content.init();
 		Compat.init();

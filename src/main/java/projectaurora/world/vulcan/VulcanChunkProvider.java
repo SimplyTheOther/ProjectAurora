@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
@@ -19,6 +20,7 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.feature.WorldGenLakes;
+import net.minecraftforge.fluids.FluidRegistry;
 import projectaurora.world.biome.AuroraBiome;
 import projectaurora.world.biome.AuroraBiomeVariant;
 import projectaurora.world.biome.AuroraBiomeVariantStorage;
@@ -466,7 +468,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    k += 8;
 	    l += 8;
 
-	    for (int i1 = 0; i1 < 16; i1++) {
+	    for (int i1 = 0; i1 < 16; i1++) {//TODO change icing to melting
 	    	for (int k1 = 0; k1 < 16; k1++) {
 	    		int j1 = this.worldObj.getPrecipitationHeight(k + i1, l + k1);
 
@@ -515,7 +517,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 
 	@Override
 	public ChunkPosition func_147416_a(World p_147416_1_, String p_147416_2_, int p_147416_3_, int p_147416_4_,
-			int p_147416_5_) {
+			int p_147416_5_) {//no idea what this does, but apparently it's 'find stronghold'
 		// TODO Auto-generated method stub
 		return null;
 	}
