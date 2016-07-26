@@ -15,16 +15,21 @@ public class EventHandler {
 	public void blockPlace(PlaceEvent event) {
 		if(event.world.provider.dimensionId == WorldModule.vulcanID) {
 			System.out.println("event.block=" + event.block + ", event.meta=" + event.blockMetadata);
+			System.out.println("event.block=" + event.block + ", event.blockSnapshot.meta=" + event.blockSnapshot.meta);
 			
 			if(event.block == Blocks.iron_block && event.blockMetadata == 0) {
 				if(FluidRegistry.getFluid("iron.molten") != null) {
 					event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("iron.molten").getBlock());
+				} else {
+					event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 				}
 			}
 			
 			if(event.block == Blocks.gold_block && event.blockMetadata == 0) {
 				if(FluidRegistry.getFluid("gold.molten") != null) {
 					event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("gold.molten").getBlock());
+				} else {
+					event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 				}
 			}
 			
@@ -36,6 +41,8 @@ public class EventHandler {
 							System.out.println("event.block=" + event.block + ", event.meta=" + event.blockMetadata);
 							if(FluidRegistry.getFluid("tin.molten") != null) {
 								event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("tin.molten").getBlock());
+							} else {
+								event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 							}
 						}
 					}
@@ -50,6 +57,8 @@ public class EventHandler {
 							System.out.println("event.block=" + event.block + ", event.meta=" + event.blockMetadata);
 							if(FluidRegistry.getFluid("lead.molten") != null) {
 								event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("lead.molten").getBlock());
+							} else {
+								event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 							}
 						}
 					}
@@ -64,6 +73,8 @@ public class EventHandler {
 							System.out.println("event.block=" + event.block + ", event.meta=" + event.blockMetadata);
 							if(FluidRegistry.getFluid("aluminium.molten") != null) {
 								event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("aluminium.molten").getBlock());
+							} else {
+								event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 							}
 						}
 					}
@@ -78,6 +89,8 @@ public class EventHandler {
 							System.out.println("event.block=" + event.block + ", event.meta=" + event.blockMetadata);
 							if(FluidRegistry.getFluid("silver.molten") != null) {
 								event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("silver.molten").getBlock());
+							} else {
+								event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 							}
 						}
 					}
@@ -92,6 +105,8 @@ public class EventHandler {
 							System.out.println("event.block=" + event.block + ", event.meta=" + event.blockMetadata);
 							if(FluidRegistry.getFluid("copper.molten") != null) {
 								event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("copper.molten").getBlock());
+							} else {
+								event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 							}
 						}
 					}
@@ -106,6 +121,8 @@ public class EventHandler {
 							System.out.println("event.block=" + event.block + ", event.meta=" + event.blockMetadata);
 							if(FluidRegistry.getFluid("nickel.molten") != null) {
 								event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("nickel.molten").getBlock());
+							} else {
+								event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 							}
 						}
 					}
