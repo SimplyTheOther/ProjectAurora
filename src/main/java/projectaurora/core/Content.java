@@ -19,16 +19,16 @@ public class Content {
 	public static Item teleporter;
 
 	public static void preInit() {
-		ore = new BlockOre().setBlockName("oreAurora");
+		ore = new BlockOre().setBlockName(Reference.modid + ".ore");
 		metaRegister(ore, ItemBlockOre.class);
 		
-		rock = new BlockRock().setBlockName("rockAurora");
+		rock = new BlockRock().setBlockName(Reference.modid + ".rock");
 		metaRegister(rock, ItemBlockRock.class);
 		
-		dust = new BlockSoft().setBlockName("dustAurora");
+		dust = new BlockSoft().setBlockName(Reference.modid + ".dust");
 		metaRegister(dust, ItemBlockSoft.class);
 		
-		teleporter = new ItemTeleporter().setUnlocalizedName("auroraTeleporter");
+		teleporter = new ItemTeleporter().setUnlocalizedName(Reference.modid + ".teleporter");
 		GameRegistry.registerItem(teleporter, Reference.modid + (teleporter.getUnlocalizedName().substring(5)));
 	}
 

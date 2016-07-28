@@ -468,17 +468,17 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    k += 8;
 	    l += 8;
 
-	    for (int i1 = 0; i1 < 16; i1++) {//TODO change icing to melting
+	    for (int i1 = 0; i1 < 16; i1++) {
 	    	for (int k1 = 0; k1 < 16; k1++) {
 	    		int j1 = this.worldObj.getPrecipitationHeight(k + i1, l + k1);
 
-	    		if (this.worldObj.isBlockFreezable(i1 + k, j1 - 1, k1 + l)) {
+	    		/*if (this.worldObj.isBlockFreezable(i1 + k, j1 - 1, k1 + l)) {
 	    			this.worldObj.setBlock(i1 + k, j1 - 1, k1 + l, Blocks.ice, 0, 2);
 	    		}
 
 	    		if (this.worldObj.func_147478_e(i1 + k, j1, k1 + l, true)) {
 	    			this.worldObj.setBlock(i1 + k, j1, k1 + l, Blocks.snow_layer, 0, 2);
-	    		}
+	    		}*/
 	    	}
 	    }
 	    BlockSand.fallInstantly = false;

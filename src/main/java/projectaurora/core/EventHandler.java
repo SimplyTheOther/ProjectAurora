@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import projectaurora.world.WorldModule;
 
-public class EventHandler {
+public class EventHandler {//TODO make the correct fluid
 	
 	@SubscribeEvent
 	public void blockPlace(PlaceEvent event) {

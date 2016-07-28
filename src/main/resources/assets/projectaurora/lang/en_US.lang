@@ -1,0 +1,25 @@
+
+itemGroup.projectaurora=Project Aurora
+
+item.projectaurora.teleporter.overworld.name=Overworld Teleporter
+item.projectaurora.teleporter.vulcan.name=Vulcan Teleporter
+item.projectaurora.teleporter.leporidae.name=Leporidae Teleporter
+item.projectaurora.teleporter.broken.name=You Stuffed Up The Teleporter
+
+tile.projectaurora.ore.oreCoalAurora.name=Bituminous Coal
+tile.projectaurora.ore.oreIronAurora.name=Limonite
+tile.projectaurora.ore.oreGoldAurora.name=Calaverite
+tile.projectaurora.ore.oreLapisAurora.name=Lapis Lazuli
+tile.projectaurora.ore.oreDiamondAurora.name=Diamond
+tile.projectaurora.ore.oreEmeraldAurora.name=Emerald
+tile.projectaurora.ore.oreCopperAurora.name=Chalcopyrite
+tile.projectaurora.ore.oreAluminiumAurora.name=Gibbsite
+tile.projectaurora.ore.oreLeadAurora.name=Galena
+tile.projectaurora.ore.oreSilverAurora.name=Argentite
+tile.projectaurora.ore.oreNickelAurora.name=Millerite
+tile.projectaurora.ore.oreTinAurora.name=Cassiterite
+tile.projectaurora.ore.oreQuartzAurora.name=Quartz
+
+tile.projectaurora.rock.rockBasaltAurora.name=Basalt
+
+tile.projectaurora.dust.dustAshAurora.name=Ash
