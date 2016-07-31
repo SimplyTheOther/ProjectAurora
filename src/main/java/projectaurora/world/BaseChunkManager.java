@@ -160,7 +160,7 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	    }
 
 	    if (!this.worldObj.isRemote) {
-	      return getBiomeVariants(null, i, k, 1, 1)[0];
+	    	return getBiomeVariants(null, i, k, 1, 1)[0];
 	    }
 
 	    return AuroraBiomeVariant.STANDARD;

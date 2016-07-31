@@ -41,8 +41,8 @@ public class AuroraBiomeVariant {//TODO readd all biome variants back
   	public static AuroraBiomeVariant LAKE = new AuroraBiomeVariant(21, "lake", VariantScale.NONE).setHeight(-2.1F, 0.05F).setAbsoluteHeight();
   //	public static AuroraBiomeVariant DENSEFOREST_LEBETHRON = new AuroraBiomeVariant(22, "denseForest_lebethron", VariantScale.LARGE).setTemperatureRainfall(0.1F, 0.3F).setHeight(0.5F, 2.0F).setTrees(8.0F).setGrass(2.0F).addTreeTypes(0.5F, new Object[] { AuroraTreeType.LEBETHRON_LARGE, Integer.valueOf(600), AuroraTreeType.LEBETHRON_HUGE, Integer.valueOf(100) });
   	public static AuroraBiomeVariant BOULDERS_RED = new AuroraBiomeVariant(23, "boulders_red", VariantScale.LARGE).setBoulders(new WorldGenBoulder(/*Content.redSandstone*/Blocks.bookshelf, 1, 1, 3), 2, 4);
-  //	public static AuroraBiomeVariant BOULDERS_ROHAN = new AuroraBiomeVariant(24, "boulders_rohan", VariantScale.LARGE).setBoulders(new WorldGenBoulder(/*Content.rock*/Blocks.coal_block, 1, 1, 3), 2, 4);
-  //	public static AuroraBiomeVariant JUNGLE_DENSE = new AuroraBiomeVariant(25, "jungle_dense", VariantScale.LARGE).setTemperatureRainfall(0.1F, 0.1F).setTrees(2.0F).addTreeTypes(0.6F, new Object[] { AuroraTreeType.JUNGLE_FANGORN, Integer.valueOf(1000), AuroraTreeType.MAHOGANY_FANGORN, Integer.valueOf(500) });
+  //	public static AuroraBiomeVariant BOULDERS_BROWN = new AuroraBiomeVariant(24, "boulders_rohan", VariantScale.LARGE).setBoulders(new WorldGenBoulder(/*Content.rock*/Blocks.coal_block, 1, 1, 3), 2, 4);
+  //	public static AuroraBiomeVariant JUNGLE_DENSE = new AuroraBiomeVariant(25, "jungle_dense", VariantScale.LARGE).setTemperatureRainfall(0.1F, 0.1F).setTrees(2.0F).addTreeTypes(0.6F, new Object[] { AuroraTreeType.JUNGLE, Integer.valueOf(1000), AuroraTreeType.MAHOGANY, Integer.valueOf(500) });
   	public static AuroraBiomeVariant VINEYARD = new AuroraBiomeVariant(26, "vineyard", VariantScale.SMALL).setHeight(0.0F, 0.5F).setTrees(0.0F).setGrass(0.5F).setFlowers(0.0F);
 
   	public static AuroraBiomeVariant[] SET_NORMAL = { FLOWERS, FOREST, FOREST_LIGHT, STEPPE, STEPPE_BARREN, HILLS, HILLS_FOREST };

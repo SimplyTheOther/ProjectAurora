@@ -156,12 +156,12 @@ public class AuroraBiome extends BiomeGenBase {
 	    return (this.temperature > 0.3F) && (this.temperature < 1.0F);
 	}
 
-	public AuroraBiome setMinMaxHeight(float f, float f1) {
-	    this.heightBaseParameter = f;
-	    f -= 2.0F;
-	    f += 0.2F;
-	    this.rootHeight = f;
-	    this.heightVariation = (f1 / 2.0F);
+	public AuroraBiome setMinMaxHeight(float min, float max) {
+	    this.heightBaseParameter = min;
+	    min -= 2.0F;
+	    min += 0.2F;
+	    this.rootHeight = min;
+	    this.heightVariation = (max / 2.0F);
 	    return this;
 	}
 
@@ -272,7 +272,7 @@ public class AuroraBiome extends BiomeGenBase {
 	      colorString = "0" + colorString;
 	    }
 
-	    info.add("Aurora biome: " + getBiomeDisplayName() + ", ID: " + this.biomeID + ", c: #" + colorString);
+	    info.add("Biome: " + getBiomeDisplayName() + ", ID: " + this.biomeID + ", c: #" + colorString);
 	    info.add("Variant: " + variant.variantName + ", loaded: " + AuroraBiomeVariantStorage.getSize(world));
   	}
 

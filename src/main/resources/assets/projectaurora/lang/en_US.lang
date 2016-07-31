@@ -23,3 +23,6 @@ tile.projectaurora.ore.oreQuartzAurora.name=Quartz
 tile.projectaurora.rock.rockBasaltAurora.name=Basalt
 
 tile.projectaurora.dust.dustAshAurora.name=Ash
+
+aurora.biome.lavaOcean.name=Lava Ocean
+aurora.biome.vulcanMain.name=Vulcan
