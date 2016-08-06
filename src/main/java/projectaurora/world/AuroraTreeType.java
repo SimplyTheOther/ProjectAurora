@@ -4,6 +4,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenSwamp;
+import projectaurora.core.Content;
+import projectaurora.world.gen.WorldGenAlgae;
 import projectaurora.world.gen.WorldGenBigTree;
 import projectaurora.world.gen.WorldGenDeadTree;
 import projectaurora.world.gen.WorldGenDesertTree;
@@ -46,8 +48,15 @@ public enum AuroraTreeType {
 		public WorldGenAbstractTree createTree(boolean flag) {
 			return new WorldGenShrub(Blocks.log, 0, Blocks.leaves, 0);
 		}
+	}),
+	GLOWSTONE(new ITreeFactory() {
+		public WorldGenAbstractTree createTree(boolean flag) {
+			return new WorldGenAlgae(flag, Content.plant, 0, Blocks.lava, 0);
+		}
 	}),//TODO more custom trees
 	NULL((ITreeFactory)null);
+	
+	public static AuroraTreeType[] SET_OAK = { OAK, OAK_LARGE, OAK_HUGE, OAK_SWAMP, OAK_DEAD, OAK_DESERT, OAK_SHRUB };
 	
 	private ITreeFactory treeFactory;
 	

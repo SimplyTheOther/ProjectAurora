@@ -148,8 +148,8 @@ public class AuroraBiome extends BiomeGenBase {
 	}
 
 	@Override
-	public AuroraBiome setTemperatureRainfall(float f, float f1) {
-	    return (AuroraBiome)super.setTemperatureRainfall(f, f1);
+	public AuroraBiome setTemperatureRainfall(float min, float max) {
+	    return (AuroraBiome)super.setTemperatureRainfall(min, max);
 	}
 
 	public boolean hasSeasonalGrass() {
@@ -301,8 +301,8 @@ public class AuroraBiome extends BiomeGenBase {
 	}
 	
 	@Override
-    public void genTerrainBlocks(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise) {
-        //this.generateBiomeTerrain(world, random, blocks, meta, i, k, stoneNoise, AuroraBiomeVariant.BOULDERS_RED);
+    public void genTerrainBlocks(World world, Random random, Block[] blocks, byte[] meta, int x, int z, double stoneNoise) {
+        //this.generateBiomeTerrain(world, random, blocks, meta, x, z, stoneNoise, AuroraBiomeVariant.BOULDERS_RED);
     }
 
 	public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, AuroraBiomeVariant variant) {
@@ -517,19 +517,18 @@ public class AuroraBiome extends BiomeGenBase {
 	    return 1.0F;
 	}
 
-	public boolean canSpawnHostilesInDay() {
-	    return true;
-	}
-
+	/**
+	 * Means get random tree?
+	 */
 	@Override
 	public final WorldGenAbstractTree func_150567_a(Random random) {
 	    AuroraTreeType tree = this.decorator.getRandomTree(random);
 	    return tree.create(false);//TODO change random tree based on planet?
 	}
 
-	public final WorldGenAbstractTree getTreeGen(World world, Random random, int i, int j, int k) {
+	public final WorldGenAbstractTree getTreeGen(World world, Random random, int x, int y, int z) {
 	    BaseChunkManager chunkManager = (BaseChunkManager)world.getWorldChunkManager();
-	    AuroraBiomeVariant variant = chunkManager.getBiomeVariantAt(i, k);
+	    AuroraBiomeVariant variant = chunkManager.getBiomeVariantAt(x, z);
 	    AuroraTreeType tree = this.decorator.getRandomTreeForVariant(random, variant);
 	    return tree.create(false);
 	}

@@ -5,9 +5,11 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import projectaurora.world.block.BlockOre;
+import projectaurora.world.block.BlockPlant;
 import projectaurora.world.block.BlockRock;
 import projectaurora.world.block.BlockSoft;
 import projectaurora.world.block.ItemBlockOre;
+import projectaurora.world.block.ItemBlockPlant;
 import projectaurora.world.block.ItemBlockRock;
 import projectaurora.world.block.ItemBlockSoft;
 import projectaurora.world.item.ItemTeleporter;
@@ -16,6 +18,7 @@ public class Content {
 	public static Block ore;
 	public static Block rock;
 	public static Block dust;
+	public static Block plant;
 	public static Item teleporter;
 
 	public static void preInit() {
@@ -27,6 +30,9 @@ public class Content {
 		
 		dust = new BlockSoft().setBlockName(Reference.modid + ".dust");
 		metaRegister(dust, ItemBlockSoft.class);
+		
+		plant = new BlockPlant().setBlockName(Reference.modid + ".plant");
+		metaRegister(plant, ItemBlockPlant.class);
 		
 		teleporter = new ItemTeleporter().setUnlocalizedName(Reference.modid + ".teleporter");
 		GameRegistry.registerItem(teleporter, Reference.modid + (teleporter.getUnlocalizedName().substring(5)));
