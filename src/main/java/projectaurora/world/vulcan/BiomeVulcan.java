@@ -2,7 +2,9 @@ package projectaurora.world.vulcan;
 
 import net.minecraft.init.Blocks;
 import projectaurora.core.Content;
+import projectaurora.world.AuroraTreeType;
 import projectaurora.world.biome.AuroraBiome;
+import projectaurora.world.biome.AuroraBiomeVariant;
 
 public class BiomeVulcan extends AuroraBiome {
 
@@ -16,5 +18,9 @@ public class BiomeVulcan extends AuroraBiome {
 		this.stoneBlockMeta = 0;
 		this.dominantFluidBlock = Blocks.lava;
 		this.dominantFluidMeta = 0;
+		
+		this.addBiomeVariantSet(AuroraBiomeVariant.SET_NORMAL);
+		
+		this.decorator.addTree(AuroraTreeType.GLOWSTONE, 200);
 	}
 }

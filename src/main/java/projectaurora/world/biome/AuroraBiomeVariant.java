@@ -34,8 +34,8 @@ public class AuroraBiomeVariant {//TODO readd all biome variants back
   	public static AuroraBiomeVariant SWAMP_UPLAND = new AuroraBiomeVariant(14, "swampUpland", VariantScale.SMALL).setHeight(0.12F, 1.0F).setTrees(6.0F).setGrass(5.0F);
   	public static AuroraBiomeVariant LAKE = new AuroraBiomeVariant(15, "lake", VariantScale.NONE).setHeight(-2.1F, 0.05F).setAbsoluteHeight();
   	public static AuroraBiomeVariant BOULDERS = new AuroraBiomeVariant(16, "boulders", VariantScale.LARGE).setBoulders(new WorldGenBoulder(/*Content.redSandstone*/Blocks.bookshelf, 1, 1, 3), 2, 4);
-  	public static AuroraBiomeVariant VINEYARD = new AuroraBiomeVariant(17, "vineyard", VariantScale.SMALL).setHeight(0.0F, 0.5F).setTrees(0.0F).setGrass(0.5F).setFlowers(0.0F);
-
+	public static AuroraBiomeVariant ISLAND = new AuroraBiomeVariant(17, "island", VariantScale.ALL).setHeight(0.12F, 1F);
+  	
   	public static AuroraBiomeVariant[] SET_NORMAL = { FLOWERS, FOREST, FOREST_LIGHT, STEPPE, STEPPE_BARREN, HILLS, HILLS_FOREST, DENSEFOREST, DEADFOREST, SHRUBLAND };
   	public static AuroraBiomeVariant[] SET_FOREST = { FLOWERS, HILLS, CLEARING };
   	public static AuroraBiomeVariant[] SET_MOUNTAINS = { FOREST, FOREST_LIGHT };

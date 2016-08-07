@@ -5,7 +5,9 @@ import java.util.Random;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import projectaurora.core.Content;
+import projectaurora.world.AuroraTreeType;
 import projectaurora.world.biome.AuroraBiome;
+import projectaurora.world.biome.AuroraBiomeVariant;
 
 public class BiomeLavaOcean extends AuroraBiome {
 
@@ -27,7 +29,10 @@ public class BiomeLavaOcean extends AuroraBiome {
 		
 		//TODO this.decorator.WHATEVERPerChunk = 
 		
-		//TODO this.decorator.addTree(AuroraTreeType.WHATEVER, whatever)
+		this.addBiomeVariant(AuroraBiomeVariant.STANDARD);
+		this.addBiomeVariant(AuroraBiomeVariant.ISLAND);
+		
+		this.decorator.addTree(AuroraTreeType.GLOWSTONE, 10);
 		
 		this.setBanditChance(0);
 	}
