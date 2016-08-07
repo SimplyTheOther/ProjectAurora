@@ -28,3 +28,6 @@ tile.projectaurora.plant.plantGlowstoneAurora.name=Glow Algae
 
 aurora.biome.lavaOcean.name=Lava Ocean
 aurora.biome.vulcanMain.name=Vulcan
+
+aurora.world.vulcan.enter=<Computer> Entering Planet 10b, Designation Vulcan
+aurora.world.vulcan.exit=<Computer> Leaving Planet 10b, Designation Vulcan

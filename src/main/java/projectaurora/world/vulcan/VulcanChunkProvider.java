@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.IProgressUpdate;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkPosition;
@@ -20,13 +19,11 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.feature.WorldGenLakes;
-import net.minecraftforge.fluids.FluidRegistry;
 import projectaurora.world.biome.AuroraBiome;
 import projectaurora.world.biome.AuroraBiomeVariant;
 import projectaurora.world.biome.AuroraBiomeVariantStorage;
 import projectaurora.world.gen.MapGenCaves;
 import projectaurora.world.gen.MapGenRavine;
-import projectaurora.world.BaseChunkManager;
 
 public class VulcanChunkProvider implements IChunkProvider {
 	//TODO could be: (most likely) Kepler-10b, or less likely COROT-7b, or Kepler-78b
