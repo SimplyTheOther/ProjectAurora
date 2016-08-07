@@ -8,10 +8,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import projectaurora.core.Aurora;
 import projectaurora.core.ClientProxy;
 import projectaurora.core.Reference;
@@ -31,6 +33,29 @@ public class BlockPlant extends Block {
 		this.setHardness(0.1F);
 		this.setResistance(0.1F);
 		this.setStepSound(soundTypeGrass);
+		this.setTickRandomly(true);
+	}
+	
+	@Override
+	public boolean canPlaceBlockAt(World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y, z);
+		
+		switch(meta) {
+			case 0:
+				if(world.getBlock(x, y - 1, z) == Blocks.lava) {
+					return true;
+				}
+			default:
+				return false;
+		}
+	}
+	
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbourBlock) {
+		if(!this.canPlaceBlockAt(world, x, y, z)) {
+			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+			world.setBlock(x, y, z, Blocks.air, 0, 2);
+		}
 	}
 	
 	@Override

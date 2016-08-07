@@ -69,8 +69,7 @@ public class BlockPlantRenderHandler implements ISimpleBlockRenderingHandler {
         l = l * l * 42317861L + l * 11L;
         int i1 = (int)(l >> 16 & 0x3);
         
-        tessellator.setBrightness(15728832/*block.getMixedBrightnessForBlock(world, x, y + 1, z)*/);
-        System.out.println(block.getMixedBrightnessForBlock(world, x, y + 1, z));
+        tessellator.setBrightness(15728848/*block.getMixedBrightnessForBlock(world, x, y + 1, z)*/);
         float newX = (float)x + 0.5F;
         float newZ = (float)z + 0.5F;
         float f3 = (float)(i1 & 1) * 0.5F * (float)(1 - i1 / 2 % 2 * 2);
