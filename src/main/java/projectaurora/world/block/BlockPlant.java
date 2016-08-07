@@ -42,7 +42,18 @@ public class BlockPlant extends Block {
 		
 		switch(meta) {
 			case 0:
-				if(world.getBlock(x, y - 1, z) == Blocks.lava) {
+				return false;
+			default:
+				return false;
+		}
+	}
+	
+	public boolean canSustainBlock(World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y, z);
+		
+		switch(meta) {
+			case 0:
+				if(world.getBlock(x, y, z) == Blocks.lava) {
 					return true;
 				}
 			default:
@@ -52,7 +63,7 @@ public class BlockPlant extends Block {
 	
 	@Override
 	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbourBlock) {
-		if(!this.canPlaceBlockAt(world, x, y, z)) {
+		if(!this.canSustainBlock(world, x, y, z)) {
 			this.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
 			world.setBlock(x, y, z, Blocks.air, 0, 2);
 		}
