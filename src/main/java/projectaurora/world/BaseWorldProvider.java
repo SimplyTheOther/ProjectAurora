@@ -104,7 +104,7 @@ public abstract class BaseWorldProvider extends WorldProvider {
 	@Override
 	public float calculateCelestialAngle(long par1, float par2) {
 		int j = (int) (par1 % this.dayLength);
-        float f1 = (j + par2) / this.dayLength - 0.25F;
+        float f1 = (j + par2) / (float)this.dayLength - 0.25F;
 
         if (f1 < 0.0F) {
             ++f1;

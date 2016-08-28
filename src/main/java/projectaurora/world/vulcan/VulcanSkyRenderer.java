@@ -29,13 +29,97 @@ public class VulcanSkyRenderer extends IRenderHandler {
 	private static final ResourceLocation sunTexture = new ResourceLocation(Reference.modid, "textures/environment/vulcanSun.png");
 	private static final ResourceLocation moonTexture = new ResourceLocation(Reference.modid, "textures/environment/blank.png");
 
-	public int starGLCallList;
+	public int starGLCallList = GLAllocation.generateDisplayLists(3);
 	public int glSkyList;
 	public int glSkyList2;
 	
 	public VulcanSkyRenderer() {
-		RenderGlobal renderGlobal = Minecraft.getMinecraft().renderGlobal;
-		this.glSkyList2 = (this.glSkyList = (this.starGLCallList = ReflectionHelper.getPrivateValue(RenderGlobal.class, renderGlobal, "starGLCallList", "field_72772_v")) + 1) + 1;
+		GL11.glPushMatrix();
+        GL11.glNewList(this.starGLCallList, GL11.GL_COMPILE);
+        this.renderStars();
+        GL11.glEndList();
+        GL11.glPopMatrix();
+        final Tessellator tessellator = Tessellator.instance;
+        this.glSkyList = this.starGLCallList + 1;
+        GL11.glNewList(this.glSkyList, GL11.GL_COMPILE);
+        final byte byte2 = 64;
+        final int i = 256 / byte2 + 2;
+        float f = 16F;
+
+        for (int j = -byte2 * i; j <= byte2 * i; j += byte2) {
+            for (int l = -byte2 * i; l <= byte2 * i; l += byte2) {
+                tessellator.startDrawingQuads();
+                tessellator.addVertex(j + 0, f, l + 0);
+                tessellator.addVertex(j + byte2, f, l + 0);
+                tessellator.addVertex(j + byte2, f, l + byte2);
+                tessellator.addVertex(j + 0, f, l + byte2);
+                tessellator.draw();
+            }
+        }
+
+        GL11.glEndList();
+        this.glSkyList2 = this.starGLCallList + 2;
+        GL11.glNewList(this.glSkyList2, GL11.GL_COMPILE);
+        f = -16F;
+        tessellator.startDrawingQuads();
+
+        for (int k = -byte2 * i; k <= byte2 * i; k += byte2) {
+            for (int i1 = -byte2 * i; i1 <= byte2 * i; i1 += byte2) {
+                tessellator.addVertex(k + byte2, f, i1 + 0);
+                tessellator.addVertex(k + 0, f, i1 + 0);
+                tessellator.addVertex(k + 0, f, i1 + byte2);
+                tessellator.addVertex(k + byte2, f, i1 + byte2);
+            }
+        }
+
+        tessellator.draw();
+        GL11.glEndList();
+	}
+
+	private void renderStars() {
+		final Random var1 = new Random(10842L);
+        final Tessellator var2 = Tessellator.instance;
+        var2.startDrawingQuads();
+
+        for (int var3 = 0; var3 < (Minecraft.getMinecraft().isFancyGraphicsEnabled() ? 35000 : 6000); ++var3) {
+            double var4 = var1.nextFloat() * 2.0F - 1.0F;
+            double var6 = var1.nextFloat() * 2.0F - 1.0F;
+            double var8 = var1.nextFloat() * 2.0F - 1.0F;
+            final double var10 = 0.08F + var1.nextFloat() * 0.07F;
+            double var12 = var4 * var4 + var6 * var6 + var8 * var8;
+
+            if (var12 < 1.0D && var12 > 0.01D) {
+                var12 = 1.0D / Math.sqrt(var12);
+                var4 *= var12;
+                var6 *= var12;
+                var8 *= var12;
+                final double pX = var4 * (Minecraft.getMinecraft().isFancyGraphicsEnabled() ? var1.nextDouble() * 75D + 65D : 80.0D);
+                final double pY = var6 * (Minecraft.getMinecraft().isFancyGraphicsEnabled() ? var1.nextDouble() * 75D + 65D : 80.0D);
+                final double pZ = var8 * (Minecraft.getMinecraft().isFancyGraphicsEnabled() ? var1.nextDouble() * 75D + 65D : 80.0D);
+                final double var20 = Math.atan2(var4, var8);
+                final double var22 = Math.sin(var20);
+                final double var24 = Math.cos(var20);
+                final double var26 = Math.atan2(Math.sqrt(var4 * var4 + var8 * var8), var6);
+                final double var28 = Math.sin(var26);
+                final double var30 = Math.cos(var26);
+                final double var32 = var1.nextDouble() * Math.PI * 2.0D;
+                final double var34 = Math.sin(var32);
+                final double var36 = Math.cos(var32);
+
+                for (int i = 0; i < 4; ++i) {
+                    final double i1 = ((i & 2) - 1) * var10;
+                    final double i2 = ((i + 1 & 2) - 1) * var10;
+                    final double var47 = i1 * var36 - i2 * var34;
+                    final double var49 = i2 * var36 + i1 * var34;
+                    final double var55 = -var47 * var30;
+                    final double dX = var55 * var22 - var49 * var24;
+                    final double dZ = var49 * var22 + var55 * var24;
+                    final double dY = var47 * var28;
+                    var2.addVertex(pX + dX, pY + dY, pZ + dZ);
+                }
+            }
+        }
+        var2.draw();
 	}
 
 	@SideOnly(Side.CLIENT)

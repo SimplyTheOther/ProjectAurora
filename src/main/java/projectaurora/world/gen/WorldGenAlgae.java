@@ -30,10 +30,6 @@ public class WorldGenAlgae extends WorldGenAbstractTree {
 			
 			if(world.isAirBlock(i, j, k) && world.getBlock(i, j - 1, k) == growableBase && world.getBlockMetadata(i, j - 1, k) == baseMeta) {
 				world.setBlock(i, j, k, growable, growableMeta, 2);
-				
-				if(world.getBiomeGenForCoords(x, z) == AuroraBiome.lavaOcean) {
-					System.out.println("setBlock in ocean at " + i + "," + j + "," + k);
-				}
 			}
 		}
 		return true;

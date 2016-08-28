@@ -15,6 +15,9 @@ import projectaurora.world.NoCloudRenderer;
 import projectaurora.world.WorldModule;
 
 public class VulcanWorldProvider extends BaseWorldProvider {
+	public VulcanWorldProvider() {
+		super.dayLength = 4800L;
+	}
 
 	@Override
 	public String getDimensionName() {
