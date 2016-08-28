@@ -13,7 +13,8 @@ public class VulcanChunkManager extends BaseChunkManager {
 		setupGenLayers();
 	}
 
-	private void setupGenLayers() {
+	@Override
+	public void setupGenLayers() {
 		long seed = this.worldObj.getSeed() + 1954L;
 	    this.chunkGenLayers = GenLayerVulcan.createWorld(seed);
 	    this.worldLayers = new BaseGenLayer[this.chunkGenLayers.length];

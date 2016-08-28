@@ -12,7 +12,7 @@ public class BiomeVulcanRiver extends AuroraBiome {
 		this.topBlockMeta = 0;
 		this.fillerBlock = Content.rock; 
 		this.fillerBlockMeta = 0;
-		this.stoneBlock = Content.rock;//TODO decide on type of stone, for now, it's basalt
+		this.stoneBlock = Content.rock;
 		this.stoneBlockMeta = 0;
 		this.dominantFluidBlock = Blocks.lava;
 		this.dominantFluidMeta = 0;

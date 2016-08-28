@@ -30,5 +30,5 @@ public class ItemBlockSoft extends ItemBlock {
 	@Override
 	public int getMetadata(int par1) {
 		return par1;
-	}//TODO do addInformation for ash compositions? Probs not
+	}
 }

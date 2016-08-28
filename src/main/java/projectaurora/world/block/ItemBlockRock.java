@@ -30,5 +30,5 @@ public class ItemBlockRock extends ItemBlock {
 	@Override
 	public int getMetadata(int par1) {
 		return par1;
-	}//TODO do addInformation for rock compositions? Probs not
+	}
 }

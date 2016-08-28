@@ -30,6 +30,8 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	protected World worldObj;
 	protected BiomeCache biomeCacheAurora;
 	
+	public abstract void setupGenLayers();
+	
 	@Override
 	public BiomeGenBase getBiomeGenAt(int x, int z) {
 		return this.biomeCacheAurora.getBiomeGenAt(x, z);

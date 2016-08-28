@@ -111,9 +111,9 @@ public class AuroraBiome extends BiomeGenBase {
 	}
 	
 	public static void initBiomes() {
-		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(deepOcean, shoresTop).setColor(1).setBiomeName("lavaOcean");
-		lavaRiver = new BiomeVulcanRiver(1).setTemperatureRainfall(2F, 0F).setMinMaxHeight(river, river).setColor(32234).setBiomeName("vulcanRiver");
-		vulcan = new BiomeVulcan(2).setTemperatureRainfall(2F, 0F).setMinMaxHeight(shoresTop, highPlains).setColor(0).setBiomeName("vulcanMain");
+		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(deepOcean, shoresTop).setColor(1).setBiomeName("lavaOcean").setDisableRain();
+		lavaRiver = new BiomeVulcanRiver(1).setTemperatureRainfall(2F, 0F).setMinMaxHeight(river, river).setColor(32234).setBiomeName("vulcanRiver").setDisableRain();
+		vulcan = new BiomeVulcan(2).setTemperatureRainfall(2F, 0F).setMinMaxHeight(shoresTop, highPlains).setColor(0).setBiomeName("vulcanMain").setDisableRain();
 	}
 	
 	protected void addBiomeVariant(AuroraBiomeVariant variant) {
@@ -282,19 +282,7 @@ public class AuroraBiome extends BiomeGenBase {
 
 	public boolean hasSky() {
 	    return true;
-	}//TODO fix sky? Has no sky?
-
-	/*public Achievement getBiomeAchievement() {
-	    return null;
-	}//TODO Biome achievements?
-
-	public Region getBiomeWaypoints() {
-	    return null;
-	}//TODO Biome Waypoints?*/
-
-	public boolean isHiddenBiome() {
-	    return false;
-	}//TODO Hidden biome? Don't get it.
+	}
 
 	public boolean getEnableRiver() {
 	    return true;
@@ -318,7 +306,7 @@ public class AuroraBiome extends BiomeGenBase {
 	    if (this.enablePodzol) {
 	    	boolean podzol = false;
 	    	
-	    	if (this.topBlock == Blocks.grass) {//TODO Top block == Blocks.grass change
+	    	if (this.topBlock == Blocks.grass) {
 	    		float trees = this.decorator.treesPerChunk + getTreeIncreaseChance();
 	    		trees = Math.max(trees, variant.treeFactor * 0.5F);
 	    		

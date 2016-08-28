@@ -84,29 +84,29 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    }
 	}
 	
-	private void generateTerrain(int x, int z, Block[] blocks) {
+	private void generateTerrain(int chunkX, int chunkZ, Block[] blocks, byte[] meta) {
 		VulcanChunkManager chunkManager = (VulcanChunkManager)this.worldObj.getWorldChunkManager();
 	    byte byte0 = 4;
 	    byte byte1 = 32;
 	    int k = byte0 + 1;
 	    byte byte3 = 33;
 	    int l = byte0 + 1;
-	    this.biomesForGeneration = chunkManager.getBiomesForGeneration(this.biomesForGeneration, x * byte0 - this.biomeSampleRadius, z * byte0 - this.biomeSampleRadius, k + this.biomeSampleWidth, l + this.biomeSampleWidth);
-	    this.variantsForGeneration = chunkManager.getVariantsChunkGen(this.variantsForGeneration, x * byte0 - this.biomeSampleRadius, z * byte0 - this.biomeSampleRadius, k + this.biomeSampleWidth, l + this.biomeSampleWidth, this.biomesForGeneration);
-	    this.heightNoise = initializeHeightNoise(this.heightNoise, x * byte0, 0, z * byte0, k, byte3, l);
+	    this.biomesForGeneration = chunkManager.getBiomesForGeneration(this.biomesForGeneration, chunkX * byte0 - this.biomeSampleRadius, chunkZ * byte0 - this.biomeSampleRadius, k + this.biomeSampleWidth, l + this.biomeSampleWidth);
+	    this.variantsForGeneration = chunkManager.getVariantsChunkGen(this.variantsForGeneration, chunkX * byte0 - this.biomeSampleRadius, chunkZ * byte0 - this.biomeSampleRadius, k + this.biomeSampleWidth, l + this.biomeSampleWidth, this.biomesForGeneration);
+	    this.heightNoise = initializeHeightNoise(this.heightNoise, chunkX * byte0, 0, chunkZ * byte0, k, byte3, l);
 
-	    for (int i1 = 0; i1 < byte0; i1++) {
-	    	for (int j1 = 0; j1 < byte0; j1++) {
-	    		for (int k1 = 0; k1 < byte1; k1++) {
+	    for (int x = 0; x < byte0; x++) {
+	    	for (int z = 0; z < byte0; z++) {
+	    		for (int y = 0; y < byte1; y++) {
 	    			double d = 0.125D;
-	    			double d1 = this.heightNoise[(((i1 + 0) * l + j1 + 0) * byte3 + k1 + 0)];
-	    			double d2 = this.heightNoise[(((i1 + 0) * l + j1 + 1) * byte3 + k1 + 0)];
-	    			double d3 = this.heightNoise[(((i1 + 1) * l + j1 + 0) * byte3 + k1 + 0)];
-	    			double d4 = this.heightNoise[(((i1 + 1) * l + j1 + 1) * byte3 + k1 + 0)];
-	    			double d5 = (this.heightNoise[(((i1 + 0) * l + j1 + 0) * byte3 + k1 + 1)] - d1) * d;
-	    			double d6 = (this.heightNoise[(((i1 + 0) * l + j1 + 1) * byte3 + k1 + 1)] - d2) * d;
-	    			double d7 = (this.heightNoise[(((i1 + 1) * l + j1 + 0) * byte3 + k1 + 1)] - d3) * d;
-	    			double d8 = (this.heightNoise[(((i1 + 1) * l + j1 + 1) * byte3 + k1 + 1)] - d4) * d;
+	    			double d1 = this.heightNoise[((x * l + z) * byte3 + y)];
+	    			double d2 = this.heightNoise[((x * l + z + 1) * byte3 + y)];
+	    			double d3 = this.heightNoise[(((x + 1) * l + z) * byte3 + y)];
+	    			double d4 = this.heightNoise[(((x + 1) * l + z + 1) * byte3 + y)];
+	    			double d5 = (this.heightNoise[((x * l + z) * byte3 + y + 1)] - d1) * d;
+	    			double d6 = (this.heightNoise[((x * l + z + 1) * byte3 + y + 1)] - d2) * d;
+	    			double d7 = (this.heightNoise[(((x + 1) * l + z) * byte3 + y + 1)] - d3) * d;
+	    			double d8 = (this.heightNoise[(((x + 1) * l + z + 1) * byte3 + y + 1)] - d4) * d;
 	    			
 	    			for (int l1 = 0; l1 < 8; l1++) {
 	    				double d9 = 0.25D;
@@ -116,7 +116,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    				double d13 = (d4 - d2) * d9;
 
 	    				for (int i2 = 0; i2 < 4; i2++) {
-	    					int j2 = i2 + i1 * 4 << 12 | 0 + j1 * 4 << 8 | k1 * 8 + l1;
+	    					int j2 = i2 + x * 4 << 12 | 0 + z * 4 << 8 | y * 8 + l1;
 	    					short s = 256;
 	    					j2 -= s;
 	    					double d14 = 0.25D;
@@ -128,21 +128,29 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    							//int tmp576_575 = (j2 + s); 
 	    							//j2 = tmp576_575; 
 	    							//blocks[tmp576_575] = Blocks.stone;
-	    							BiomeGenBase biome = worldObj.getBiomeGenForCoords(x, z);
+	    							BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
 	    							
 	    							if(biome instanceof AuroraBiome) {
     									blocks[j2 += s] = ((AuroraBiome)biome).stoneBlock;//TODO something with meta?
+    									//meta[j2 += s] = (byte)((AuroraBiome)biome).stoneBlockMeta;
 	    							}
-	    						} else if (k1 * 8 + l1 <= 62) {
+	    						} else if (y * 8 + l1 <= 62) {
 	    							//int d11 = (j2 + s); 
 	    							//j2 = d11; 
 	    							//blocks[d11] = Blocks.water;
-	    							blocks[j2 += s] = Blocks.lava;//TODO Vulcan won't have water AT ALL
+	    							BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
+	    							
+	    							if(biome instanceof AuroraBiome) {
+	    								blocks[j2 += s] = ((AuroraBiome)biome).dominantFluidBlock;
+    									//meta[j2 += s] = (byte)((AuroraBiome)biome).dominantFluidMeta;
+	    							}
+	    							//blocks[j2 += s] = Blocks.lava;
 	    						} else {
 	    							//int tmp621_620 = (j2 + s); 
 	    							//j2 = tmp621_620; 
 	    							//blocks[tmp621_620] = Blocks.air;
 	    							blocks[j2 += s] = Blocks.air;//TODO Vulcan might have air. 
+	    							//meta[j2 += s] = 0;
 	    						}
 	    					}
 
@@ -352,7 +360,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	}
 
 	@Override
-	public boolean chunkExists(int p_73149_1_, int p_73149_2_) {
+	public boolean chunkExists(int x, int z) {
 		return true;
 	}
 
@@ -366,7 +374,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    Block[] blocks = new Block[65536];
 	    byte[] metadata = new byte[65536];
 
-	    generateTerrain(x, z, blocks);
+	    generateTerrain(x, z, blocks, metadata);
 	    this.biomesForGeneration = chunkManager.loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
 	    this.variantsForGeneration = chunkManager.getBiomeVariants(this.variantsForGeneration, x * 16, z * 16, 16, 16);
 	    replaceBlocksForBiome(x, z, blocks, metadata, this.biomesForGeneration, this.variantsForGeneration);
@@ -513,9 +521,8 @@ public class VulcanChunkProvider implements IChunkProvider {
 	}
 
 	@Override
-	public ChunkPosition func_147416_a(World p_147416_1_, String p_147416_2_, int p_147416_3_, int p_147416_4_,
+	public ChunkPosition func_147416_a(World world, String p_147416_2_, int p_147416_3_, int p_147416_4_,
 			int p_147416_5_) {//no idea what this does, but apparently it's 'find stronghold'
-		// TODO Auto-generated method stub
 		return null;
 	}
 

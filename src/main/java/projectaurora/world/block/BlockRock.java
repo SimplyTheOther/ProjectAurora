@@ -14,7 +14,7 @@ import net.minecraft.util.IIcon;
 import projectaurora.core.Aurora;
 import projectaurora.core.Reference;
 
-public class BlockRock extends Block {//TODO basalt as vulcan rock?
+public class BlockRock extends Block {
 	
 	@SideOnly(Side.CLIENT)
 	public IIcon[] icons = new IIcon[texNames.length];

@@ -2,16 +2,19 @@ package projectaurora.core;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class EventHandler {//TODO make the correct fluid
+public class EventHandler {//TODO make the correct fluid, make water work
 	
 	@SubscribeEvent
 	public void blockPlace(PlaceEvent event) {
@@ -19,6 +22,11 @@ public class EventHandler {//TODO make the correct fluid
 			//TODO debugging variants
 			System.out.println("biome=" + event.world.getBiomeGenForCoords(event.x, event.z));
 			System.out.println("variant=" + ((projectaurora.world.vulcan.VulcanChunkManager)event.world.getWorldChunkManager()).getBiomeVariantAt(event.x, event.z));
+			
+			if(event.block.getMaterial() == Material.water) {
+				event.world.setBlock(event.x, event.y, event.z, Blocks.air);
+				event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+			}
 			
 			if(event.block == Blocks.iron_block && event.world.getBlockMetadata(event.x, event.y, event.z) == 0) {
 				if(FluidRegistry.getFluid("iron.molten") != null) {

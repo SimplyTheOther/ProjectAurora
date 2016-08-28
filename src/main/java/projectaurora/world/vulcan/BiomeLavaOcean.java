@@ -17,7 +17,7 @@ public class BiomeLavaOcean extends AuroraBiome {
 		this.topBlockMeta = 0;
 		this.fillerBlock = Content.rock; 
 		this.fillerBlockMeta = 0;
-		this.stoneBlock = Content.rock;//TODO decide on type of stone, for now, it's basalt
+		this.stoneBlock = Content.rock;
 		this.stoneBlockMeta = 0;
 		this.dominantFluidBlock = Blocks.lava;
 		this.dominantFluidMeta = 0;
@@ -29,10 +29,12 @@ public class BiomeLavaOcean extends AuroraBiome {
 		
 		//TODO this.decorator.WHATEVERPerChunk = 
 		
-		this.addBiomeVariant(AuroraBiomeVariant.STANDARD);
 		this.addBiomeVariant(AuroraBiomeVariant.ISLAND);
 		
-		this.decorator.addTree(AuroraTreeType.GLOWSTONE, 10);
+		this.decorator.glowstonePerChunk = 1;
+		
+		this.decorator.clearTrees();
+		this.decorator.addTree(AuroraTreeType.GLOWSTONE, 1000000);
 		
 		this.setBanditChance(0);
 	}
@@ -40,11 +42,6 @@ public class BiomeLavaOcean extends AuroraBiome {
 	@Override
 	public boolean getEnableRiver() {
 		return false;
-	}
-	
-	@Override
-	public void decorate(World world, Random rand, int x, int z) {
-		super.decorate(world, rand, x, z);
 	}
 	
 	@Override

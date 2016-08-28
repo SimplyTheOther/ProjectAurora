@@ -15,9 +15,10 @@ import net.minecraft.world.gen.feature.WorldGenMelon;
 import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraft.world.gen.feature.WorldGenReed;
 import net.minecraft.world.gen.feature.WorldGenVines;
-import net.minecraft.world.gen.feature.WorldGenWaterlily;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import projectaurora.core.Content;
 import projectaurora.world.AuroraTreeType;
+import projectaurora.world.gen.WorldGenAlgae;
 import projectaurora.world.gen.WorldGenBiomeFlowers;
 import projectaurora.world.gen.WorldGenCaveCobwebs;
 import projectaurora.world.gen.WorldGenCorn;
@@ -53,7 +54,7 @@ public class AuroraBiomeDecorator {
 	private WorldGenerator dryReedGen;
 	private WorldGenerator cornGen;
 	private WorldGenerator pumpkinGen;
-	private WorldGenerator waterlilyGen;
+	private WorldGenerator glowstoneGen;
 	private WorldGenerator cobwebGen;
 	private WorldGenerator stalactiteGen;
 	private WorldGenerator vinesGen;
@@ -73,7 +74,7 @@ public class AuroraBiomeDecorator {
 	public boolean enableFern;
 	public boolean enableSpecialGrasses;
 	public int deadBushPerChunk;
-	public int waterlilyPerChunk;
+	public int glowstonePerChunk;
 	public int mushroomsPerChunk;
 	public boolean enableRandomMushroom;
 	public int canePerChunk;
@@ -126,7 +127,7 @@ public class AuroraBiomeDecorator {
 	    this.dryReedGen = new WorldGenReeds(Blocks.reeds, 0);
 	    this.cornGen = new WorldGenCorn(Blocks.reeds, 0);
 	    this.pumpkinGen = new WorldGenPumpkin();
-	    this.waterlilyGen = new WorldGenWaterlily();
+	    this.glowstoneGen = new WorldGenAlgae(false, Content.plant, 0, Blocks.lava, 0);
 	    this.cobwebGen = new WorldGenCaveCobwebs(Blocks.web, 0, Blocks.stone, 0);
 	    this.stalactiteGen = new WorldGenStalactites();
 	    this.vinesGen = new WorldGenVines();
@@ -147,7 +148,7 @@ public class AuroraBiomeDecorator {
 	    this.enableFern = false;
 	    this.enableSpecialGrasses = true;
 	    this.deadBushPerChunk = 0;
-	    this.waterlilyPerChunk = 0;
+	    this.glowstonePerChunk = 0;
 	    this.mushroomsPerChunk = 0;
 	    this.enableRandomMushroom = true;
 	    this.canePerChunk = 0;
@@ -413,12 +414,12 @@ public class AuroraBiomeDecorator {
 	    	new WorldGenDeadBush(Blocks.deadbush).generate(this.worldObj, this.rand, i, j, k);
 	    }
 
-	    for (int l = 0; l < this.waterlilyPerChunk; l++) {
+	    for (int l = 0; l < this.glowstonePerChunk; l++) {
 	    	int i = this.chunkX + this.rand.nextInt(16) + 8;
 	    	int k = this.chunkZ + this.rand.nextInt(16) + 8;
 
-	    	for (int j = this.rand.nextInt(128); (j > 0) && (this.worldObj.getBlock(i, j - 1, k) == Blocks.air); j--) {
-	    		this.waterlilyGen.generate(this.worldObj, this.rand, i, j, k);
+	    	for (int j = this.rand.nextInt(128); (j > 0) && (this.worldObj.getBlock(i, j + 1, k) == Blocks.air); j--) {
+	    		this.glowstoneGen.generate(this.worldObj, this.rand, i, j, k);
 	    	}
 	    }
 
