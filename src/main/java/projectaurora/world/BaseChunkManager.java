@@ -23,10 +23,11 @@ import projectaurora.world.layer.BaseGenLayer;
 public abstract class BaseChunkManager extends WorldChunkManager {
 	protected BaseGenLayer[] chunkGenLayers;
 	protected BaseGenLayer[] worldLayers;
+	protected static int LAYER_BIOME = 0;
 	protected static int LAYER_VARIANTS_LARGE = 1;
 	protected static int LAYER_VARIANTS_SMALL = 2;
 	protected static int LAYER_VARIANTS_LAKES = 3;
-	protected static int LAYER_BIOME = 0;
+	protected static int LAYER_VARIANTS_RIVERS = 4;
 	protected World worldObj;
 	protected BiomeCache biomeCacheAurora;
 	
@@ -73,10 +74,12 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	    BaseGenLayer variantsLarge = sourceGenLayers[LAYER_VARIANTS_LARGE];
 	    BaseGenLayer variantsSmall = sourceGenLayers[LAYER_VARIANTS_SMALL];
 	    BaseGenLayer variantsLakes = sourceGenLayers[LAYER_VARIANTS_LAKES];
+	    BaseGenLayer variantsRivers = sourceGenLayers[LAYER_VARIANTS_RIVERS];
 
 	    int[] variantsLargeInts = variantsLarge.getInts(this.worldObj, i, k, xSize, zSize);
 	    int[] variantsSmallInts = variantsSmall.getInts(this.worldObj, i, k, xSize, zSize);
 	    int[] variantsLakesInts = variantsLakes.getInts(this.worldObj, i, k, xSize, zSize);
+	    int[] variantsRiversInts = variantsRivers.getInts(this.worldObj, i, k, xSize, zSize);
 
 	    for (int k1 = 0; k1 < zSize; k1++) {
 	    	for (int i1 = 0; i1 < xSize; i1++) {
@@ -140,7 +143,13 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	        			}
 	        		}
 	        	}
-
+	        	int riverCode = variantsRiversInts[index];
+	        	if(riverCode == 2) {
+	        		variant = AuroraBiomeVariant.RIVER;
+	        	} else if(riverCode == 1 && biome.getEnableRiver() && (!structureNear) && (!mountainNear)) {
+	        		variant = AuroraBiomeVariant.RIVER;
+	        	}
+	        	
 	        	variants[index] = variant;
 	    	}
 	    }
@@ -175,8 +184,8 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	
   	@SideOnly(Side.CLIENT)
   	@Override
-  	public float getTemperatureAtHeight(float f, int height) {
-  		return f;
+  	public float getTemperatureAtHeight(float originalTemp, int height) {
+  		return originalTemp;
   	}
   	
 	@Override  

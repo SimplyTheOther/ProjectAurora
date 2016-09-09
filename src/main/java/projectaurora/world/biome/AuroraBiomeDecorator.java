@@ -18,6 +18,7 @@ import net.minecraft.world.gen.feature.WorldGenVines;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import projectaurora.core.Content;
 import projectaurora.world.AuroraTreeType;
+import projectaurora.world.BaseChunkManager;
 import projectaurora.world.gen.WorldGenAlgae;
 import projectaurora.world.gen.WorldGenBiomeFlowers;
 import projectaurora.world.gen.WorldGenCaveCobwebs;
@@ -31,7 +32,6 @@ import projectaurora.world.gen.WorldGenStreams;
 import projectaurora.world.gen.WorldGenSurfaceGravel;
 import projectaurora.world.village.AuroraVillageGen;
 import projectaurora.world.vulcan.BiomeVulcan;
-import projectaurora.world.BaseChunkManager;
 
 public class AuroraBiomeDecorator {
 	private World worldObj;

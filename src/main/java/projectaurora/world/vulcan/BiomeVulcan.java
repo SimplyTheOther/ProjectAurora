@@ -23,5 +23,7 @@ public class BiomeVulcan extends AuroraBiome {
 		
 		this.decorator.clearTrees();
 		this.decorator.addTree(AuroraTreeType.GLOWSTONE, 50);
+		
+		super.vulcanList.add(this);
 	}
 }

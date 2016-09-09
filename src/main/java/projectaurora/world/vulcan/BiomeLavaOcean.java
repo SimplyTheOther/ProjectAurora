@@ -37,6 +37,8 @@ public class BiomeLavaOcean extends AuroraBiome {
 		this.decorator.addTree(AuroraTreeType.GLOWSTONE, 1000000);
 		
 		this.setBanditChance(0);
+		
+		super.vulcanList.add(this);
 	}
 	
 	@Override

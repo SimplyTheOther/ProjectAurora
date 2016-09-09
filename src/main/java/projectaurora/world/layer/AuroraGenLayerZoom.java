@@ -12,43 +12,38 @@ public class AuroraGenLayerZoom extends BaseGenLayer {
 
 	@Override
 	public int[] getInts(World world, int x, int z, int xSize, int zSize) {
-		int i1 = x >> 1;
-	    int k1 = z >> 1;
-	    int xSizeZoom = (xSize >> 1) + 2;
-	    int zSizeZoom = (zSize >> 1) + 2;
-	    int[] variants = this.baseParent.getInts(world, i1, k1, xSizeZoom, zSizeZoom);
-
-	    int i2 = xSizeZoom - 1 << 1;
-	    int k2 = zSizeZoom - 1 << 1;
-	    int[] ints = AuroraIntCache.get(world).getIntArray(i2 * k2);
-
-	    for (int k3 = 0; k3 < zSizeZoom - 1; k3++) {
-	    	int index = (k3 << 1) * i2;
-	    	int i3 = 0;
-	    	int int00 = variants[(i3 + 0 + (k3 + 0) * xSizeZoom)];
-
-	    	for (int int01 = variants[(i3 + 0 + (k3 + 1) * xSizeZoom)]; i3 < xSizeZoom - 1; i3++) {
-	    		initChunkSeed(i3 + i1 << 1, k3 + k1 << 1);
-	    		int int10 = variants[(i3 + 1 + (k3 + 0) * xSizeZoom)];
-	    		int int11 = variants[(i3 + 1 + (k3 + 1) * xSizeZoom)];
-	    		ints[index] = int00;
-	    		ints[(index + i2)] = selectRandom(new int[] { int00, int01 });
-	    		index++;
-	    		ints[index] = selectRandom(new int[] { int00, int10 });
-	    		ints[(index + i2)] = selectModeOrRandom(int00, int10, int01, int11);
-	    		index++;
-	        	int00 = int10;
-	        	int01 = int11;
-	    	}
-	    }
-
-	    int[] zoomedInts = AuroraIntCache.get(world).getIntArray(xSize * zSize);
-	    
-	    for (int k3 = 0; k3 < zSize; k3++) {
-	    	System.arraycopy(ints, (k3 + (z & 0x1)) * i2 + (x & 0x1), zoomedInts, k3 * xSize, xSize);
-	    }
-	    
-	    return zoomedInts;
+		int i2 = x >> 1;
+        int k2 = z >> 1;
+        int xSizeZoom = (xSize >> 1) + 2;
+        int zSizeZoom = (zSize >> 1) + 2;
+        int[] variants = this.baseParent.getInts(world, i2, k2, xSizeZoom, zSizeZoom);
+        
+        int i3 = xSizeZoom - 1 << 1;
+        int k3 = zSizeZoom - 1 << 1;
+        int[] ints = AuroraIntCache.get(world).getIntArray(i3 * k3);
+        
+        for (int k4 = 0; k4 < zSizeZoom - 1; ++k4) {
+            for (int i4 = 0; i4 < xSizeZoom - 1; ++i4) {
+                this.initChunkSeed((long)(i4 + i2 << 1), (long)(k4 + k2 << 1));
+                int int00 = variants[i4 + 0 + (k4 + 0) * xSizeZoom];
+                int int2 = variants[i4 + 0 + (k4 + 1) * xSizeZoom];
+                int int3 = variants[i4 + 1 + (k4 + 0) * xSizeZoom];
+                int int4 = variants[i4 + 1 + (k4 + 1) * xSizeZoom];
+                int index = (i4 << 1) + (k4 << 1) * i3;
+                ints[index] = int00;
+                ints[index + 1] = this.selectRandom(new int[] { int00, int3 });
+                ints[index + i3] = this.selectRandom(new int[] { int00, int2 });
+                ints[index + i3 + 1] = this.selectModeOrRandom(int00, int3, int2, int4);
+            }
+        }
+        
+        int[] zoomedInts = AuroraIntCache.get(world).getIntArray(xSize * zSize);
+        
+        for (int k5 = 0; k5 < zSize; ++k5) {
+            System.arraycopy(ints, (k5 + (z & 0x1)) * i3 + (x & 0x1), zoomedInts, k5 * xSize, xSize);
+        }
+        
+        return zoomedInts;
     }
 
 	public static BaseGenLayer magnify(long seed, BaseGenLayer source, int zooms) {

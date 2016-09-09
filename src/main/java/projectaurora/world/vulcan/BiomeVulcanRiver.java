@@ -18,5 +18,7 @@ public class BiomeVulcanRiver extends AuroraBiome {
 		this.dominantFluidMeta = 0;
 		//this.spawnableWhateverList.clear();
 		//setBanditChance
+		
+		super.vulcanList.add(this);
 	}
 }

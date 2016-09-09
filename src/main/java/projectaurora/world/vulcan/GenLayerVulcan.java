@@ -6,12 +6,21 @@ import projectaurora.world.biome.AuroraBiome;
 import projectaurora.world.layer.AuroraGenLayerBeach;
 import projectaurora.world.layer.AuroraGenLayerBiomeSubTypes;
 import projectaurora.world.layer.AuroraGenLayerBiomeSubTypesInit;
-import projectaurora.world.layer.AuroraGenLayerBiomeSubTypesSmall;
 import projectaurora.world.layer.AuroraGenLayerBiomeVariants;
 import projectaurora.world.layer.AuroraGenLayerBiomeVariantsLake;
+import projectaurora.world.layer.AuroraGenLayerBiomes;
+import projectaurora.world.layer.AuroraGenLayerDesertOasis;
+import projectaurora.world.layer.AuroraGenLayerDesertRiverbanks;
+import projectaurora.world.layer.AuroraGenLayerExtractRivers;
+import projectaurora.world.layer.AuroraGenLayerIncludeRivers;
+import projectaurora.world.layer.AuroraGenLayerNarrowRivers;
+import projectaurora.world.layer.AuroraGenLayerOasisLake;
+import projectaurora.world.layer.AuroraGenLayerOcean;
+import projectaurora.world.layer.AuroraGenLayerRemoveOcean;
+import projectaurora.world.layer.AuroraGenLayerRemoveRivers;
 import projectaurora.world.layer.AuroraGenLayerRiver;
 import projectaurora.world.layer.AuroraGenLayerRiverInit;
-import projectaurora.world.layer.AuroraGenLayerRiverVariants;
+import projectaurora.world.layer.AuroraGenLayerRiverZoom;
 import projectaurora.world.layer.AuroraGenLayerSmooth;
 import projectaurora.world.layer.AuroraGenLayerZoom;
 import projectaurora.world.layer.BaseGenLayer;
@@ -90,7 +99,7 @@ public class GenLayerVulcan extends BaseGenLayer {
 		return outputBiomeIDs;
 	}
 
-	public static BaseGenLayer[] createWorld(long seed) {
+	/*public static BaseGenLayer[] createWorld(long seed) {
 		BaseGenLayer rivers = new AuroraGenLayerRiverInit(100L);
 		rivers = AuroraGenLayerZoom.magnify(1000L, rivers, 8);
 		rivers = new AuroraGenLayerRiver(1L, rivers);
@@ -128,5 +137,67 @@ public class GenLayerVulcan extends BaseGenLayer {
 			}
 		}
 		return new BaseGenLayer[] { biomes, variants, variantsSmall, lakes};
+	}*/
+	
+	public static BaseGenLayer[] createWorld(long seed) {
+		BaseGenLayer rivers = new AuroraGenLayerRiverInit(100L);
+	    rivers = AuroraGenLayerZoom.magnify(1000L, rivers, 10);
+	    rivers = new AuroraGenLayerRiver(1L, rivers);
+	    rivers = new AuroraGenLayerSmooth(1000L, rivers);
+	    rivers = AuroraGenLayerZoom.magnify(1000L, rivers, 1);
+
+	    BaseGenLayer biomeSubtypes = new AuroraGenLayerBiomeSubTypesInit(3000L);
+	    biomeSubtypes = AuroraGenLayerZoom.magnify(3000L, biomeSubtypes, 2);
+
+	    BaseGenLayer biomes = new GenLayerVulcan(seed);
+	    
+	    BaseGenLayer oceans = new AuroraGenLayerOcean(2012L);
+	    oceans = AuroraGenLayerZoom.magnify(200L, oceans, 3);
+	    oceans = new AuroraGenLayerRemoveOcean(400L, oceans);
+
+	    biomes = new AuroraGenLayerBiomes(2013L, oceans);
+	    biomes = AuroraGenLayerZoom.magnify(300L, biomes, 2);
+
+	    BaseGenLayer mapRivers = new AuroraGenLayerExtractRivers(5000L, biomes);
+	    biomes = new AuroraGenLayerRemoveRivers(1000L, biomes);
+	    biomes = new AuroraGenLayerBiomeSubTypes(1000L, biomes, biomeSubtypes);
+
+	    biomes = new AuroraGenLayerDesertRiverbanks(200L, biomes, mapRivers);
+	    biomes = new AuroraGenLayerDesertOasis(500L, biomes);
+	    biomes = AuroraGenLayerZoom.magnify(1000L, biomes, 1);
+	    biomes = new AuroraGenLayerBeach(1000L, biomes, AuroraBiome.lavaOcean);
+	    biomes = AuroraGenLayerZoom.magnify(1000L, biomes, 2);
+	    biomes = new AuroraGenLayerOasisLake(600L, biomes);
+	    biomes = AuroraGenLayerZoom.magnify(1000L, biomes, 2);
+	    biomes = new AuroraGenLayerSmooth(1000L, biomes);
+
+	    BaseGenLayer variants = new AuroraGenLayerBiomeVariants(200L);
+	    variants = AuroraGenLayerZoom.magnify(200L, variants, 8);
+	    BaseGenLayer variantsSmall = new AuroraGenLayerBiomeVariants(300L);
+	    variantsSmall = AuroraGenLayerZoom.magnify(300L, variantsSmall, 6);
+
+	    BaseGenLayer lakes = new AuroraGenLayerBiomeVariantsLake(100L, null, 0).setLakeFlags(new int[] { 1 });
+	    
+	    for (int i = 1; i <= 5; i++) {
+	    	lakes = new AuroraGenLayerZoom(200L + i, lakes);
+
+	    	if (i <= 2) {
+	    		lakes = new AuroraGenLayerBiomeVariantsLake(300L + i, lakes, i).setLakeFlags(new int[] { 1 });
+	    	}
+
+	    	if (i == 3) {
+	    		lakes = new AuroraGenLayerBiomeVariantsLake(500L, lakes, i).setLakeFlags(new int[] { 2, 4 });
+	    	}
+	    }
+
+	    for (int i = 0; i < 4; i++) {
+	    	mapRivers = new AuroraGenLayerRiverZoom(4000L + i, mapRivers);
+	    }
+	    
+	    mapRivers = new AuroraGenLayerNarrowRivers(3000L, mapRivers, 6);
+	    mapRivers = AuroraGenLayerZoom.magnify(4000L, mapRivers, 1);
+	    rivers = new AuroraGenLayerIncludeRivers(5000L, rivers, mapRivers);
+
+	    return new BaseGenLayer[] { biomes, variants, variantsSmall, lakes, rivers };
 	}
 }

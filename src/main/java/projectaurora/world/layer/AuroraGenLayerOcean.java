@@ -3,9 +3,9 @@ package projectaurora.world.layer;
 import net.minecraft.world.World;
 import projectaurora.world.AuroraIntCache;
 
-public class AuroraGenLayerRiverInit extends BaseGenLayer {
+public class AuroraGenLayerOcean extends BaseGenLayer {
 
-	public AuroraGenLayerRiverInit(long seed) {
+	public AuroraGenLayerOcean(long seed) {
 		super(seed);
 	}
 
@@ -16,7 +16,14 @@ public class AuroraGenLayerRiverInit extends BaseGenLayer {
 		for(int k1 = 0; k1 < zSize; k1++) {
 			for(int i1 = 0; i1 < xSize; i1++) {
 				initChunkSeed(x + i1, z + k1);
-				ints[i1 + k1 * xSize] = 2 + this.nextInt(299999);//TODO see if river works
+				
+				boolean ocean = nextInt(5) == 0;
+				
+				if(ocean) {
+					ints[(i1 + k1 * xSize)] = 1;
+				} else {
+					ints[(i1 + k1 * xSize)] = 0;
+				}
 			}
 		}
 		return ints;

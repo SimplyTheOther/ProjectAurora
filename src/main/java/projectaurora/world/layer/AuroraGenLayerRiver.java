@@ -4,6 +4,8 @@ import net.minecraft.world.World;
 import projectaurora.world.AuroraIntCache;
 
 public class AuroraGenLayerRiver extends BaseGenLayer {
+    public static final int RANDOM_RIVER = 1;
+    public static final int MAP_RIVER = 2;
 
 	public AuroraGenLayerRiver(long seed, BaseGenLayer layer) {
 		super(seed);
@@ -12,28 +14,28 @@ public class AuroraGenLayerRiver extends BaseGenLayer {
 
 	@Override
 	public int[] getInts(World world, int x, int z, int xSize, int zSize) {
-	    int i1 = x - 1;
-	    int k1 = z - 1;
-	    int i2 = xSize + 2;
-	    int k2 = zSize + 2;
-	    int[] riverInit = this.baseParent.getInts(world, i1, k1, i2, k2);
-	    int[] ints = AuroraIntCache.get(world).getIntArray(xSize * zSize);
-
-	    for (int k3 = 0; k3 < zSize; k3++) {
-	    	for (int i3 = 0; i3 < xSize; i3++) {
-	    		int centre = riverInit[(i3 + 1 + (k3 + 1) * i2)];
-	    		int xn = riverInit[(i3 + 0 + (k3 + 1) * i2)];
-	    		int xp = riverInit[(i3 + 2 + (k3 + 1) * i2)];
-	        	int zn = riverInit[(i3 + 1 + (k3 + 0) * i2)];
-	        	int zp = riverInit[(i3 + 1 + (k3 + 2) * i2)];
-
-	        	if ((centre == xn) && (centre == zn) && (centre == xp) && (centre == zp)) {
-	        		ints[(i3 + k3 * xSize)] = -1;
-	        	} else {
-	        		ints[(i3 + k3 * xSize)] = 0;
-	        	}
-	    	}
-	    }
-	    return ints;
+		int i2 = x - 1;
+        int k2 = z - 1;
+        int i3 = xSize + 2;
+        int k3 = zSize + 2;
+        int[] riverInit = this.baseParent.getInts(world, i2, k2, i3, k3);
+        int[] ints = AuroraIntCache.get(world).getIntArray(xSize * zSize);
+       
+        for (int k4 = 0; k4 < zSize; ++k4) {
+            for (int i4 = 0; i4 < xSize; ++i4) {
+                int centre = riverInit[i4 + 1 + (k4 + 1) * i3];
+                int xn = riverInit[i4 + 0 + (k4 + 1) * i3];
+                int xp = riverInit[i4 + 2 + (k4 + 1) * i3];
+                int zn = riverInit[i4 + 1 + (k4 + 0) * i3];
+                int zp = riverInit[i4 + 1 + (k4 + 2) * i3];
+                
+                if (centre == xn && centre == zn && centre == xp && centre == zp) {
+                    ints[i4 + k4 * xSize] = 0;
+                } else {
+                    ints[i4 + k4 * xSize] = 1;
+                }
+            }
+        }
+        return ints;
   	}
 }

@@ -30,10 +30,11 @@ import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.EnumHelper;
 import projectaurora.core.Aurora;
+import projectaurora.core.MusicType;
 import projectaurora.entity.AmbientCreature;
 import projectaurora.world.AuroraTreeType;
 import projectaurora.world.BaseChunkManager;
-import projectaurora.world.biome.AuroraBiomeVariant.VariantScale;
+import projectaurora.world.WorldModule;
 import projectaurora.world.vulcan.BiomeLavaOcean;
 import projectaurora.world.vulcan.BiomeVulcan;
 import projectaurora.world.vulcan.BiomeVulcanRiver;
@@ -44,6 +45,7 @@ public class AuroraBiome extends BiomeGenBase {
 	public static EnumCreatureType creatureType_Ambient = (EnumCreatureType)EnumHelper.addEnum(correctCreatureTypeParams, EnumCreatureType.class, "AuroraAmbient", new Object[] { AmbientCreature.class, Integer.valueOf(50), Material.air, Boolean.valueOf(true), Boolean.valueOf(false)});
 	
 	public static AuroraBiome[] auroraBiomeList = new AuroraBiome[256];
+	public static List<AuroraBiome> vulcanList = new ArrayList();
 	
 	public static BiomeGenBase lavaOcean;
 	public static BiomeGenBase lavaRiver;
@@ -57,6 +59,11 @@ public class AuroraBiome extends BiomeGenBase {
 	public static final float lowPlains = 0.075F;
 	public static final float highPlains = 0.4F;
 	public static final float hill = 1.5F;
+	
+	public static final float testDeepOcean = -1.0F;
+	public static final float testIslands = 0.3F;
+	public static final float testNormalBottom = 0.15F;
+	public static final float testNormalTop = 0.3F;
 	
 	public AuroraBiomeDecorator decorator;
 	public int topBlockMeta = 0;
@@ -111,9 +118,9 @@ public class AuroraBiome extends BiomeGenBase {
 	}
 	
 	public static void initBiomes() {
-		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(deepOcean, shoresTop).setColor(1).setBiomeName("lavaOcean").setDisableRain();
+		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(testDeepOcean, testIslands/*deepOcean, shoresTop*/).setColor(1).setBiomeName("lavaOcean").setDisableRain();
 		lavaRiver = new BiomeVulcanRiver(1).setTemperatureRainfall(2F, 0F).setMinMaxHeight(river, river).setColor(32234).setBiomeName("vulcanRiver").setDisableRain();
-		vulcan = new BiomeVulcan(2).setTemperatureRainfall(2F, 0F).setMinMaxHeight(shoresTop, highPlains).setColor(0).setBiomeName("vulcanMain").setDisableRain();
+		vulcan = new BiomeVulcan(2).setTemperatureRainfall(2F, 0F).setMinMaxHeight(testNormalBottom, testNormalTop/*shoresTop, highPlains*/).setColor(0).setBiomeName("vulcanMain").setDisableRain();
 	}
 	
 	protected void addBiomeVariant(AuroraBiomeVariant variant) {
@@ -292,6 +299,10 @@ public class AuroraBiome extends BiomeGenBase {
     public void genTerrainBlocks(World world, Random random, Block[] blocks, byte[] meta, int x, int z, double stoneNoise) {
         //this.generateBiomeTerrain(world, random, blocks, meta, x, z, stoneNoise, AuroraBiomeVariant.BOULDERS_RED);
     }
+	
+	public MusicType getMusicForBiome() {
+		return MusicType.DEFAULT;
+	}
 
 	public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, AuroraBiomeVariant variant) {
 	    int seaLevel = 63;
@@ -842,5 +853,15 @@ public class AuroraBiome extends BiomeGenBase {
 	    public void updateWater(int rgb) {
 	    	this.theBiome.waterColorMultiplier = rgb;
 	    }
+	}
+
+	public static List getBiomesForCurrentDimension(World world) {
+		int dimensionID = world.provider.dimensionId;
+		
+		if(dimensionID == WorldModule.vulcanID) {
+			return vulcanList;
+		}
+		System.out.println("Couldn't get biomeList, defaulting to vulcan");
+		return vulcanList;
 	}
 }

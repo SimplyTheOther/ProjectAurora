@@ -3,11 +3,15 @@ package projectaurora.world.layer;
 import net.minecraft.world.World;
 import projectaurora.world.AuroraIntCache;
 
-public class AuroraGenLayerBiomeSubTypesSmall extends BaseGenLayer {
+@Deprecated
+public class AuroraGenLayerBiomeSubTypesSmall extends BaseGenLayer {//TODO deprecated
 
-	public AuroraGenLayerBiomeSubTypesSmall(long seed, BaseGenLayer layer) {
+	/*public AuroraGenLayerBiomeSubTypesSmall(long seed, BaseGenLayer layer) {
 		super(seed);
 		this.baseParent = layer;
+	}*/
+	public AuroraGenLayerBiomeSubTypesSmall(long seed) {
+		super(seed);
 	}
 
 	@Override

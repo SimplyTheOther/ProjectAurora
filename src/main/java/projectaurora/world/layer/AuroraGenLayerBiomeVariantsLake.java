@@ -41,28 +41,21 @@ public class AuroraGenLayerBiomeVariantsLake extends BaseGenLayer {
 
 	    for (int k1 = 0; k1 < zSize; k1++) {
 	    	for (int i1 = 0; i1 < xSize; i1++) {
-	    		initChunkSeed(x + i1, z + k1);
-	    		int baseInt = baseInts == null ? 0 : baseInts[(i1 + k1 * xSize)];
-
-	    		if (getFlag(this.lakeFlags, 1)) {
-	    			if (nextInt(20 * this.zoomScale * this.zoomScale * this.zoomScale) == 2) {
-	    				baseInt = setFlag(baseInt, 1);
-	    			}
-	    		}
-	    		
-	    		if (getFlag(this.lakeFlags, 2)) {
-	    			if (nextInt(12) == 3) {
-	    				baseInt = setFlag(baseInt, 2);
-	    			}
-	    		}
-	    		
-	    		if (getFlag(this.lakeFlags, 4)) {
-	    			if (nextInt(10) == 1) {
-	    				baseInt = setFlag(baseInt, 4);
-	    			}
-	    		}
-	    		
-	    		ints[(i1 + k1 * xSize)] = baseInt;
+                this.initChunkSeed((long)(x + i1), (long)(z + k1));
+                int baseInt = (baseInts == null) ? 0 : baseInts[i1 + k1 * xSize];
+                
+                if (getFlag(this.lakeFlags, 1) && this.nextInt(30 * this.zoomScale * this.zoomScale * this.zoomScale) == 2) {
+                    baseInt = setFlag(baseInt, 1);
+                }
+                
+                if (getFlag(this.lakeFlags, 2) && this.nextInt(12) == 3) {
+                    baseInt = setFlag(baseInt, 2);
+                }
+                
+                if (getFlag(this.lakeFlags, 4) && this.nextInt(10) == 1) {
+                    baseInt = setFlag(baseInt, 4);
+                }
+                ints[i1 + k1 * xSize] = baseInt;
 	    	}
 	    }
 	    return ints;
