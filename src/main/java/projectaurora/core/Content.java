@@ -22,24 +22,24 @@ public class Content {
 	public static Item teleporter;
 
 	public static void preInit() {
-		ore = new BlockOre().setBlockName(Reference.modid + ".ore");
+		ore = new BlockOre().setBlockName(Reference.modidLowerCase + ".ore");
 		metaRegister(ore, ItemBlockOre.class);
 		
-		rock = new BlockRock().setBlockName(Reference.modid + ".rock");
+		rock = new BlockRock().setBlockName(Reference.modidLowerCase + ".rock");
 		metaRegister(rock, ItemBlockRock.class);
 		
-		dust = new BlockSoft().setBlockName(Reference.modid + ".dust");
+		dust = new BlockSoft().setBlockName(Reference.modidLowerCase + ".dust");
 		metaRegister(dust, ItemBlockSoft.class);
 		
-		plant = new BlockPlant().setBlockName(Reference.modid + ".plant");
+		plant = new BlockPlant().setBlockName(Reference.modidLowerCase + ".plant");
 		metaRegister(plant, ItemBlockPlant.class);
 		
-		teleporter = new ItemTeleporter().setUnlocalizedName(Reference.modid + ".teleporter");
-		GameRegistry.registerItem(teleporter, Reference.modid + (teleporter.getUnlocalizedName().substring(5)));
+		teleporter = new ItemTeleporter().setUnlocalizedName(Reference.modidLowerCase + ".teleporter");
+		GameRegistry.registerItem(teleporter, (teleporter.getUnlocalizedName().substring(5)));
 	}
 
 	public static void metaRegister(Block block, Class<? extends ItemBlock> itemclass) {
-		GameRegistry.registerBlock(block, itemclass, Reference.modid + (block.getUnlocalizedName().substring(5)));
+		GameRegistry.registerBlock(block, itemclass, (block.getUnlocalizedName().substring(5)));
 	}
 
 	public static void init() {

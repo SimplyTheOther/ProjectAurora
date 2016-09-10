@@ -26,8 +26,7 @@ import projectaurora.world.gen.MapGenCaves;
 import projectaurora.world.gen.MapGenRavine;
 
 public class VulcanChunkProvider implements IChunkProvider {
-	//TODO could be: (most likely) Kepler-10b, or less likely COROT-7b, or Kepler-78b
-	//TODO note: if Kepler-10b, 1833K (~1560C), above iron melting point
+	//TODO Kepler-10b, 1833K (~1560C), above iron melting point
 	private World worldObj;
 	private Random rand;
 	private BiomeGenBase[] biomesForGeneration;
@@ -149,7 +148,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    							//int tmp621_620 = (j2 + s); 
 	    							//j2 = tmp621_620; 
 	    							//blocks[tmp621_620] = Blocks.air;
-	    							blocks[j2 += s] = Blocks.air;//TODO Vulcan might have air. 
+	    							blocks[j2 += s] = Blocks.air;
 	    							//meta[j2 += s] = 0;
 	    						}
 	    					}
@@ -251,7 +250,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	        	int xPos = i + i1 << 2;
 	        	int zPos = k + k1 << 2;
 	        	
-	        	//float roadNear = Road.isRoadNear(xPos, zPos, 32); TODO there won't be a road. probs. Maybe I can steal their code
+	        	//float roadNear = Road.isRoadNear(xPos, zPos, 32); TODO there won't be a road. probably
 	        	
 	        	/*if (roadNear >= 0.0F) {
 	        		float interpFactor = roadNear;
@@ -262,7 +261,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 
 	        	//float mountain = Mountain.getTotalHeightBoost(xPos, zPos);
 	       
-	        	/*if (mountain > 0.005F) { TODO too hard to work with hardcoded mountains
+	        	/*if (mountain > 0.005F) { 
 	        		avgBaseHeight += mountain;
 
 	        		float mtnV = 0.2F;

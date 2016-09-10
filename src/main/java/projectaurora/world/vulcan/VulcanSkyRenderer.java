@@ -26,8 +26,8 @@ public class VulcanSkyRenderer extends IRenderHandler {
 	//No moon
 	//20 hour year...
 	//Basically no atmosphere
-	private static final ResourceLocation sunTexture = new ResourceLocation(Reference.modid, "textures/environment/vulcanSun.png");
-	private static final ResourceLocation moonTexture = new ResourceLocation(Reference.modid, "textures/environment/blank.png");
+	private static final ResourceLocation sunTexture = new ResourceLocation(Reference.modidLowerCase, "textures/environment/vulcanSun.png");
+	private static final ResourceLocation moonTexture = new ResourceLocation(Reference.modidLowerCase, "textures/environment/blank.png");
 
 	public int starGLCallList = GLAllocation.generateDisplayLists(3);
 	public int glSkyList;

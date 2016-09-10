@@ -33,7 +33,7 @@ import projectaurora.world.gen.WorldGenSurfaceGravel;
 import projectaurora.world.village.AuroraVillageGen;
 import projectaurora.world.vulcan.BiomeVulcan;
 
-public class AuroraBiomeDecorator {
+public class AuroraBiomeDecorator {//TODO readd generation
 	private World worldObj;
 	private Random rand;
 	private int chunkX;
@@ -336,7 +336,7 @@ public class AuroraBiomeDecorator {
 	    	int i = this.chunkX + this.rand.nextInt(16) + 8;
 	    	int k = this.chunkZ + this.rand.nextInt(16) + 8;
 	    	//WorldGenerator treeGen = AuroraTreeType.WILLOW_WATER.create(false);
-	    	//treeGen.generate(this.worldObj, this.rand, i, this.worldObj.getHeightValue(i, k), k);//TODO other tree gen
+	    	//treeGen.generate(this.worldObj, this.rand, i, this.worldObj.getHeightValue(i, k), k);
 	    }
 
 	    int fallenLeaves = trees / 2;
@@ -527,9 +527,9 @@ public class AuroraBiomeDecorator {
 	    	int j = this.rand.nextInt(128);
 	    	int k = this.chunkZ + this.rand.nextInt(16) + 8;
 	    	//new WorldGenBerryBush().generate(this.worldObj, this.rand, i, j, k);
-	    }//TODO Berry bush
+	    }
 
-	    if (this.generateWater) {//TODO Don't generate water on some planets
+	    if (this.generateWater) {
 	    	WorldGenerator waterGen = new WorldGenStreams(Blocks.flowing_water);
 
 	    	for (int l = 0; l < 50; l++) {

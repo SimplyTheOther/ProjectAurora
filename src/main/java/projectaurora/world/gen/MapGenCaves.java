@@ -8,8 +8,10 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.MapGenBase;
+import projectaurora.world.biome.AuroraBiome;
 
 public class MapGenCaves extends MapGenBase {
+	
 	protected void generateLargeCaveNode(long par1, int par3, int par4, Block[] blockArray, double par6, double par8, double par10) {
 		generateCaveNode(par1, par3, par4, blockArray, par6, par8, par10, 1.0F + this.rand.nextFloat() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);
  	}
@@ -19,11 +21,11 @@ public class MapGenCaves extends MapGenBase {
 	    double var21 = par4 * 16 + 8;
 	    float var23 = 0.0F;
 	    float var24 = 0.0F;
-	    Random var25 = new Random(par1);
+	    Random rand = new Random(par1);
 
 	    if (par16 <= 0) {
 	    	int var26 = this.range * 16 - 16;
-	    	par16 = var26 - var25.nextInt(var26 / 4);
+	    	par16 = var26 - rand.nextInt(var26 / 4);
 	    }
 
 	    boolean var54 = false;
@@ -33,11 +35,11 @@ public class MapGenCaves extends MapGenBase {
 	    	var54 = true;
 	    }
 
-	    boolean digSurface = var25.nextInt(5) == 0;
+	    boolean digSurface = rand.nextInt(5) == 0;
 
-	    int var27 = var25.nextInt(par16 / 2) + par16 / 4;
+	    int var27 = rand.nextInt(par16 / 2) + par16 / 4;
 
-	    for (boolean var28 = var25.nextInt(6) == 0; par15 < par16; par15++) {
+	    for (boolean var28 = rand.nextInt(6) == 0; par15 < par16; par15++) {
 	    	double var29 = 1.5D + MathHelper.sin(par15 * 3.141593F / par16) * par12 * 1.0F;
 	    	double var31 = var29 * par17;
 	    	float var33 = MathHelper.cos(par14);
@@ -56,16 +58,16 @@ public class MapGenCaves extends MapGenBase {
 	    	par13 += var23 * 0.1F;
 	    	var24 *= 0.9F;
 	    	var23 *= 0.75F;
-	    	var24 += (var25.nextFloat() - var25.nextFloat()) * var25.nextFloat() * 2.0F;
-	      	var23 += (var25.nextFloat() - var25.nextFloat()) * var25.nextFloat() * 4.0F;
+	    	var24 += (rand.nextFloat() - rand.nextFloat()) * rand.nextFloat() * 2.0F;
+	      	var23 += (rand.nextFloat() - rand.nextFloat()) * rand.nextFloat() * 4.0F;
 
 	      	if ((!var54) && (par15 == var27) && (par12 > 1.0F) && (par16 > 0)) {
-	      		generateCaveNode(var25.nextLong(), par3, par4, blockArray, par6, par8, par10, var25.nextFloat() * 0.5F + 0.5F, par13 - 1.570796F, par14 / 3.0F, par15, par16, 1.0D);
-	      		generateCaveNode(var25.nextLong(), par3, par4, blockArray, par6, par8, par10, var25.nextFloat() * 0.5F + 0.5F, par13 + 1.570796F, par14 / 3.0F, par15, par16, 1.0D);
+	      		generateCaveNode(rand.nextLong(), par3, par4, blockArray, par6, par8, par10, rand.nextFloat() * 0.5F + 0.5F, par13 - 1.570796F, par14 / 3.0F, par15, par16, 1.0D);
+	      		generateCaveNode(rand.nextLong(), par3, par4, blockArray, par6, par8, par10, rand.nextFloat() * 0.5F + 0.5F, par13 + 1.570796F, par14 / 3.0F, par15, par16, 1.0D);
 	      		return;
 	      	}
 
-	      	if ((var54) || (var25.nextInt(4) != 0)) {
+	      	if ((var54) || (rand.nextInt(4) != 0)) {
 	      		double var35 = par6 - var19;
 	      		double var37 = par10 - var21;
 	        	double var39 = par16 - par15;
@@ -175,7 +177,7 @@ public class MapGenCaves extends MapGenBase {
 	}
 
 	@Override
-	protected void func_151538_a(World world, int par2, int par3, int par4, int par5, Block[] par6ArrayOfByte) {
+	protected void func_151538_a(World world, int par2, int par3, int par4, int par5, Block[] blockArray) {
 	    int var7 = this.rand.nextInt(this.rand.nextInt(this.rand.nextInt(40) + 1) + 1);
 
 	    if (this.rand.nextInt(15) != 0) {
@@ -189,7 +191,7 @@ public class MapGenCaves extends MapGenBase {
 	    	int var15 = 1;
 
 	    	if (this.rand.nextInt(4) == 0) {
-	    		generateLargeCaveNode(this.rand.nextLong(), par4, par5, par6ArrayOfByte, var9, var11, var13);
+	    		generateLargeCaveNode(this.rand.nextLong(), par4, par5, blockArray, var9, var11, var13);
 	    		var15 += this.rand.nextInt(4);
 	    	}
 
@@ -202,22 +204,30 @@ public class MapGenCaves extends MapGenBase {
 	    			var19 *= (this.rand.nextFloat() * this.rand.nextFloat() * 3.0F + 1.0F);
 	    		}
 
-	    		generateCaveNode(this.rand.nextLong(), par4, par5, par6ArrayOfByte, var9, var11, var13, var19, var17, var18, 0, 0, 1.0D);
+	    		generateCaveNode(this.rand.nextLong(), par4, par5, blockArray, var9, var11, var13, var19, var17, var18, 0, 0, 1.0D);
 	    	}
 	    }
 	}
 
 	public static boolean isTerrainBlock(Block block, BiomeGenBase biome) {
+		if(biome instanceof AuroraBiome) {
+			if(block == ((AuroraBiome)biome).stoneBlock) {
+				return true;
+			}
+		}
+		
 	    if ((block == biome.topBlock) || (block == biome.fillerBlock)) {
 	    	return true;
 	    }
-	    if ((block == Blocks.grass) || (block == Blocks.dirt) || (block == Blocks.sand) || (block == Blocks.gravel)) {// TODO own terrain blocks 
+	    
+	    if ((block == Blocks.grass) || (block == Blocks.dirt) || (block == Blocks.sand) || (block == Blocks.gravel)) {
 	    	return true;
 	    }
-	    //TODO own dirt path?	*/
-	    if ((block == Blocks.stone) || (block == Blocks.sandstone)) {// TODO own rocks? 
+	    
+	    if ((block == Blocks.stone) || (block == Blocks.sandstone)) {
 	    	return true;
 	    }
+	    
 	    return false;
 	}
 }

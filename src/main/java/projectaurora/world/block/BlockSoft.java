@@ -39,7 +39,7 @@ public class BlockSoft extends Block {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
 		for(int i = 0; i < texNames.length; i++) {
-			this.icons[i] = register.registerIcon(Reference.modid + ":dusts/dust" + texNames[i]);
+			this.icons[i] = register.registerIcon(Reference.modidLowerCase + ":dusts/dust" + texNames[i]);
 		}
 	}
 

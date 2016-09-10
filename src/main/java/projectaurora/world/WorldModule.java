@@ -1,7 +1,6 @@
 package projectaurora.world;
 
 import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.DimensionManager;
 import projectaurora.world.biome.AuroraBiome;
 import projectaurora.world.vulcan.VulcanWorldProvider;

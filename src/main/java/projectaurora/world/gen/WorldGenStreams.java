@@ -6,6 +6,9 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import projectaurora.world.BaseChunkManager;
+import projectaurora.world.BaseWorldProvider;
+import projectaurora.world.biome.AuroraBiome;
 
 public class WorldGenStreams extends WorldGenerator {
 	private Block liquid;
@@ -74,6 +77,15 @@ public class WorldGenStreams extends WorldGenerator {
 
 	private boolean isRock(World world, int x, int y, int z) {
 		Block block = world.getBlock(x, y, z);
+		int meta = world.getBlockMetadata(x, y, z);
+		
+		if(world.provider instanceof BaseWorldProvider) {
+			AuroraBiome biome = (AuroraBiome)world.getBiomeGenForCoords(x, z);
+			
+			if(block == biome.stoneBlock && meta == biome.stoneBlockMeta) {
+				return true;
+			}
+		}
 		
 		if(block == Blocks.stone/*TODO other rocks*/) {
 			return true;

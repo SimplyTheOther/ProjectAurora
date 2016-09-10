@@ -16,10 +16,10 @@ import net.minecraftforge.common.MinecraftForge;
 import projectaurora.compat.Compat;
 import projectaurora.world.WorldModule;
 
-@Mod(modid = Reference.modid, name = Reference.name, version = Reference.version, dependencies = "required-after:Forge;after:TConstruct;after:ImmersiveEngineering")
+@Mod(modid = Reference.modidUpperCase, name = Reference.name, version = Reference.version, dependencies = "required-after:Forge;after:TConstruct;after:ImmersiveEngineering")
 public class Aurora {
 
-	@Mod.Instance(Reference.modid)
+	@Mod.Instance(Reference.modidUpperCase)
 	public static Aurora instance;
 	
 	@SidedProxy(clientSide = "projectaurora.core.ClientProxy", serverSide = "projectaurora.core.CommonProxy")
@@ -51,7 +51,7 @@ public class Aurora {
 		Compat.postInit();
 	}
 	
-	public static CreativeTabs tabWorld = new CreativeTabs(Reference.modid) {
+	public static CreativeTabs tabWorld = new CreativeTabs(Reference.modidLowerCase) {
 
 		@Override
 		public Item getTabIconItem() {

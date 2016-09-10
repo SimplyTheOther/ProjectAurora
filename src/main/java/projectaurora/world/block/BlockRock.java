@@ -40,7 +40,7 @@ public class BlockRock extends Block {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
 		for(int i = 0; i < texNames.length; i++) {
-			this.icons[i] = register.registerIcon(Reference.modid + ":rocks/rock" + texNames[i]);
+			this.icons[i] = register.registerIcon(Reference.modidLowerCase + ":rocks/rock" + texNames[i]);
 		}
 	}
 

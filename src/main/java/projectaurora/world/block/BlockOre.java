@@ -69,7 +69,7 @@ public class BlockOre extends Block { // TODO NOTE TO SELF: Quartz? Tin. Platinu
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
 		for(int i = 0; i < texNames.length; i++) {
-			this.icons[i] = register.registerIcon(Reference.modid + ":ores/ore" + texNames[i]);
+			this.icons[i] = register.registerIcon(Reference.modidLowerCase + ":ores/ore" + texNames[i]);
 		}
 	}
 

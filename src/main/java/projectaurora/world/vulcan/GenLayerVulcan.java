@@ -33,13 +33,6 @@ public class GenLayerVulcan extends BaseGenLayer {
 
 	@Override
 	public int[] getInts(World world, int x, int z, int width, int length) {
-		/*int[] inputBiomeIDs = null;
-		if(this.baseParent != null) {
-			System.out.println("baseParent exists");
-			inputBiomeIDs = this.baseParent.getInts(world, x, z, width, length);
-		} else if(this.baseParent == null) {
-			System.out.println("baseParent does not exist");
-		}*///TODO make the original baseParent thing work
 		int[] inputBiomeIDs = noBaseGetInts(world, x, z, width, length);
 		int[] outputBiomeIDs = AuroraIntCache.get(world).getIntArray(width * length);
 		
@@ -61,25 +54,10 @@ public class GenLayerVulcan extends BaseGenLayer {
 				}
 			}
 		}
-		/*int[] outputBiomeIDs = AuroraIntCache.get(world).getoutputBiomeIDs(width * length);
-	   
-		for (int k1 = 0; k1 < length; k1++) {
-			for (int i1 = 0; i1 < width; i1++) {
-				int i2 = x + i1 + originX;
-				int k2 = z + k1 + originZ;
-				
-				if ((i2 < 0) || (i2 >= imageWidth) || (k2 < 0) || (k2 >= imageHeight)) {
-					outputBiomeIDs[(i1 + k1 * width)] = AuroraBiome.ocean.biomeID;
-				} else {
-					outputBiomeIDs[(i1 + k1 * width)] = biomeImageData[(i2 + k2 * imageWidth)];
-				}
-			}
-		}
-	    return outputBiomeIDs;*/
-		return outputBiomeIDs; //TODO Fix getInts for rainfall or whatever
+		return outputBiomeIDs; 
     }
 
-	private int[] noBaseGetInts(World world, int x, int z, int width, int length) {//TODO see if this even works...
+	private int[] noBaseGetInts(World world, int x, int z, int width, int length) {
 		int[] outputBiomeIDs = AuroraIntCache.get(world).getIntArray(width * length);
 	
 		for(int i1 = 0; i1 < length; i1++) {

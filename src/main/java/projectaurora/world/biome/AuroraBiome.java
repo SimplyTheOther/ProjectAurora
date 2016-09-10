@@ -522,7 +522,7 @@ public class AuroraBiome extends BiomeGenBase {
 	@Override
 	public final WorldGenAbstractTree func_150567_a(Random random) {
 	    AuroraTreeType tree = this.decorator.getRandomTree(random);
-	    return tree.create(false);//TODO change random tree based on planet?
+	    return tree.create(false);
 	}
 
 	public final WorldGenAbstractTree getTreeGen(World world, Random random, int x, int y, int z) {
@@ -640,7 +640,7 @@ public class AuroraBiome extends BiomeGenBase {
 	    
 	    if (this.biomeColors.grass != null){
 	    	color = this.biomeColors.grass.getRGB();
-	    } else {//TODO Biome grass colour change
+	    } else {
 	    	AuroraBiomeVariant variant = ((BaseChunkManager)Minecraft.getMinecraft().theWorld.getWorldChunkManager()).getBiomeVariantAt(i, k);
 	    	float temp = getFloatTemperature(i, j, k) + variant.tempBoost;
 	    	float rain = this.rainfall + variant.rainBoost;

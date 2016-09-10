@@ -123,7 +123,7 @@ public class BlockPlant extends Block {
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
 		for(int i = 0; i < texNames.length; i++) {
-			this.icons[i] = register.registerIcon(Reference.modid + ":plants/plant" + texNames[i]);
+			this.icons[i] = register.registerIcon(Reference.modidLowerCase + ":plants/plant" + texNames[i]);
 		}
 	}
 

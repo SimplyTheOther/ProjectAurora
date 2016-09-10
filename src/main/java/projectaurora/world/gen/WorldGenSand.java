@@ -68,7 +68,6 @@ public class WorldGenSand extends WorldGenerator {
 				}
 			}
 		}
-		// TODO Change the params?
 		return false;
 	}
 }

@@ -36,7 +36,7 @@ public class ItemTeleporter extends Item {
 		icons = new IIcon[2];
 		
 		for(int i = 0; i < 2; i++) {
-			icons[i] = register.registerIcon(Reference.modid + ":teleporter" + i);
+			icons[i] = register.registerIcon(Reference.modidLowerCase + ":teleporter" + i);
 		}
 	}
 	
