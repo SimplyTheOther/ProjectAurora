@@ -51,7 +51,7 @@ public class AuroraBiome extends BiomeGenBase {
 	public static BiomeGenBase lavaRiver;
 	public static BiomeGenBase vulcan;
 	
-	public static final float deepOcean = -1.9F;
+	public static final float deepOcean = -2.9F;
 	public static final float river = -0.5F;
 	public static final float deepSwamp = -0.3F;
 	public static final float shores = -0.025F;
@@ -118,7 +118,7 @@ public class AuroraBiome extends BiomeGenBase {
 	}
 	
 	public static void initBiomes() {
-		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(testDeepOcean, testIslands/*deepOcean, shoresTop*/).setColor(1).setBiomeName("lavaOcean").setDisableRain();
+		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(testDeepOcean, testNormalTop/*deepOcean, shoresTop*/).setColor(1).setBiomeName("lavaOcean").setDisableRain();
 		lavaRiver = new BiomeVulcanRiver(1).setTemperatureRainfall(2F, 0F).setMinMaxHeight(river, river).setColor(32234).setBiomeName("vulcanRiver").setDisableRain();
 		vulcan = new BiomeVulcan(2).setTemperatureRainfall(2F, 0F).setMinMaxHeight(testNormalBottom, testNormalTop/*shoresTop, highPlains*/).setColor(0).setBiomeName("vulcanMain").setDisableRain();
 	}

@@ -9,18 +9,24 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import projectaurora.compat.Compat;
 
-public class EventHandler {//TODO make the correct fluid, make water work
+public class EventHandler {
 	
 	@SubscribeEvent
 	public void blockPlace(PlaceEvent event) {
 		if(!event.world.isRemote) {
 			if(event.world.provider.dimensionId == projectaurora.world.WorldModule.vulcanID) {
+				evaporateWater(event);
+				
 				meltBlock("Iron", event);
 				meltBlock("Gold", event);
 				
@@ -78,6 +84,13 @@ public class EventHandler {//TODO make the correct fluid, make water work
 				meltBlock("Uranium", event);
 				meltBlock("Zinc", event);
 			}
+		}
+	}
+
+	private void evaporateWater(PlaceEvent event) {
+		if(event.block.getMaterial() == Material.water) {
+			System.out.println("found water!");
+			event.world.setBlock(event.x, event.y, event.z, Blocks.air);
 		}
 	}
 
@@ -676,4 +689,96 @@ public class EventHandler {//TODO make the correct fluid, make water work
 			minecraft.theWorld.theProfiler.endSection();
 		}
 	}
+	
+	@SubscribeEvent
+	public void onPlayerInteract(PlayerInteractEvent event) {
+		if(event.world.provider.dimensionId == projectaurora.world.WorldModule.vulcanID) {
+			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+				try {
+					if(event.entityPlayer != null) {
+						System.out.println("entityplayernotnull");
+						
+						if(event.entityPlayer.getCurrentEquippedItem() != null) {
+							System.out.println("itemstacknotnull");
+							
+							if(event.entityPlayer.getCurrentEquippedItem().getItem() != null) {
+								System.out.println("itemnotnull");
+								
+								if(event.entityPlayer.getCurrentEquippedItem().getItem() == Items.water_bucket) {
+									if(!event.entityPlayer.capabilities.isCreativeMode) {
+										ItemStack prevEquipped = event.entityPlayer.getCurrentEquippedItem();
+								
+										event.entityPlayer.inventory.setInventorySlotContents(event.entityPlayer.inventory.currentItem, new ItemStack(Items.bucket));
+										MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(event.entityPlayer, prevEquipped));
+							
+										event.world.playSoundEffect((double)((float)event.x + 0.5F), (double)((float)event.y + 0.5F), (double)((float)event.z + 0.5F), "random.fizz", 0.5F, 2.6F + (event.world.rand.nextFloat() - event.world.rand.nextFloat()) * 0.8F);
+							
+										event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+										event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+										event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+										event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+										event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+										event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+										event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+										event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
+									} else {
+										event.setCanceled(true);
+										System.out.println("cancelled");
+									}
+								}
+							}
+						}
+					}
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	/*@SubscribeEvent
+	public void onFillBucket(FillBucketEvent event) {
+		if(event.world.provider.dimensionId == projectaurora.world.WorldModule.vulcanID) {
+			System.out.println("block at targetBW=" + event.world.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ).getUnlocalizedName());
+			System.out.println("current=" + event.current.getItem().getUnlocalizedName());
+			if(event.current.getItem() == Items.water_bucket) {
+				System.out.println("block at target=" + event.world.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ).getUnlocalizedName());
+		
+				event.result = new ItemStack(Items.bucket);
+				event.setCanceled(true);
+				event.result = new ItemStack(Items.bucket);
+				/*switch(event.target.sideHit) {
+					case 0:
+						evaporateWater(event, 0, -1, 0);
+						break;
+					case 1:
+						evaporateWater(event, 0, 1, 0);
+						break;
+					case 2:
+						evaporateWater(event, 0, 0, -1);
+						break;
+					case 3:
+						evaporateWater(event, 0, 0, 1);
+						break;
+					case 4:
+						evaporateWater(event, -1, 0, 0);
+						break;
+					case 5:
+						evaporateWater(event, 1, 0, 0);
+						break;
+					default:
+						break;
+				}
+			}
+		}
+	}*/
+
+	/*private void evaporateWater(FillBucketEvent event, int x, int y, int z) {
+		System.out.println("sidehit=" + event.target.sideHit);
+		System.out.println("block at target2=" + event.world.getBlock(event.target.blockX + x, event.target.blockY + y, event.target.blockZ + z).getUnlocalizedName());
+		if(event.world.getBlock(event.target.blockX + x, event.target.blockY + y, event.target.blockZ + z).getMaterial() == Material.water) {
+			event.world.setBlock(event.target.blockX + x, event.target.blockY + y, event.target.blockZ + z, Blocks.air, 0, 3);
+			System.out.println("Aired");
+		}
+	}*/
 }

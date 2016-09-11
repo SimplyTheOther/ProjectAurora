@@ -1,9 +1,12 @@
 package projectaurora.compat;
 
+import java.io.File;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraftforge.common.config.Configuration;
 
 public class Compat {
 	
@@ -30,6 +33,8 @@ public class Compat {
 		if(Loader.isModLoaded("TConstruct")) {
 			isTinkersLoaded = true;
 			tinkerStorage = GameRegistry.findBlock("TConstruct", "MetalBlock");
+			
+			putDimensionsInBlacklist();
 		}
 		
 		if(Loader.isModLoaded("ThermalFoundation")) {
@@ -43,4 +48,28 @@ public class Compat {
 		
 	}
 
+
+	private static void putDimensionsInBlacklist() {
+		String location = Loader.instance().getConfigDir().getPath();
+		File tinkerConfig = new File(location + File.separator + "TinkersConstruct.cfg");
+		
+		try {
+			if(tinkerConfig.exists()) {
+				Configuration config = new Configuration(tinkerConfig);
+			
+				config.load();
+			
+				config.get("DimBlacklist", "GenerateSlimeIslandInDim0Only", true, "True: slime islands wont generate in any ages other than overworld(if enabled); False: will generate in all non-blackisted ages").set(true);
+			
+				System.out.println(config.get("DimBlacklist", "GenerateSlimeIslandInDim0Only", true, "True: slime islands wont generate in any ages other than overworld(if enabled); False: will generate in all non-blackisted ages").getBoolean());
+				
+				config.save();
+				
+				System.out.println("dimensionInBlacklist");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("dimensionInBlacklistFailed");
+		}
+	}
 }
