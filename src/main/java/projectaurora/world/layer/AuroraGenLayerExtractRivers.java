@@ -22,7 +22,7 @@ public class AuroraGenLayerExtractRivers extends BaseGenLayer {
 
 	    		int biomeID = biomes[(i1 + k1 * xSize)];
 	        
-	    		if (biomeID == AuroraBiome.lavaRiver.biomeID) {//TODO change to generic river
+	    		if (AuroraBiome.auroraBiomeList[biomeID].isRiver == true) {
 	    			ints[(i1 + k1 * xSize)] = 2;
 	    		} else {
 	    			ints[(i1 + k1 * xSize)] = 0;

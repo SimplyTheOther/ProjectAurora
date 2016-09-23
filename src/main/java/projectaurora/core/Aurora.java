@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
 import projectaurora.compat.Compat;
 import projectaurora.world.WorldModule;
 
@@ -31,7 +32,7 @@ public class Aurora {
 	public void preInit(FMLPreInitializationEvent event) {
 		Content.preInit();
 		Compat.preInit();
-		WorldModule.preInit();
+		WorldModule.preInit(event);
 	}
 	
 	@Mod.EventHandler

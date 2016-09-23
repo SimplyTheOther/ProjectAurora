@@ -15,6 +15,7 @@ import projectaurora.world.NoCloudRenderer;
 import projectaurora.world.WorldModule;
 
 public class VulcanWorldProvider extends BaseWorldProvider {
+	
 	public VulcanWorldProvider() {
 		super.dayLength = 4800L;
 	}
@@ -205,4 +206,10 @@ public class VulcanWorldProvider extends BaseWorldProvider {
 
         return Vec3.createVectorHelper((double)f4, (double)f5, (double)f6);*/
     }
+    
+	@Override
+	@SideOnly(Side.CLIENT)
+	public float[] calcSunriseSunsetColors(float par1, float par2) {
+            return null;
+	}
 }

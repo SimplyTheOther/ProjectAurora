@@ -87,7 +87,7 @@ public class WorldGenStreams extends WorldGenerator {
 			}
 		}
 		
-		if(block == Blocks.stone/*TODO other rocks*/) {
+		if(block == Blocks.stone) {
 			return true;
 		}
 		return false;

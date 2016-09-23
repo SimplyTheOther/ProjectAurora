@@ -4,7 +4,7 @@ import net.minecraft.init.Blocks;
 import projectaurora.core.Content;
 import projectaurora.world.biome.AuroraBiome;
 
-public class BiomeVulcanRiver extends AuroraBiome {
+public class BiomeVulcanRiver extends BiomeVulcan {
 
 	public BiomeVulcanRiver(int biomeID) {
 		super(biomeID);
@@ -19,6 +19,8 @@ public class BiomeVulcanRiver extends AuroraBiome {
 		//this.spawnableWhateverList.clear();
 		//setBanditChance
 		this.decorator.generateWater = false;
+		
+		this.isRiver = true;
 		
 		super.vulcanList.add(this);
 	}

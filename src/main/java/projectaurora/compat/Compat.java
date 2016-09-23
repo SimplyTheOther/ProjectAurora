@@ -2,6 +2,8 @@ package projectaurora.compat;
 
 import java.io.File;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -28,13 +30,15 @@ public class Compat {
 		if(Loader.isModLoaded("ImmersiveEngineering")) {
 			isImmersiveEngineeringLoaded = true;
 			iEStorage = GameRegistry.findBlock("ImmersiveEngineering", "storage");
+			
+			putDimensionsInIEOreBlacklist();
 		}
 		
 		if(Loader.isModLoaded("TConstruct")) {
 			isTinkersLoaded = true;
 			tinkerStorage = GameRegistry.findBlock("TConstruct", "MetalBlock");
 			
-			putDimensionsInBlacklist();
+			putDimensionsInSlimeIslandBlacklist();
 		}
 		
 		if(Loader.isModLoaded("ThermalFoundation")) {
@@ -49,7 +53,7 @@ public class Compat {
 	}
 
 
-	private static void putDimensionsInBlacklist() {
+	private static void putDimensionsInSlimeIslandBlacklist() {
 		String location = Loader.instance().getConfigDir().getPath();
 		File tinkerConfig = new File(location + File.separator + "TinkersConstruct.cfg");
 		
@@ -60,16 +64,50 @@ public class Compat {
 				config.load();
 			
 				config.get("DimBlacklist", "GenerateSlimeIslandInDim0Only", true, "True: slime islands wont generate in any ages other than overworld(if enabled); False: will generate in all non-blackisted ages").set(true);
-			
-				System.out.println(config.get("DimBlacklist", "GenerateSlimeIslandInDim0Only", true, "True: slime islands wont generate in any ages other than overworld(if enabled); False: will generate in all non-blackisted ages").getBoolean());
 				
 				config.save();
 				
-				System.out.println("dimensionInBlacklist");
+				System.out.println("dimensionInTiCBlacklist");
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("dimensionInBlacklistFailed");
+			System.out.println("dimensionInTiCBlacklistFailed");
+		}
+	}
+	
+	private static void putDimensionsInIEOreBlacklist() {
+		String location = Loader.instance().getConfigDir().getPath();
+		File ieConfig = new File(location + File.separator + "ImmersiveEngineering.cfg");
+		
+		try {
+			if(ieConfig.exists()) {
+				Configuration config = new Configuration(ieConfig);
+				int[] currentOreGenBlacklist;
+			
+				config.load();
+			
+				currentOreGenBlacklist = config.get("oregen", "DimensionBlacklist", new int[] { -1, 1 }, "A blacklist of dimensions in which IE ores won't spawn. By default this is Nether (-1) and End (1)").getIntList();
+				
+				int[] combinedIntArray = new int[currentOreGenBlacklist.length + projectaurora.world.WorldModule.allDimensionIds.length];
+				System.arraycopy(currentOreGenBlacklist, 0, combinedIntArray, 0, currentOreGenBlacklist.length);
+				System.arraycopy(projectaurora.world.WorldModule.allDimensionIds, 0, combinedIntArray, currentOreGenBlacklist.length, projectaurora.world.WorldModule.allDimensionIds.length);
+
+				for(int i = 0; i < projectaurora.world.WorldModule.allDimensionIds.length; i++) {
+					if(ArrayUtils.contains(currentOreGenBlacklist, projectaurora.world.WorldModule.allDimensionIds[i])) {
+						System.out.println("dimensionAlreadyInIEBlacklist");
+					} else {
+						config.get("oregen", "DimensionBlacklist", currentOreGenBlacklist, "A blacklist of dimensions in which IE ores won't spawn. By default this is Nether (-1) and End (1)").set(combinedIntArray);
+					
+						System.out.println("dimensionInIEBlacklist");
+					}
+				}
+				System.out.println("CombinedIntArray=" + combinedIntArray.length + "," + combinedIntArray[0] + "," + combinedIntArray[1] + "," + combinedIntArray[2]);
+				
+				config.save();
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("dimensionInIEBlacklistFailed");
 		}
 	}
 }

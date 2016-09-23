@@ -79,6 +79,7 @@ public class AuroraBiome extends BiomeGenBase {
 	protected static NoiseGeneratorPerlin biomeTerrainNoise = new NoiseGeneratorPerlin(new Random(1955L), 1);
 	protected static Random terrainRand = new Random();
 	protected boolean enablePodzol = true;
+	protected boolean enableRocky = true;
 
 	public List spawnableGoodList = new ArrayList();
 	public List spawnableEvilList = new ArrayList();
@@ -93,11 +94,13 @@ public class AuroraBiome extends BiomeGenBase {
 	public BiomeColors biomeColors = new BiomeColors(this);
 	
 	public BiomeTerrain biomeTerrain = new BiomeTerrain(this);
+
+	public boolean isRiver = false;
+
+	public boolean isOcean = false;
 	
-	private static Color waterColorNorth = new Color(602979); //TODO water colours?
-	private static Color waterColorSouth = new Color(4973293);
-	private static int waterLimitNorth = -40000;
-	private static int waterLimitSouth = 160000;
+	private static Color waterColorCold = new Color(602979); //TODO water colours?
+	private static Color waterColorTropical = new Color(4973293);
 	
 	public AuroraBiome(int biomeID) {
 		super(biomeID, false);
@@ -195,53 +198,53 @@ public class AuroraBiome extends BiomeGenBase {
 	    return (BiomeGenBase.FlowerEntry)WeightedRandom.getRandomItem(random, this.flowers);
 	}
 
-	protected void registerPlainsFlowers() {//TODO own flowers
+	protected void registerPlainsFlowers() {
 	    this.flowers.clear();
-	    //addFlower(Blocks.red_flower, 4, 3);
-	    //addFlower(Blocks.red_flower, 5, 3);
-	    //addFlower(Blocks.red_flower, 6, 3);
-	    //addFlower(Blocks.red_flower, 7, 3);
-	    //addFlower(Blocks.red_flower, 0, 20);
-	    //addFlower(Blocks.red_flower, 3, 20);
-	    //addFlower(Blocks.red_flower, 8, 20);
-	    //addFlower(Blocks.yellow_flower, 0, 30);
+	    addFlower(Blocks.red_flower, 4, 3);
+	    addFlower(Blocks.red_flower, 5, 3);
+	    addFlower(Blocks.red_flower, 6, 3);
+	    addFlower(Blocks.red_flower, 7, 3);
+	    addFlower(Blocks.red_flower, 0, 20);
+	    addFlower(Blocks.red_flower, 3, 20);
+	    addFlower(Blocks.red_flower, 8, 20);
+	    addFlower(Blocks.yellow_flower, 0, 30);
 	    //addFlower(bluebell, 0, 5);
 	}
 
-	protected void registerForestFlowers() {//TODO own flowers
+	protected void registerForestFlowers() {
 	    this.flowers.clear();
 	    addDefaultFlowers();
 	    //addFlower(bluebell, 0, 5);
 	}
 
-	protected void registerJungleFlowers() {//TODO own flowers
+	protected void registerJungleFlowers() {
 	    this.flowers.clear();
 	    addDefaultFlowers();
 	}
 
-	protected void registerMountainsFlowers() {//TODO own flowers
+	protected void registerMountainsFlowers() {
 	    this.flowers.clear();
 	    addDefaultFlowers();
-	    //addFlower(Blocks.red_flower, 1, 10);
+	    addFlower(Blocks.red_flower, 1, 10);
 	    //addFlower(bluebell, 0, 5);
 	}
 
 	protected void registerTaigaFlowers() {
 	    this.flowers.clear();
 	    addDefaultFlowers();
-	    //addFlower(Blocks.red_flower, 1, 10);
-	    //addFlower(bluebell, 0, 5); TODO own flowers
+	    addFlower(Blocks.red_flower, 1, 10);
+	    //addFlower(bluebell, 0, 5); 
 	}
 
 	protected void registerSavannaFlowers() {
 	    this.flowers.clear();
 	    addDefaultFlowers();
-	}//TODO own flowers
+	}
 
 	protected void registerSwampFlowers() {
 	    this.flowers.clear();
 	    addDefaultFlowers();
-	}//TODO own flowers
+	}
 
 	protected void registerTravellingTrader(Class entityClass) {
 	    this.spawnableTraders.add(entityClass);
@@ -297,15 +300,19 @@ public class AuroraBiome extends BiomeGenBase {
 	
 	@Override
     public void genTerrainBlocks(World world, Random random, Block[] blocks, byte[] meta, int x, int z, double stoneNoise) {
-        //this.generateBiomeTerrain(world, random, blocks, meta, x, z, stoneNoise, AuroraBiomeVariant.BOULDERS_RED);
+        this.generateBiomeTerrain(world, random, blocks, meta, x, z, stoneNoise, 63, AuroraBiomeVariant.RIVER);
     }
 	
 	public MusicType getMusicForBiome() {
 		return MusicType.DEFAULT;
 	}
 
-	public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, AuroraBiomeVariant variant) {
-	    int seaLevel = 63;
+	public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, AuroraBiomeVariant variant) {
+        int chunkX = i & 0xF;
+        int chunkZ = k & 0xF;
+        int xzIndex = chunkX * 16 + chunkZ;
+        int ySize = blocks.length / 256;
+		int seaLevel = 63;
 
 	    int fillerDepthBase = (int)(stoneNoise / 4.0D + 5.0D + random.nextDouble() * 0.25D);
 	    int fillerDepth = -1;
@@ -313,6 +320,35 @@ public class AuroraBiome extends BiomeGenBase {
 	    byte topMeta = (byte)this.topBlockMeta;
 	    Block filler = this.fillerBlock;
 	    byte fillerMeta = (byte)this.fillerBlockMeta;
+	    
+        if (this.enableRocky && height >= 90) {
+            float hFactor = (height - 90) / 10.0f;
+            float thresh = 1.2f - hFactor * 0.2f;
+            thresh = Math.max(thresh, 0.0f);
+            double d1 = AuroraBiome.biomeTerrainNoise.func_151601_a(i * 0.03, k * 0.03);
+            double d2 = AuroraBiome.biomeTerrainNoise.func_151601_a(i * 0.3, k * 0.3);
+            if (d1 + d2 > thresh) {
+                if (random.nextInt(5) == 0) {
+                    top = Blocks.gravel;
+                    topMeta = 0;
+                }
+                else {
+                    top = this.stoneBlock;
+                    topMeta = (byte)this.stoneBlockMeta;
+                }
+                filler = this.stoneBlock;
+                fillerMeta = (byte)this.stoneBlockMeta;
+                int prevHeight = height;
+                if (random.nextInt(20) == 0) {
+                    ++height;
+                }
+                for (int j = height; j >= prevHeight; --j) {
+                    int index = xzIndex * ySize + j;
+                    blocks[index] = this.stoneBlock;
+                    meta[index] = (byte)this.stoneBlockMeta;
+                }
+            }
+        }
 
 	    if (this.enablePodzol) {
 	    	boolean podzol = false;
@@ -354,29 +390,28 @@ public class AuroraBiome extends BiomeGenBase {
 	    	}
 	    }
 
-	    int chunkX = i & 0xF;
-	    int chunkZ = k & 0xF;
-	    int xzIndex = chunkX * 16 + chunkZ;
-	    int ySize = blocks.length / 256;
-
 	    boolean marsh = variant.hasMarsh;
 	    
 	    if (marsh) {
 	    	double d1 = AuroraBiomeVariant.marshNoise.func_151601_a(i * 0.1D, k * 0.1D);
 
-	    	if (d1 > -0.1D) {
-	    		for (int j = ySize - 1; j >= 0; j--) {
-	    			int index = xzIndex * ySize + j;
-	         
-	    			if ((blocks[index] == null) || (blocks[index].getMaterial() != Material.air)) {
-	    				if ((j != seaLevel - 1) || (blocks[index] == this.dominantFluidBlock && meta[index] == this.dominantFluidMeta))
-	    					break;
-	    				blocks[index] = this.dominantFluidBlock;
-	    				meta[index] = (byte)this.dominantFluidMeta;
-	    				break;
-	    			}
-	    		}
-	    	}
+	    	if (d1 > -0.1) {
+                int l = ySize - 1;
+                
+                while (l >= 0) {
+                    int index2 = xzIndex * ySize + l;
+                    
+                    if (blocks[index2] == null || blocks[index2].getMaterial() != Material.air) {
+                        if (l == seaLevel - 1 && blocks[index2] != Blocks.water) {
+                            blocks[index2] = Blocks.water;
+                            break;
+                        }
+                        break;
+                    } else {
+                        --l;
+                    }
+                }
+            }
 	    }
 
 	    for (int j = ySize - 1; j >= 0; j--) {
@@ -449,41 +484,42 @@ public class AuroraBiome extends BiomeGenBase {
 
 	    int mountainRockDepth = (int)(stoneNoise * 6.0D + 2.0D + random.nextDouble() * 0.25D);
 
-	    /*if (((this instanceof BiomeGenMountain)) && (((BiomeGenMountain)this).isSnowCovered()) && (this != foothills)) {
-	    	int snowHeight = 120 - mountainRockDepth;
-	    	int stoneHeight = snowHeight - 30;
-	      
-	    	for (int j = 255; j >= stoneHeight; j--) {
-	    		int index = xzIndex * ySize + j;
-	    		Block block = blocks[index];
+	    /*if (this instanceof BiomeMountains && ((BiomeMountains)this).isSnowCovered() && this != Biome.mountainsFoothills) {
+            int snowHeight = 120 - mountainRockDepth;
+            
+            for (int stoneHeight = snowHeight - 30, j2 = 255; j2 >= stoneHeight; --j2) {
+                int index4 = xzIndex * ySize + j2;
+                Block block2 = blocks[index4];
+                
+                if (j2 >= snowHeight && block2 == this.topBlock) {
+                    blocks[index4] = Blocks.snow;
+                    meta[index4] = 0;
+                } else if (block2 == this.topBlock || block2 == this.fillerBlock) {
+                    blocks[index4] = Blocks.stone;
+                    meta[index4] = 0;
+                }
+            }
+        }*/
 
-	    		if ((j >= snowHeight) && (block == this.topBlock)) {
-	    			blocks[index] = Blocks.snow;
-	    			meta[index] = 0;
-	    		} else if ((block == this.topBlock) || (block == this.fillerBlock)) {
-	    			blocks[index] = Blocks.stone;
-	    			meta[index] = 0;
-	    		}
-	    	}
-	    }*/
-
-	    /*if (((this instanceof BiomeGenMountain2)) && (this != foothills2)) {
-	    	int snowHeight = 150 - mountainRockDepth;
-	    	int stoneHeight = snowHeight - 40;
-	      
-	    	for (int j = 255; j >= stoneHeight; j--) {
-	    		int index = xzIndex * ySize + j;
-	    		Block block = blocks[index];
-
-	    		if ((j >= snowHeight) && (block == this.topBlock)) {
-	    			blocks[index] = Blocks.snow;
-	    			meta[index] = 0;
-	    		} else if ((block == this.topBlock) || (block == this.fillerBlock)) {
-	    			blocks[index] = Blocks.stone;
-	    			meta[index] = 0;
-	    		}
-	    	}
-	    }*/
+	    /*if (this instanceof BiomeMountains2 && this != Biome.mountains2Foothills) {
+            int stoneHeight2 = 110 - mountainRockDepth;
+            
+            for (int sandHeight = stoneHeight2 - 6, j2 = 255; j2 >= sandHeight; --j2) {
+                int index4 = xzIndex * ySize + j2;
+                Block block2 = blocks[index4];
+                
+                if (block2 == this.topBlock || block2 == this.fillerBlock) {
+                    if (j2 >= stoneHeight2) {
+                        blocks[index4] = Content.rock;
+                        meta[index4] = 4;
+                    } else {
+                        blocks[index4] = Blocks.sand;
+                        meta[index4] = 1;
+                    }
+                }
+            }
+        }*/
+        variant.generateVariantTerrain(world, random, blocks, meta, i, k, height, this);
     }
 
 	@Override
@@ -711,23 +747,21 @@ public class AuroraBiome extends BiomeGenBase {
 
 	public static void updateWaterColor(int i, int j, int k) {
 	    int min = 0;
-	    int max = waterLimitSouth - waterLimitNorth;
-	    float latitude = MathHelper.clamp_int(k - waterLimitNorth, min, max) / max;
 
-	    float[] northColors = waterColorNorth.getColorComponents(null);
-	    float[] southColors = waterColorSouth.getColorComponents(null);
+	    float[] coldColors = waterColorCold.getColorComponents(null);
+	    float[] tropicalColors = waterColorTropical.getColorComponents(null);
 
-	    float dR = southColors[0] - northColors[0];
-	    float dG = southColors[1] - northColors[1];
-	    float dB = southColors[2] - northColors[2];
+	    float dR = tropicalColors[0] - coldColors[0];
+	    float dG = tropicalColors[1] - coldColors[1];
+	    float dB = tropicalColors[2] - coldColors[2];
 
-	    float r = dR * latitude;
-	    float g = dG * latitude;
-	    float b = dB * latitude;
+	    float r = dR;
+	    float g = dG;
+	    float b = dB;
 
-	    r += northColors[0];
-	    g += northColors[1];
-	    b += northColors[2];
+	    r += coldColors[0];
+	    g += coldColors[1];
+	    b += coldColors[2];
 	    Color water = new Color(r, g, b);
 	    int waterRGB = water.getRGB();
 

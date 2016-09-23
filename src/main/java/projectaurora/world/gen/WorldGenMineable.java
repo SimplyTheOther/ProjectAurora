@@ -6,20 +6,25 @@ import net.minecraft.block.Block;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import projectaurora.world.biome.AuroraBiome;
 
-public class WorldGenMinable extends WorldGenerator {
+public class WorldGenMineable extends WorldGenerator {
 	private Block minable;
 	private int minableMeta;
 	private int numberOfBlocks;
 	private Block target;
 	private int targetMeta;
 	
-	public WorldGenMinable(Block block, int meta, int number, Block blockTarget, int targetMeta) {
+	public WorldGenMineable(Block block, int meta, int veinSize, Block blockTarget, int targetMeta) {
 		this.minable = block;
 		this.minableMeta = meta;
-		this.numberOfBlocks = number;
+		this.numberOfBlocks = veinSize;
 		this.target = blockTarget;
 		this.targetMeta = targetMeta;
+	}
+	
+	public WorldGenMineable(Block block, int meta, int[] config, AuroraBiome biome) {
+		this(block, meta, config[0], biome.stoneBlock, biome.stoneBlockMeta);
 	}
 
 	@Override
@@ -31,9 +36,9 @@ public class WorldGenMinable extends WorldGenerator {
         double d3 = (double)((float)(z + 8) - MathHelper.cos(f) * (float)this.numberOfBlocks / 8.0F);
         double d4 = (double)(y + rand.nextInt(3) - 2);
         double d5 = (double)(y + rand.nextInt(3) - 2);
-
+        
         for (int l = 0; l <= this.numberOfBlocks; ++l) {
-            double d6 = d0 + (d1 - d0) * (double)l / (double)this.numberOfBlocks;
+        	double d6 = d0 + (d1 - d0) * (double)l / (double)this.numberOfBlocks;
             double d7 = d4 + (d5 - d4) * (double)l / (double)this.numberOfBlocks;
             double d8 = d2 + (d3 - d2) * (double)l / (double)this.numberOfBlocks;
             double d9 = rand.nextDouble() * (double)this.numberOfBlocks / 16.0D;
@@ -59,6 +64,8 @@ public class WorldGenMinable extends WorldGenerator {
 
                                 if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(k2, l2, i3) == this.target && world.getBlockMetadata(k2, l2, i3) == this.targetMeta) {
                                     world.setBlock(k2, l2, i3, this.minable, this.minableMeta, 2);
+                                    
+                                    //System.out.println("placed=" + this.minable.getUnlocalizedName() + "," + k2 + "," + l2 + ","+ i3);
                                 }
                             }
                         }

@@ -23,10 +23,15 @@ public class AuroraGenLayerBiomes extends BaseGenLayer {
 	    		initChunkSeed(x + i1, z + k1);
 
 	    		int isOcean = oceans[(i1 + k1 * xSize)];
-	    		int biomeID;
+	    		int biomeID = 1;
 	       
 	        	if (isOcean == 1) {
-	        		biomeID = AuroraBiome.lavaOcean.biomeID;//TODO change to ocean function
+	        		//biomeID = AuroraBiome.getBiomesForCurrentDimension(world);
+	        		for(int i = 0; i < AuroraBiome.getBiomesForCurrentDimension(world).size(); i++) {
+	        			if(((AuroraBiome)AuroraBiome.getBiomesForCurrentDimension(world).get(i)).isOcean) {
+	        				biomeID = ((AuroraBiome)AuroraBiome.getBiomesForCurrentDimension(world).get(i)).biomeID;
+	        			}
+	        		}
 	        	} else {
 	        		List biomeList = AuroraBiome.getBiomesForCurrentDimension(world);
 	        		int randIndex = nextInt(biomeList.size());

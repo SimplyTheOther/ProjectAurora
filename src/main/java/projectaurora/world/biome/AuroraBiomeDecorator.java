@@ -16,15 +16,18 @@ import net.minecraft.world.gen.feature.WorldGenPumpkin;
 import net.minecraft.world.gen.feature.WorldGenReed;
 import net.minecraft.world.gen.feature.WorldGenVines;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.fluids.FluidRegistry;
+import projectaurora.compat.Compat;
 import projectaurora.core.Content;
 import projectaurora.world.AuroraTreeType;
 import projectaurora.world.BaseChunkManager;
+import projectaurora.world.WorldModule;
 import projectaurora.world.gen.WorldGenAlgae;
 import projectaurora.world.gen.WorldGenBiomeFlowers;
 import projectaurora.world.gen.WorldGenCaveCobwebs;
 import projectaurora.world.gen.WorldGenCorn;
 import projectaurora.world.gen.WorldGenLogs;
-import projectaurora.world.gen.WorldGenMinable;
+import projectaurora.world.gen.WorldGenMineable;
 import projectaurora.world.gen.WorldGenReeds;
 import projectaurora.world.gen.WorldGenSand;
 import projectaurora.world.gen.WorldGenStalactites;
@@ -32,6 +35,7 @@ import projectaurora.world.gen.WorldGenStreams;
 import projectaurora.world.gen.WorldGenSurfaceGravel;
 import projectaurora.world.village.AuroraVillageGen;
 import projectaurora.world.vulcan.BiomeVulcan;
+import projectaurora.world.vulcan.VulcanChunkProvider.ChunkFlags;
 
 public class AuroraBiomeDecorator {//TODO readd generation
 	private World worldObj;
@@ -43,7 +47,7 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	public float biomeOreFactor = 1.0F;
 	private WorldGenerator clayGen;
 	private WorldGenerator sandGen;
-	private WorldGenerator quagmireGen;
+	private WorldGenerator quicksandGen;
 	private WorldGenerator surfaceGravelGen;
 	private WorldGenerator flowerGen;
 	private WorldGenerator logGen;
@@ -62,7 +66,7 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	private WorldGenerator melonGen;
 	public int sandPerChunk;
 	public int clayPerChunk;
-	public int quagmirePerChunk;
+	public int quicksandPerChunk;
 	public int treesPerChunk;
 	public int willowPerChunk;
 	public int logsPerChunk;
@@ -86,15 +90,36 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	public boolean generateWater;
 	public boolean generateLava;
 	public boolean generateCobwebs;
+	public boolean generateSurfaceGravel;
 	private int treeClusterSize;
 	private int treeClusterChance;
 	private List<AuroraTreeType.WeightedTreeType> treeTypes;
 	private Random structureRand;
 	private List<RandomStructure> randomStructures;
 	//private List<AuroraVillageGen> villages; TODO own villages/towns/settlements
+	public boolean generateDirt;
+	public boolean generateGravel;
+	public boolean generateCoal;
+	public boolean generateIron;
+	public boolean generateGold;
+	public boolean generateLapis;
+	public boolean generateDiamond;
+	public boolean generateEmerald;
+	public boolean generateCopper;
+	public boolean generateAluminium;
+	public boolean generateLead;
+	public boolean generateSilver;
+	public boolean generateNickel;
+	public boolean generateTin;
+	public boolean generateQuartz;
+	public boolean moltenOres;
 
-	public void addOre(WorldGenerator gen, float f, int min, int max) {
-	    this.biomeOres.add(new GenerateOre(gen, f, min, max));
+	public void addOre(WorldGenerator generator, float chance, int min, int max) {
+	    this.biomeOres.add(new GenerateOre(generator, chance, min, max));
+	}
+	
+	public void addOre(WorldGenerator generator, int[] config) {
+	    this.biomeOres.add(new GenerateOre(generator, (float)config[1], config[2], config[3]));
 	}
 
 	public void clearOres() {
@@ -102,21 +127,10 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	}
 
 	public AuroraBiomeDecorator(AuroraBiome biome) {
-	    addOre(new WorldGenMinable(Blocks.dirt, 0, 32, biome.stoneBlock, 0), 40.0F, 0, 256);//TODO replace dirt and gravel underground
-	    addOre(new WorldGenMinable(Blocks.gravel, 0, 32, biome.stoneBlock, 0), 20.0F, 0, 256);
-
-	    /*addOre(new WorldGenMinable(Blocks.coal_ore, 16), 30.0F, 0, 256);
-	    addOre(new WorldGenMinable(Block.copperOre, 8), 8.0F, 0, 128);
-	    addOre(new WorldGenMinable(Block.tinOre, 8), 8.0F, 0, 128);
-	    addOre(new WorldGenMinable(Blocks.iron_ore, 8), 20.0F, 0, 64);
-
-	    addOre(new WorldGenMinable(Blocks.gold_ore, 8), 2.0F, 0, 32);
-	    addOre(new WorldGenMinable(Block.silverOre, 8), 3.0F, 0, 32);*///TODO replace ores
-
 	    this.clayGen = new WorldGenSand(Blocks.clay, 0, 5, 1);
 	    this.sandGen = new WorldGenSand(Blocks.sand, 0, 7, 2);
-	    //this.quagmireGen = new WorldGenSand(Block.quagmire, 0, 7, 2);
-	    this.surfaceGravelGen = new WorldGenSurfaceGravel(Blocks.gravel, 0);//TODO replace gravel, and other blocks above
+	    //this.quicksandGen = new WorldGenSand(Block.quicksand, 0, 7, 2);
+	    this.surfaceGravelGen = new WorldGenSurfaceGravel(Blocks.gravel, 0);
 
 	    this.flowerGen = new WorldGenBiomeFlowers();
 	    this.logGen = new WorldGenLogs();
@@ -128,7 +142,7 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	    this.cornGen = new WorldGenCorn(Blocks.reeds, 0);
 	    this.pumpkinGen = new WorldGenPumpkin();
 	    this.glowstoneGen = new WorldGenAlgae(false, Content.plant, 0, Blocks.lava, 0);
-	    this.cobwebGen = new WorldGenCaveCobwebs(Blocks.web, 0, Blocks.stone, 0);
+	    this.cobwebGen = new WorldGenCaveCobwebs(Blocks.web, 0, biome.stoneBlock, biome.stoneBlockMeta);
 	    this.stalactiteGen = new WorldGenStalactites();
 	    this.vinesGen = new WorldGenVines();
 	    this.cactusGen = new WorldGenCactus();
@@ -136,7 +150,7 @@ public class AuroraBiomeDecorator {//TODO readd generation
 
 	    this.sandPerChunk = 4;
 	    this.clayPerChunk = 3;
-	    this.quagmirePerChunk = 0;
+	    this.quicksandPerChunk = 0;
 	    this.treesPerChunk = 0;
 	    this.willowPerChunk = 0;
 	    this.logsPerChunk = 0;
@@ -160,6 +174,25 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	    this.generateWater = true;
 	    this.generateLava = true;
 	    this.generateCobwebs = true;
+	    this.generateSurfaceGravel = true;
+	    this.generateDirt = true;
+	    this.generateGravel = true;
+		
+		this.generateCoal = true;
+		this.generateIron = true;
+		this.generateGold = true;
+		this.generateLapis = true;
+		this.generateDiamond = true;
+		this.generateEmerald = true;
+		this.generateCopper = true;
+		this.generateAluminium = true;
+		this.generateLead = true;
+		this.generateSilver = true;
+		this.generateNickel = true;
+		this.generateTin = true;
+		this.generateQuartz = true;
+		
+		this.moltenOres = false;
 
 	    this.treeClusterChance = -1;
 
@@ -244,7 +277,122 @@ public class AuroraBiomeDecorator {//TODO readd generation
 
 	private void decorate() {
 	    AuroraBiomeVariant biomeVariant = ((BaseChunkManager)this.worldObj.getWorldChunkManager()).getBiomeVariantAt(this.chunkX + 8, this.chunkZ + 8);
+	    AuroraBiome biome = (AuroraBiome)((BaseChunkManager)this.worldObj.getWorldChunkManager()).getBiomeGenAt(chunkX, chunkZ);
 
+	    if(this.generateDirt) {
+	    	addOre(new WorldGenMineable(Blocks.dirt, 0, WorldModule.dirtGen, biome), WorldModule.dirtGen);
+	    }
+	    
+	    if(this.generateGravel) {
+		    addOre(new WorldGenMineable(Blocks.gravel, 0, WorldModule.gravelGen, biome), WorldModule.gravelGen);
+	    }
+	    
+	    if(this.generateCoal) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("coal.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("coal.molten").getBlock(), 0, WorldModule.coalGen, biome), WorldModule.coalGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.coalGen, biome), WorldModule.coalGen);	
+	    	}
+	    }
+	    
+	    if(this.generateIron) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("iron.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("iron.molten").getBlock(), 0, WorldModule.ironGen, biome), WorldModule.ironGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.ironGen, biome), WorldModule.ironGen);	
+	    	}
+	    }
+	    
+	    if(this.generateGold) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("gold.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("gold.molten").getBlock(), 0, WorldModule.goldGen, biome), WorldModule.goldGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.goldGen, biome), WorldModule.goldGen);	
+	    	}
+	    }
+	    
+	    if(this.generateLapis) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("lapis.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("lapis.molten").getBlock(), 0, WorldModule.lapisGen, biome), WorldModule.lapisGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.lapisGen, biome), WorldModule.lapisGen);	
+	    	}
+	    }
+	    
+	    if(this.generateDiamond) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("diamond.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("diamond.molten").getBlock(), 0, WorldModule.diamondGen, biome), WorldModule.diamondGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.diamondGen, biome), WorldModule.diamondGen);	
+	    	}
+	    }
+	    
+	    if(this.generateEmerald) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("emerald.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("emerald.molten").getBlock(), 0, WorldModule.emeraldGen, biome), WorldModule.emeraldGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.emeraldGen, biome), WorldModule.emeraldGen);	
+	    	}
+	    }
+	    
+	    if(this.generateCopper) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("copper.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("copper.molten").getBlock(), 0, WorldModule.copperGen, biome), WorldModule.copperGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.copperGen, biome), WorldModule.copperGen);	
+	    	}
+	    }
+	    
+	    if(this.generateAluminium) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("aluminium.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("aluminium.molten").getBlock(), 0, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);
+	    	} else if(this.moltenOres && FluidRegistry.getFluid("aluminum.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("aluminum.molten").getBlock(), 0, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);	
+	    	}
+	    }
+	    
+	    if(this.generateLead) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("lead.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("lead.molten").getBlock(), 0, WorldModule.leadGen, biome), WorldModule.leadGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.leadGen, biome), WorldModule.leadGen);	
+	    	}
+	    }
+	    
+	    if(this.generateSilver) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("silver.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("silver.molten").getBlock(), 0, WorldModule.silverGen, biome), WorldModule.silverGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.silverGen, biome), WorldModule.silverGen);	
+	    	}
+	    }
+	    
+	    if(this.generateNickel) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("nickel.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("nickel.molten").getBlock(), 0, WorldModule.nickelGen, biome), WorldModule.nickelGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.nickelGen, biome), WorldModule.nickelGen);	
+	    	}
+	    }
+	    
+	    if(this.generateTin) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("tin.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("tin.molten").getBlock(), 0, WorldModule.tinGen, biome), WorldModule.tinGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.tinGen, biome), WorldModule.tinGen);	
+	    	}
+	    }
+	    
+	    if(this.generateQuartz) {
+	    	if(this.moltenOres && FluidRegistry.getFluid("quartz.molten") != null) {
+	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("quartz.molten").getBlock(), 0, WorldModule.quartzGen, biome), WorldModule.quartzGen);
+	    	} else {
+	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.quartzGen, biome), WorldModule.quartzGen);	
+	    	}
+	    }
+	    
 	    generateOres();
 
 	    if ((this.rand.nextBoolean()) && (this.generateCobwebs)) {
@@ -261,10 +409,10 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	    	this.stalactiteGen.generate(this.worldObj, this.rand, i, j, k);
 	    }
 
-	    for (int l = 0; l < this.quagmirePerChunk; l++) {
+	    for (int l = 0; l < this.quicksandPerChunk; l++) {
 	    	int i = this.chunkX + this.rand.nextInt(16) + 8;
 	    	int k = this.chunkZ + this.rand.nextInt(16) + 8;
-	    	this.quagmireGen.generate(this.worldObj, this.rand, i, this.worldObj.getTopSolidOrLiquidBlock(i, k), k);
+	    	this.quicksandGen.generate(this.worldObj, this.rand, i, this.worldObj.getTopSolidOrLiquidBlock(i, k), k);
 	    }
 
 	    for (int l = 0; l < this.sandPerChunk; l++) {
@@ -279,7 +427,7 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	    	this.clayGen.generate(this.worldObj, this.rand, i, this.worldObj.getTopSolidOrLiquidBlock(i, k), k);
 	    }
 
-	    if (this.rand.nextInt(120) == 0) {
+	    if (this.rand.nextInt(120) == 0 && this.generateSurfaceGravel) {
 	    	int i = this.chunkX + this.rand.nextInt(16) + 8;
 	    	int k = this.chunkZ + this.rand.nextInt(16) + 8;
 	    	this.surfaceGravelGen.generate(this.worldObj, this.rand, i, 0, k);
@@ -581,28 +729,31 @@ public class AuroraBiomeDecorator {//TODO readd generation
 
 	private void generateOres() {
 		for (GenerateOre ore : this.biomeOres) {
-			float f = ore.oreChance * this.biomeOreFactor;
-			genStandardOre(f, ore.oreGen, ore.minHeight, ore.maxHeight);
+			float oresToGenerate = ore.oreChance * this.biomeOreFactor * 0.01F;
+			genStandardOre(oresToGenerate, ore.oreGen, ore.minHeight, ore.maxHeight);
 	    }
 	}
 
-	private void genStandardOre(float ores, WorldGenerator oreGen, int minHeight, int maxHeight) {
-		while (ores > 0.0F) {
-			boolean generate;
-	      
-			if (ores >= 1.0F) {
+	private void genStandardOre(float oresToGenerate, WorldGenerator oreGen, int minHeight, int maxHeight) {
+		while (oresToGenerate > 0.0F) {
+			boolean generate = oresToGenerate >= 1.0F || this.rand.nextFloat() < oresToGenerate;
+			--oresToGenerate;
+			
+			System.out.println("oresToGenerate=" + Float.toString(oresToGenerate));
+			
+/*			if (oresToGenerate >= 1.0F) {
 				generate = true;
 			} else {
-				generate = this.rand.nextFloat() < ores;
+				generate = this.rand.nextFloat() < oresToGenerate;
 			}
 	     
-			ores -= 1.0F;
+			oresToGenerate -= 1.0F;*/
 
 			if (generate) {
-				int i = this.chunkX + this.rand.nextInt(16);
-				int j = MathHelper.getRandomIntegerInRange(this.rand, minHeight, maxHeight);
-				int k = this.chunkZ + this.rand.nextInt(16);
-				oreGen.generate(this.worldObj, this.rand, i, j, k);
+				int x = this.chunkX + this.rand.nextInt(16);
+				int y = MathHelper.getRandomIntegerInRange(this.rand, minHeight, maxHeight);
+				int z = this.chunkZ + this.rand.nextInt(16);
+				oreGen.generate(this.worldObj, this.rand, x, y, z);
 			}
 	    }
 	}
@@ -611,9 +762,9 @@ public class AuroraBiomeDecorator {//TODO readd generation
 		public WorldGenerator structureGen;
 	    public int chunkChance;
 
-	    public RandomStructure(WorldGenerator w, int i) {
-	    	this.structureGen = w;
-	    	this.chunkChance = i;
+	    public RandomStructure(WorldGenerator generator, int chance) {
+	    	this.structureGen = generator;
+	    	this.chunkChance = chance;
 	    }
 	}
 
@@ -623,11 +774,30 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	    private int minHeight;
 	    private int maxHeight;
 
-	    public GenerateOre(WorldGenerator gen, float f, int min, int max) {
-	    	this.oreGen = gen;
-	    	this.oreChance = f;
-	    	this.minHeight = min;
-	    	this.maxHeight = max;
+	    public GenerateOre(WorldGenerator generator, float chance, int minH, int maxH) {
+	    	this.oreGen = generator;
+	    	this.oreChance = chance;
+	    	this.minHeight = minH;
+	    	this.maxHeight = maxH;
 	    }
 	}
+
+    public void checkForVillages(World world, int i, int k, ChunkFlags chunkFlags) {
+        chunkFlags.isVillage = false;
+        chunkFlags.isFlatVillage = false;
+        
+        /*for (AuroraVillageGen village : this.villages) {
+            List<AuroraVillageGen.AbstractInstance> instances = village.getNearbyVillagesAtPosition(world, i, k);
+            
+            if (!instances.isEmpty()) {
+                chunkFlags.isVillage = true;
+                
+                for (AuroraVillageGen.AbstractInstance inst : instances) {
+                    if (inst.isFlat()) {
+                        chunkFlags.isFlatVillage = true;
+                    }
+                }
+            } TODO villages
+        }*/
+    }
 }

@@ -21,6 +21,7 @@ import net.minecraft.world.WorldServer;
 import projectaurora.core.Aurora;
 import projectaurora.core.Reference;
 import projectaurora.world.WorldModule;
+import projectaurora.world.biome.AuroraBiome;
 import projectaurora.world.debug.TeleporterPlanet;
 
 public class ItemTeleporter extends Item {
@@ -85,16 +86,44 @@ public class ItemTeleporter extends Item {
 			for(int x = 0; x < 15; x++) {
 				for(int y = 0; y < 31; y++) {
 					for(int z = 0; z < 15; z++) {
-						System.out.println("zed");
 						
-						System.out.println((int)player.posX + x + "," + (int)player.posY + y + "," + (int)player.posZ + z);
-						
-						System.out.println(world.getBlock((int)player.posX + x, (int)player.posY + y, (int)player.posZ + z).getMaterial() == Material.lava);
-						
-						if(world.getBlock((int)player.posX - 8 + x, (int)player.posY + 16 - y, (int)player.posZ - 8 + z).getMaterial() == Material.lava) {
-							world.setBlock((int)player.posX - 8 + x, (int)player.posY + 16 - y, (int)player.posZ - 8 + z, Blocks.air, 0, 3);
-							
-							System.out.println("deleted" + x + y + 8 + z);
+						switch(stack.getItemDamage()) {
+							case 0: {
+								int playerX = (int) player.posX;
+								int playerY = (int) player.posY;
+								int playerZ = (int) player.posZ;
+								
+								if(world.provider.dimensionId == WorldModule.vulcanID) {
+									AuroraBiome biome = (AuroraBiome)world.getBiomeGenForCoords(playerX, playerZ);
+									
+									if(world.getBlock(playerX - 8 + x, playerY + 16 - y, playerZ - 8 + z) == biome.stoneBlock) {
+										world.setBlock(playerX - 8 + x, playerY + 16 - y, playerZ - 8 + z, Blocks.air, 0, 3);
+										System.out.println("deleted" + x + y + 8 + z);
+									}
+								}
+								
+								if(world.getBlock(playerX - 8 + x, playerY + 16 - y, playerZ - 8 + z) == world.getBiomeGenForCoords(playerX, playerZ).topBlock || world.getBlock(playerX - 8 + x, playerY + 16 - y, playerZ - 8 + z) == world.getBiomeGenForCoords(playerX, playerZ).fillerBlock || world.getBlock(playerX - 8 + x, playerY + 16 - y, playerZ - 8 + z) == Blocks.stone || world.getBlock(playerX - 8 + x, playerY + 16 - y, playerZ - 8 + z) == Blocks.gravel) {
+									world.setBlock(playerX - 8 + x, playerY + 16 - y, playerZ - 8 + z, Blocks.air, 0, 3);
+									System.out.println("deleted" + x + y + 8 + z);
+								}
+								break;
+							}
+							case 1: {
+								if(world.getBlock((int)player.posX - 8 + x, (int)player.posY + 16 - y, (int)player.posZ - 8 + z).getMaterial() == Material.lava) {
+									world.setBlock((int)player.posX - 8 + x, (int)player.posY + 16 - y, (int)player.posZ - 8 + z, Blocks.air, 0, 3);
+									
+									System.out.println("deleted" + x + y + 8 + z);
+								}
+								break;
+							}
+							default: {
+								if(world.getBlock((int)player.posX - 8 + x, (int)player.posY + 16 - y, (int)player.posZ - 8 + z).getMaterial() == Material.water) {
+									world.setBlock((int)player.posX - 8 + x, (int)player.posY + 16 - y, (int)player.posZ - 8 + z, Blocks.air, 0, 3);
+									
+									System.out.println("deleted" + x + y + 8 + z);
+								}
+								break;
+							}
 						}
 					}
 				}

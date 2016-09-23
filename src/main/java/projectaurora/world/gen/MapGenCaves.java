@@ -11,6 +11,7 @@ import net.minecraft.world.gen.MapGenBase;
 import projectaurora.world.biome.AuroraBiome;
 
 public class MapGenCaves extends MapGenBase {
+    public boolean isVillage;
 	
 	protected void generateLargeCaveNode(long par1, int par3, int par4, Block[] blockArray, double par6, double par8, double par10) {
 		generateCaveNode(par1, par3, par4, blockArray, par6, par8, par10, 1.0F + this.rand.nextFloat() * 6.0F, 0.0F, 0.0F, -1, -1, 0.5D);

@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import projectaurora.world.biome.AuroraBiome;
 
 public class WorldGenStalactites extends WorldGenerator {
 
@@ -15,11 +16,15 @@ public class WorldGenStalactites extends WorldGenerator {
 			int j1 = y - rand.nextInt(4) + rand.nextInt(4);
 			int k1 = z - rand.nextInt(8) + rand.nextInt(8);
 			
-			if(world.isAirBlock(i1, j1, k1)) {
-				if(world.getBlock(i1, j1 + 1, k1) == Blocks.stone) {
-					world.setBlock(i1, j1, k1, Blocks.brick_block, 0, 2);//TODO placeholder stalactites
-				} else if(world.getBlock(i1, j1 - 1, k1) == Blocks.stone) {
-					world.setBlock(i1, j1, k1, Blocks.stonebrick, 0, 2);
+			if(world.getBiomeGenForCoords(x, z) instanceof AuroraBiome) {
+				AuroraBiome biome = (AuroraBiome)world.getBiomeGenForCoords(x, z);
+				
+				if(world.isAirBlock(i1, j1, k1)) {
+					if(world.getBlock(i1, j1 + 1, k1) == biome.stoneBlock) {
+						world.setBlock(i1, j1, k1, Blocks.brick_block, 0, 2);//TODO placeholder stalactites
+					} else if(world.getBlock(i1, j1 - 1, k1) == biome.stoneBlock) {
+						world.setBlock(i1, j1, k1, Blocks.stonebrick, 0, 2);
+					}
 				}
 			}
 		}

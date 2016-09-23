@@ -26,11 +26,11 @@ import projectaurora.world.gen.MapGenCaves;
 import projectaurora.world.gen.MapGenRavine;
 
 public class VulcanChunkProvider implements IChunkProvider {
-	//TODO Kepler-10b, 1833K (~1560C), above iron melting point
+	//Kepler-10b, 1833K (~1560C), above iron melting point
 	private World worldObj;
 	private Random rand;
 	private BiomeGenBase[] biomesForGeneration;
-	private AuroraBiomeVariant[] variantsForGeneration;	  //TODO maybe? fix variants for generation
+	private AuroraBiomeVariant[] variantsForGeneration;
 	private static final double COORDINATE_SCALE = 684.41200000000003D;	 
 	private static final double HEIGHT_SCALE = 1.0D;
 	private static final double MAIN_NOISE_SCALE_XZ = 400.0D;
@@ -56,7 +56,8 @@ public class VulcanChunkProvider implements IChunkProvider {
 	private double[] stoneNoise = new double[256];	  
 	private double[] heightNoise;
 	private float[] biomeHeightNoise;
-	private MapGenBase caveGenerator = new MapGenCaves();
+	private double[] blockHeightNoiseArray;
+	private MapGenCaves caveGenerator = new MapGenCaves();
 	private MapGenBase ravineGenerator = new MapGenRavine();
 	private static final int seaLevel = 62;
 	
@@ -83,8 +84,81 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    }
 	}
 	
-	private void generateTerrain(int chunkX, int chunkZ, Block[] blocks, byte[] meta) {
+	private void generateTerrain(int chunkX, int chunkZ, Block[] blocks, byte[] meta, ChunkFlags chunkFlags) {
 		VulcanChunkManager chunkManager = (VulcanChunkManager)this.worldObj.getWorldChunkManager();
+        byte byte0 = 4;
+        byte byte2 = 32;
+        int k = byte0 + 1;
+        byte byte3 = 33;
+        int l = byte0 + 1;
+        this.biomesForGeneration = chunkManager.getBiomesForGeneration(this.biomesForGeneration, chunkX * byte0 - this.biomeSampleRadius, chunkZ * byte0 - this.biomeSampleRadius, k + this.biomeSampleWidth, l + this.biomeSampleWidth);
+        this.variantsForGeneration = chunkManager.getVariantsChunkGen(this.variantsForGeneration, chunkX * byte0 - this.biomeSampleRadius, chunkZ * byte0 - this.biomeSampleRadius, k + this.biomeSampleWidth, l + this.biomeSampleWidth, this.biomesForGeneration);
+        this.heightNoise = this.initializeHeightNoise(this.heightNoise, chunkX * byte0, 0, chunkZ * byte0, k, byte3, l, chunkFlags);
+        
+        this.blockHeightNoiseArray = new double[blocks.length];
+        
+        for (int i2 = 0; i2 < byte0; ++i2) {
+            for (int j2 = 0; j2 < byte0; ++j2) {
+                for (int k2 = 0; k2 < byte2; ++k2) {
+                    double d = 0.125;
+                    double d2 = this.heightNoise[((i2 + 0) * l + j2 + 0) * byte3 + k2 + 0];
+                    double d3 = this.heightNoise[((i2 + 0) * l + j2 + 1) * byte3 + k2 + 0];
+                    double d4 = this.heightNoise[((i2 + 1) * l + j2 + 0) * byte3 + k2 + 0];
+                    double d5 = this.heightNoise[((i2 + 1) * l + j2 + 1) * byte3 + k2 + 0];
+                    double d6 = (this.heightNoise[((i2 + 0) * l + j2 + 0) * byte3 + k2 + 1] - d2) * d;
+                    double d7 = (this.heightNoise[((i2 + 0) * l + j2 + 1) * byte3 + k2 + 1] - d3) * d;
+                    double d8 = (this.heightNoise[((i2 + 1) * l + j2 + 0) * byte3 + k2 + 1] - d4) * d;
+                    double d9 = (this.heightNoise[((i2 + 1) * l + j2 + 1) * byte3 + k2 + 1] - d5) * d;
+                    
+                    for (int l2 = 0; l2 < 8; ++l2) {
+                        double d10 = 0.25;
+                        double d11 = d2;
+                        double d12 = d3;
+                        double d13 = (d4 - d2) * d10;
+                        double d14 = (d5 - d3) * d10;
+                        
+                        for (int i3 = 0; i3 < 4; ++i3) {
+                            int j3 = i3 + i2 * 4 << 12 | 0 + j2 * 4 << 8 | k2 * 8 + l2;
+                            double d15 = 0.25;
+                            double d16 = (d12 - d11) * d15;
+                            
+                            for (int k3 = 0; k3 < 4; ++k3) {
+                                int blockIndex = j3 + k3 * 256;
+                                double blockHeightNoise = d11 + d16 * k3;
+                                this.blockHeightNoiseArray[blockIndex] = blockHeightNoise;
+                                
+                            	BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
+                            	
+                            	//System.out.println("blockHeightNoise:" + blockHeightNoise);
+                            	//System.out.println("lavaHeightGen:" + k2 * 8 + l2);
+                            	//System.out.println("blockIndex:" + blockIndex);
+                                
+                                if (blockHeightNoise > 0.0) {
+                                	if(biome instanceof AuroraBiome) {
+    									blocks[blockIndex] = ((AuroraBiome)biome).stoneBlock;//TODO meta
+    									//meta[blockIndex] = (byte)((AuroraBiome)biome).stoneBlockMeta;
+	    							}
+                                } else if (k2 * 8 + l2 < 63) {
+                                	if(biome instanceof AuroraBiome) {
+    									blocks[blockIndex] = ((AuroraBiome)biome).dominantFluidBlock;//TODO meta
+    									//meta[blockIndex] = (byte)((AuroraBiome)biome).dominantFluidMeta;
+	    							}
+                                } else {
+                                    blocks[blockIndex] = Blocks.air;
+                                }   
+                            }
+                            d11 += d13;
+                            d12 += d14;
+                        }
+                        d2 += d6;
+                        d3 += d7;
+                        d4 += d8;
+                        d5 += d9;
+                    }
+                }
+            }
+        }
+		/*VulcanChunkManager chunkManager = (VulcanChunkManager)this.worldObj.getWorldChunkManager();
 	    byte byte0 = 4;
 	    byte byte1 = 32;
 	    int k = byte0 + 1;
@@ -92,8 +166,10 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    int l = byte0 + 1;
 	    this.biomesForGeneration = chunkManager.getBiomesForGeneration(this.biomesForGeneration, chunkX * byte0 - this.biomeSampleRadius, chunkZ * byte0 - this.biomeSampleRadius, k + this.biomeSampleWidth, l + this.biomeSampleWidth);
 	    this.variantsForGeneration = chunkManager.getVariantsChunkGen(this.variantsForGeneration, chunkX * byte0 - this.biomeSampleRadius, chunkZ * byte0 - this.biomeSampleRadius, k + this.biomeSampleWidth, l + this.biomeSampleWidth, this.biomesForGeneration);
-	    this.heightNoise = initializeHeightNoise(this.heightNoise, chunkX * byte0, 0, chunkZ * byte0, k, byte3, l);
+	    this.heightNoise = initializeHeightNoise(this.heightNoise, chunkX * byte0, 0, chunkZ * byte0, k, byte3, l, chunkFlags);
 
+	    this.blockHeightNoiseArray = new double[blocks.length];
+	    
 	    for (int x = 0; x < byte0; x++) {
 	    	for (int z = 0; z < byte0; z++) {
 	    		for (int y = 0; y < byte1; y++) {
@@ -123,34 +199,27 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    					double d16 = d10 - d15;
 
 	    					for (int k2 = 0; k2 < 4; k2++) {
-	    						if ((d16 += d15) > 0.0D) {
-	    							//int tmp576_575 = (j2 + s); 
-	    							//j2 = tmp576_575; 
-	    							//blocks[tmp576_575] = Blocks.stone;
-	    							BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
+	    						int blockIndex = j2 + k2 * 256;
+                                double blockHeightNoise = d10 + d15 * k2;
+                                this.blockHeightNoiseArray[blockIndex] = blockHeightNoise;
+                                
+                                if (blockHeightNoise > 0.0) {
+                                	BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
 	    							
 	    							if(biome instanceof AuroraBiome) {
-    									blocks[j2 += s] = ((AuroraBiome)biome).stoneBlock;//TODO something with meta?
-    									//meta[j2 += s] = (byte)((AuroraBiome)biome).stoneBlockMeta;
+    									blocks[blockIndex] = ((AuroraBiome)biome).stoneBlock;//TODO meta
+    									//meta[blockIndex] = (byte)((AuroraBiome)biome).stoneBlockMeta;
 	    							}
-	    						} else if (y * 8 + l1 <= 62) {
-	    							//int d11 = (j2 + s); 
-	    							//j2 = d11; 
-	    							//blocks[d11] = Blocks.water;
-	    							BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
+                                } else if (k2 * 8 + l1 <= 62) {
+                                	BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
 	    							
 	    							if(biome instanceof AuroraBiome) {
-	    								blocks[j2 += s] = ((AuroraBiome)biome).dominantFluidBlock;
-    									//meta[j2 += s] = (byte)((AuroraBiome)biome).dominantFluidMeta;
+    									blocks[blockIndex] = ((AuroraBiome)biome).dominantFluidBlock;//TODO meta
+    									//meta[blockIndex] = (byte)((AuroraBiome)biome).dominantFluidMeta;
 	    							}
-	    							//blocks[j2 += s] = Blocks.lava;
-	    						} else {
-	    							//int tmp621_620 = (j2 + s); 
-	    							//j2 = tmp621_620; 
-	    							//blocks[tmp621_620] = Blocks.air;
-	    							blocks[j2 += s] = Blocks.air;
-	    							//meta[j2 += s] = 0;
-	    						}
+                                } else {
+                                    blocks[blockIndex] = Blocks.air;
+                                }
 	    					}
 
 	    					d10 += d12;
@@ -163,10 +232,119 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    			}
 	    		}
 	    	}
+	    }*/
+	}
+
+	private void replaceBlocksForBiome(int originalX, int originalZ, Block[] blocks, byte[] metadata, BiomeGenBase[] biomeArray, AuroraBiomeVariant[] variantArray) {
+		double d = 0.03125D;
+	    this.stoneNoise = this.stoneNoiseGen.generateNoiseOctaves(this.stoneNoise, originalX * 16, originalZ * 16, 0, 16, 16, 1, d * 2.0D, d * 2.0D, d * 2.0D);
+	    int ySize = blocks.length / 256;
+
+	    for (int i1 = 0; i1 < 16; i1++) {
+	    	for (int k1 = 0; k1 < 16; k1++) {
+	    		int x = originalX * 16 + i1;
+	    		int z = originalZ * 16 + k1;
+	    		int xzIndex = i1 * 16 + k1;
+	    		int xzIndexBiome = i1 + k1 * 16;
+	    		AuroraBiome biome = (AuroraBiome)biomeArray[xzIndexBiome];
+	    		AuroraBiomeVariant variant = variantArray[xzIndexBiome];
+
+	    		int height = 0;
+                for (int j = ySize - 1; j >= 0; --j) {
+                    int index = xzIndex * ySize + j;
+                    Block block = blocks[index];
+                    if (block.isOpaqueCube()) {
+                        height = j;
+                        break;
+                    }
+                }
+                biome.generateBiomeTerrain(this.worldObj, this.rand, blocks, metadata, x, z, this.stoneNoise[xzIndex], height, variant);
+                
+                /*if (FixedStructures.hasMapFeatures(this.worldObj)) {
+                    RoadGenerator.generateRoad(this.worldObj, this.rand, x, z, biome, blocks, metadata, this.blockHeightNoiseArray);
+                    int lavaHeight = Mountains.getLavaHeight(x, z);
+                    
+                    if (lavaHeight > 0) {
+                        for (int l = lavaHeight; l >= 0; --l) {
+                            int index2 = xzIndex * ySize + l;
+                            Block block2 = blocks[index2];
+                            
+                            if (block2.isOpaqueCube()) {
+                                break;
+                            }
+                            
+                            blocks[index2] = Blocks.lava;
+                            metadata[index2] = 0;
+                        }
+                    }
+                }*/
+	    	}
 	    }
 	}
 	
-	private double[] initializeHeightNoise(double[] noise, int i, int j, int k, int xSize, byte ySize, int zSize) {
+	@Override
+	public Chunk loadChunk(int x, int z) {
+		return provideChunk(x, z);
+	}
+
+	@Override
+	public Chunk provideChunk(int x, int z) {
+	    this.rand.setSeed(x * 341873128712L + z * 132897987541L);
+
+	    VulcanChunkManager chunkManager = (VulcanChunkManager)this.worldObj.getWorldChunkManager();
+	    Block[] blocks = new Block[65536];
+	    byte[] metadata = new byte[65536];
+        ChunkFlags chunkFlags = new ChunkFlags();
+        
+	    generateTerrain(x, z, blocks, metadata, chunkFlags);
+	    this.biomesForGeneration = chunkManager.loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
+	    this.variantsForGeneration = chunkManager.getBiomeVariants(this.variantsForGeneration, x * 16, z * 16, 16, 16);
+	    replaceBlocksForBiome(x, z, blocks, metadata, this.biomesForGeneration, this.variantsForGeneration);
+
+        this.caveGenerator.isVillage = chunkFlags.isVillage;
+	    this.caveGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
+	    this.ravineGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
+
+	    Chunk chunk = new Chunk(this.worldObj, x, z);
+
+	    ExtendedBlockStorage[] blockStorage = chunk.getBlockStorageArray();
+	    for (int i1 = 0; i1 < 16; i1++) {
+	    	for (int k1 = 0; k1 < 16; k1++) {
+	    		for (int j1 = 0; j1 < 256; j1++) {
+	    			int blockIndex = i1 << 12 | k1 << 8 | j1;
+	    			Block block = blocks[blockIndex];
+
+	    			if ((block != null) && (block != Blocks.air)) {
+	    				byte meta = metadata[blockIndex];
+
+	    				int j2 = j1 >> 4;
+	    			if (blockStorage[j2] == null) {
+	    				blockStorage[j2] = new ExtendedBlockStorage(j2 << 4, true);
+	    			}
+
+	    			blockStorage[j2].func_150818_a(i1, j1 & 0xF, k1, block);
+	    			blockStorage[j2].setExtBlockMetadata(i1, j1 & 0xF, k1, meta & 0xF);
+	    			}
+	    		}
+	    	}
+	    }
+	    byte[] biomes = chunk.getBiomeArray();
+	    for (int l = 0; l < biomes.length; l++) {
+	    	biomes[l] = ((byte)this.biomesForGeneration[l].biomeID);
+	    }
+
+	    byte[] variants = new byte[256];
+	    for (int l = 0; l < variants.length; l++) {
+	    	variants[l] = ((byte)this.variantsForGeneration[l].variantID);
+	    }
+	    AuroraBiomeVariantStorage.setChunkBiomeVariants(this.worldObj, chunk, variants);
+
+	    chunk.generateSkylightMap();
+        //FixedStructures.nanoTimeElapsed = 0L;
+	    return chunk;
+	}
+	
+	private double[] initializeHeightNoise(double[] noise, int i, int j, int k, int xSize, int ySize, int zSize, ChunkFlags chunkFlags) {
 	    if (noise == null) {
 	    	noise = new double[xSize * ySize * zSize];
 	    }
@@ -238,8 +416,18 @@ public class VulcanChunkProvider implements IChunkProvider {
 	        			totalHeightNoise += heightNoise;
 
 	        			float flatBiomeHeight = biome.rootHeight;
-	        			totalFlatBiomeHeight += flatBiomeHeight;
-	        			totalFlatBiomeCount++;
+	        			boolean isWater = ((AuroraBiome)biome).rootHeight < 0.0F;
+	        			
+                        if (variant.absoluteHeight && variant.absoluteHeightLevel < 0.0f) {
+                            isWater = true;
+                        }
+                        
+                        if (isWater) {
+                            flatBiomeHeight = baseHeight;
+                        }
+                        
+                        totalFlatBiomeHeight += flatBiomeHeight;
+                        ++totalFlatBiomeCount;
 	        		}
 	        	}
 
@@ -250,24 +438,32 @@ public class VulcanChunkProvider implements IChunkProvider {
 	        	int xPos = i + i1 << 2;
 	        	int zPos = k + k1 << 2;
 	        	
-	        	//float roadNear = Road.isRoadNear(xPos, zPos, 32); TODO there won't be a road. probably
+                xPos += 2;
+                zPos += 2;
 	        	
-	        	/*if (roadNear >= 0.0F) {
-	        		float interpFactor = roadNear;
-	        		avgBaseHeight = avgFlatBiomeHeight + (avgBaseHeight - avgFlatBiomeHeight) * interpFactor;
-
-	        		avgHeightVariation *= interpFactor;
-	        	}*/
-
-	        	//float mountain = Mountain.getTotalHeightBoost(xPos, zPos);
-	       
-	        	/*if (mountain > 0.005F) { 
-	        		avgBaseHeight += mountain;
-
-	        		float mtnV = 0.2F;
-	        		float dv = avgHeightVariation - mtnV;
-	        		avgHeightVariation = mtnV + dv / (1.0F + mountain);
-	        	}*/
+                /*if (FixedStructures.hasMapFeatures(this.worldObj)) {
+                    float roadNear = Roads.isRoadNear(xPos, zPos, 32);
+                    if (roadNear >= 0.0f) {
+                        float interpFactor = roadNear;
+                        avgBaseHeight = avgFlatBiomeHeight + (avgBaseHeight - avgFlatBiomeHeight) * interpFactor;
+                        avgHeightVariation *= interpFactor;
+                    }
+                    float mountain = Mountains.getTotalHeightBoost(xPos, zPos);
+                    if (mountain > 0.005f) {
+                        avgBaseHeight += mountain;
+                        float mtnV = 0.2f;
+                        float dv = avgHeightVariation - mtnV;
+                        avgHeightVariation = mtnV + dv / (1.0f + mountain);
+                    }
+                }*/
+                if (centreBiome instanceof AuroraBiome) {
+                    AuroraBiome lb = (AuroraBiome)centreBiome;
+                    lb.decorator.checkForVillages(this.worldObj, xPos, zPos, chunkFlags);
+                    if (chunkFlags.isFlatVillage) {
+                        avgBaseHeight = avgFlatBiomeHeight;
+                        avgHeightVariation = 0.0f;
+                    }
+                }
 
 	        	avgBaseHeight = (avgBaseHeight * 4.0F - 1.0F) / 8.0F;
 	        
@@ -338,91 +534,10 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    }
 	    return noise;
 	}
-
-	private void replaceBlocksForBiome(int originalX, int originalZ, Block[] blocks, byte[] metadata, BiomeGenBase[] biomeArray, AuroraBiomeVariant[] variantArray) {
-		double d = 0.03125D;
-	    this.stoneNoise = this.stoneNoiseGen.generateNoiseOctaves(this.stoneNoise, originalX * 16, originalZ * 16, 0, 16, 16, 1, d * 2.0D, d * 2.0D, d * 2.0D);
-	    int ySize = blocks.length / 256;
-
-	    for (int i1 = 0; i1 < 16; i1++) {
-	    	for (int k1 = 0; k1 < 16; k1++) {
-	    		int x = originalX * 16 + i1;
-	    		int z = originalZ * 16 + k1;
-	    		int xzIndex = i1 * 16 + k1;
-	    		int xzIndexBiome = i1 + k1 * 16;
-	    		AuroraBiome biome = (AuroraBiome)biomeArray[xzIndexBiome];
-	    		AuroraBiomeVariant variant = variantArray[xzIndexBiome];
-
-	    		biome.generateBiomeTerrain(this.worldObj, this.rand, blocks, metadata, x, z, this.stoneNoise[xzIndex], variant);
-	    	}
-	    }
-	}
-
+	
 	@Override
 	public boolean chunkExists(int x, int z) {
 		return true;
-	}
-
-	@Override
-	public Chunk provideChunk(int x, int z) {
-		long lo = System.nanoTime();
-
-	    this.rand.setSeed(x * 341873128712L + z * 132897987541L);
-
-	    VulcanChunkManager chunkManager = (VulcanChunkManager)this.worldObj.getWorldChunkManager();
-	    Block[] blocks = new Block[65536];
-	    byte[] metadata = new byte[65536];
-
-	    generateTerrain(x, z, blocks, metadata);
-	    this.biomesForGeneration = chunkManager.loadBlockGeneratorData(this.biomesForGeneration, x * 16, z * 16, 16, 16);
-	    this.variantsForGeneration = chunkManager.getBiomeVariants(this.variantsForGeneration, x * 16, z * 16, 16, 16);
-	    replaceBlocksForBiome(x, z, blocks, metadata, this.biomesForGeneration, this.variantsForGeneration);
-
-	    this.caveGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
-	    this.ravineGenerator.func_151539_a(this, this.worldObj, x, z, blocks);
-
-	    Chunk chunk = new Chunk(this.worldObj, x, z);
-
-	    ExtendedBlockStorage[] blockStorage = chunk.getBlockStorageArray();
-	    for (int i1 = 0; i1 < 16; i1++) {
-	    	for (int k1 = 0; k1 < 16; k1++) {
-	    		for (int j1 = 0; j1 < 256; j1++) {
-	    			int blockIndex = i1 << 12 | k1 << 8 | j1;
-	    			Block block = blocks[blockIndex];
-
-	    			if ((block != null) && (block != Blocks.air)) {
-	    				byte meta = metadata[blockIndex];
-
-	    				int j2 = j1 >> 4;
-	    			if (blockStorage[j2] == null) {
-	    				blockStorage[j2] = new ExtendedBlockStorage(j2 << 4, true);
-	    			}
-
-	    			blockStorage[j2].func_150818_a(i1, j1 & 0xF, k1, block);
-	    			blockStorage[j2].setExtBlockMetadata(i1, j1 & 0xF, k1, meta & 0xF);
-	    			}
-	    		}
-	    	}
-	    }
-	    byte[] biomes = chunk.getBiomeArray();
-	    for (int l = 0; l < biomes.length; l++) {
-	    	biomes[l] = ((byte)this.biomesForGeneration[l].biomeID);
-	    }
-
-	    byte[] variants = new byte[256];
-	    for (int l = 0; l < variants.length; l++) {
-	    	variants[l] = ((byte)this.variantsForGeneration[l].variantID);
-	    }
-	    AuroraBiomeVariantStorage.setChunkBiomeVariants(this.worldObj, chunk, variants);
-
-	    chunk.generateSkylightMap();
-
-	    return chunk;
-	}
-
-	@Override
-	public Chunk loadChunk(int x, int z) {
-		return provideChunk(x, z);
 	}
 
 	@Override
@@ -492,6 +607,11 @@ public class VulcanChunkProvider implements IChunkProvider {
 	public boolean saveChunks(boolean flag, IProgressUpdate update) {
 		return true;
 	}
+	
+	@Override
+	public void saveExtraData() {
+
+	}
 
 	@Override
 	public boolean unloadQueuedChunks() {
@@ -534,9 +654,14 @@ public class VulcanChunkProvider implements IChunkProvider {
 	public void recreateStructures(int x, int z) {
 
 	}
-
-	@Override
-	public void saveExtraData() {
-
-	}
+	
+	public static class ChunkFlags {
+        public boolean isVillage;
+        public boolean isFlatVillage;
+        
+        private ChunkFlags() {
+            this.isVillage = false;
+            this.isFlatVillage = false;
+        }
+    }
 }

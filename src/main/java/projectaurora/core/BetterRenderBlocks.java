@@ -4165,56 +4165,51 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
     /**
      * Renders a block based on the BlockLiquid class at the given coordinates
      */
-    public boolean renderBlockLiquid(Block p_147721_1_, int p_147721_2_, int p_147721_3_, int p_147721_4_)
-    {
+    public boolean renderBlockLiquid(Block liquid, int x, int y, int z) {
         Tessellator tessellator = Tessellator.instance;
-        int l = p_147721_1_.colorMultiplier(this.blockAccess, p_147721_2_, p_147721_3_, p_147721_4_);
-        float f = (float)(l >> 16 & 255) / 255.0F;
-        float f1 = (float)(l >> 8 & 255) / 255.0F;
-        float f2 = (float)(l & 255) / 255.0F;
-        boolean flag = p_147721_1_.shouldSideBeRendered(this.blockAccess, p_147721_2_, p_147721_3_ + 1, p_147721_4_, 1);
-        boolean flag1 = p_147721_1_.shouldSideBeRendered(this.blockAccess, p_147721_2_, p_147721_3_ - 1, p_147721_4_, 0);
-        boolean[] aboolean = new boolean[] {p_147721_1_.shouldSideBeRendered(this.blockAccess, p_147721_2_, p_147721_3_, p_147721_4_ - 1, 2), p_147721_1_.shouldSideBeRendered(this.blockAccess, p_147721_2_, p_147721_3_, p_147721_4_ + 1, 3), p_147721_1_.shouldSideBeRendered(this.blockAccess, p_147721_2_ - 1, p_147721_3_, p_147721_4_, 4), p_147721_1_.shouldSideBeRendered(this.blockAccess, p_147721_2_ + 1, p_147721_3_, p_147721_4_, 5)};
+        int colorMultiplier = liquid.colorMultiplier(this.blockAccess, x, y, z);
+        float f = (float)(colorMultiplier >> 16 & 255) / 255.0F;
+        float f1 = (float)(colorMultiplier >> 8 & 255) / 255.0F;
+        float f2 = (float)(colorMultiplier & 255) / 255.0F;
+        boolean shouldBlockOnTopBottomBeRendered = liquid.shouldSideBeRendered(this.blockAccess, x, y + 1, z, 1);
+        boolean shouldBlockUnderTopBeRendered = liquid.shouldSideBeRendered(this.blockAccess, x, y - 1, z, 0);
+        boolean[] shouldSidesBeRendered = new boolean[] { liquid.shouldSideBeRendered(this.blockAccess, x, y, z - 1, 2), liquid.shouldSideBeRendered(this.blockAccess, x, y, z + 1, 3), liquid.shouldSideBeRendered(this.blockAccess, x - 1, y, z, 4), liquid.shouldSideBeRendered(this.blockAccess, x + 1, y, z, 5) };
 
-        if (!flag && !flag1 && !aboolean[0] && !aboolean[1] && !aboolean[2] && !aboolean[3])
-        {
+        if (!shouldBlockOnTopBottomBeRendered && !shouldBlockUnderTopBeRendered && !shouldSidesBeRendered[0] && !shouldSidesBeRendered[1] && !shouldSidesBeRendered[2] && !shouldSidesBeRendered[3]) {
             return false;
-        }
-        else
-        {
-            boolean flag2 = false;
+        } else {
+            boolean newRenderAllFaces = false;
             float f3 = 0.5F;
             float f4 = 1.0F;
             float f5 = 0.8F;
             float f6 = 0.6F;
-            double d0 = 0.0D;
-            double d1 = 1.0D;
-            Material material = p_147721_1_.getMaterial();
-            int i1 = this.blockAccess.getBlockMetadata(p_147721_2_, p_147721_3_, p_147721_4_);
-            double d2 = (double)this.getLiquidHeight(p_147721_2_, p_147721_3_, p_147721_4_, material);
-            double d3 = (double)this.getLiquidHeight(p_147721_2_, p_147721_3_, p_147721_4_ + 1, material);
-            double d4 = (double)this.getLiquidHeight(p_147721_2_ + 1, p_147721_3_, p_147721_4_ + 1, material);
-            double d5 = (double)this.getLiquidHeight(p_147721_2_ + 1, p_147721_3_, p_147721_4_, material);
-            double d6 = 0.0010000000474974513D;
+            double newRenderMinY = 0.0D;
+            double newRenderMaxY = 1.0D;
+            
+            Material material = liquid.getMaterial();
+            int meta = this.blockAccess.getBlockMetadata(x, y, z);
+            double liquidHeight = (double)this.getLiquidHeight(x, y, z, material);
+            double liquidHeightPlusZ = (double)this.getLiquidHeight(x, y, z + 1, material);
+            double liquidHeightPlusXPlusZ = (double)this.getLiquidHeight(x + 1, y, z + 1, material);
+            double liquidHeightPlusX = (double)this.getLiquidHeight(x + 1, y, z, material);
+            double longDouble = 0.0010000000474974513D;
             float f9;
             float f10;
             float f11;
 
-            if (this.renderAllFaces || flag)
-            {
-                flag2 = true;
-                IIcon iicon = this.getBlockIconFromSideAndMetadata(p_147721_1_, 1, i1);
-                float f7 = (float)BlockLiquid.getFlowDirection(this.blockAccess, p_147721_2_, p_147721_3_, p_147721_4_, material);
+            if (this.renderAllFaces || shouldBlockOnTopBottomBeRendered) {
+                newRenderAllFaces = true;
+                IIcon iconToRender = this.getBlockIconFromSideAndMetadata(liquid, 1, meta);
+                float flowDirection = (float)BlockLiquid.getFlowDirection(this.blockAccess, x, y, z, material);
 
-                if (f7 > -999.0F)
-                {
-                    iicon = this.getBlockIconFromSideAndMetadata(p_147721_1_, 2, i1);
+                if (flowDirection > -999.0F) {
+                    iconToRender = this.getBlockIconFromSideAndMetadata(liquid, 2, meta);
                 }
 
-                d2 -= d6;
-                d3 -= d6;
-                d4 -= d6;
-                d5 -= d6;
+                liquidHeight -= longDouble;
+                liquidHeightPlusZ -= longDouble;
+                liquidHeightPlusXPlusZ -= longDouble;
+                liquidHeightPlusX -= longDouble;
                 double d7;
                 double d8;
                 double d10;
@@ -4224,190 +4219,166 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
                 double d18;
                 double d20;
 
-                if (f7 < -999.0F)
-                {
-                    d7 = (double)iicon.getInterpolatedU(0.0D);
-                    d14 = (double)iicon.getInterpolatedV(0.0D);
+                if (flowDirection < -999.0F) {
+                    d7 = (double)iconToRender.getInterpolatedU(0.0D);
+                    d14 = (double)iconToRender.getInterpolatedV(0.0D);
                     d8 = d7;
-                    d16 = (double)iicon.getInterpolatedV(16.0D);
-                    d10 = (double)iicon.getInterpolatedU(16.0D);
+                    d16 = (double)iconToRender.getInterpolatedV(16.0D);
+                    d10 = (double)iconToRender.getInterpolatedU(16.0D);
                     d18 = d16;
                     d12 = d10;
                     d20 = d14;
-                }
-                else
-                {
-                    f9 = MathHelper.sin(f7) * 0.25F;
-                    f10 = MathHelper.cos(f7) * 0.25F;
+                } else {
+                    f9 = MathHelper.sin(flowDirection) * 0.25F;
+                    f10 = MathHelper.cos(flowDirection) * 0.25F;
                     f11 = 8.0F;
-                    d7 = (double)iicon.getInterpolatedU((double)(8.0F + (-f10 - f9) * 16.0F));
-                    d14 = (double)iicon.getInterpolatedV((double)(8.0F + (-f10 + f9) * 16.0F));
-                    d8 = (double)iicon.getInterpolatedU((double)(8.0F + (-f10 + f9) * 16.0F));
-                    d16 = (double)iicon.getInterpolatedV((double)(8.0F + (f10 + f9) * 16.0F));
-                    d10 = (double)iicon.getInterpolatedU((double)(8.0F + (f10 + f9) * 16.0F));
-                    d18 = (double)iicon.getInterpolatedV((double)(8.0F + (f10 - f9) * 16.0F));
-                    d12 = (double)iicon.getInterpolatedU((double)(8.0F + (f10 - f9) * 16.0F));
-                    d20 = (double)iicon.getInterpolatedV((double)(8.0F + (-f10 - f9) * 16.0F));
+                    d7 = (double)iconToRender.getInterpolatedU((double)(8.0F + (-f10 - f9) * 16.0F));
+                    d14 = (double)iconToRender.getInterpolatedV((double)(8.0F + (-f10 + f9) * 16.0F));
+                    d8 = (double)iconToRender.getInterpolatedU((double)(8.0F + (-f10 + f9) * 16.0F));
+                    d16 = (double)iconToRender.getInterpolatedV((double)(8.0F + (f10 + f9) * 16.0F));
+                    d10 = (double)iconToRender.getInterpolatedU((double)(8.0F + (f10 + f9) * 16.0F));
+                    d18 = (double)iconToRender.getInterpolatedV((double)(8.0F + (f10 - f9) * 16.0F));
+                    d12 = (double)iconToRender.getInterpolatedU((double)(8.0F + (f10 - f9) * 16.0F));
+                    d20 = (double)iconToRender.getInterpolatedV((double)(8.0F + (-f10 - f9) * 16.0F));
                 }
 
-                tessellator.setBrightness(p_147721_1_.getMixedBrightnessForBlock(this.blockAccess, p_147721_2_, p_147721_3_, p_147721_4_));
+                tessellator.setBrightness(liquid.getMixedBrightnessForBlock(this.blockAccess, x, y, z));
                 tessellator.setColorOpaque_F(f4 * f, f4 * f1, f4 * f2);
-                tessellator.addVertexWithUV((double)(p_147721_2_ + 0), (double)p_147721_3_ + d2, (double)(p_147721_4_ + 0), d7, d14);
-                tessellator.addVertexWithUV((double)(p_147721_2_ + 0), (double)p_147721_3_ + d3, (double)(p_147721_4_ + 1), d8, d16);
-                tessellator.addVertexWithUV((double)(p_147721_2_ + 1), (double)p_147721_3_ + d4, (double)(p_147721_4_ + 1), d10, d18);
-                tessellator.addVertexWithUV((double)(p_147721_2_ + 1), (double)p_147721_3_ + d5, (double)(p_147721_4_ + 0), d12, d20);
-                tessellator.addVertexWithUV((double)(p_147721_2_ + 0), (double)p_147721_3_ + d2, (double)(p_147721_4_ + 0), d7, d14);
-                tessellator.addVertexWithUV((double)(p_147721_2_ + 1), (double)p_147721_3_ + d5, (double)(p_147721_4_ + 0), d12, d20);
-                tessellator.addVertexWithUV((double)(p_147721_2_ + 1), (double)p_147721_3_ + d4, (double)(p_147721_4_ + 1), d10, d18);
-                tessellator.addVertexWithUV((double)(p_147721_2_ + 0), (double)p_147721_3_ + d3, (double)(p_147721_4_ + 1), d8, d16);
+                tessellator.addVertexWithUV((double)(x + 0), (double)y + liquidHeight, (double)(z + 0), d7, d14);
+                tessellator.addVertexWithUV((double)(x + 0), (double)y + liquidHeightPlusZ, (double)(z + 1), d8, d16);
+                tessellator.addVertexWithUV((double)(x + 1), (double)y + liquidHeightPlusXPlusZ, (double)(z + 1), d10, d18);
+                tessellator.addVertexWithUV((double)(x + 1), (double)y + liquidHeightPlusX, (double)(z + 0), d12, d20);
+                tessellator.addVertexWithUV((double)(x + 0), (double)y + liquidHeight, (double)(z + 0), d7, d14);
+                tessellator.addVertexWithUV((double)(x + 1), (double)y + liquidHeightPlusX, (double)(z + 0), d12, d20);
+                tessellator.addVertexWithUV((double)(x + 1), (double)y + liquidHeightPlusXPlusZ, (double)(z + 1), d10, d18);
+                tessellator.addVertexWithUV((double)(x + 0), (double)y + liquidHeightPlusZ, (double)(z + 1), d8, d16);
             }
 
-            if (this.renderAllFaces || flag1)
-            {
-                tessellator.setBrightness(p_147721_1_.getMixedBrightnessForBlock(this.blockAccess, p_147721_2_, p_147721_3_ - 1, p_147721_4_));
+            if (this.renderAllFaces || shouldBlockUnderTopBeRendered) {
+                tessellator.setBrightness(liquid.getMixedBrightnessForBlock(this.blockAccess, x, y - 1, z));
                 tessellator.setColorOpaque_F(f3, f3, f3);
-                this.renderFaceYNeg(p_147721_1_, (double)p_147721_2_, (double)p_147721_3_ + d6, (double)p_147721_4_, this.getBlockIconFromSide(p_147721_1_, 0));
-                flag2 = true;
+                this.renderFaceYNeg(liquid, (double)x, (double)y + longDouble, (double)z, this.getBlockIconFromSide(liquid, 0));
+                newRenderAllFaces = true;
             }
 
-            for (int k1 = 0; k1 < 4; ++k1)
-            {
-                int l1 = p_147721_2_;
-                int j1 = p_147721_4_;
+            for (int side = 0; side < 4; ++side) {
+                int newX = x;
+                int newZ = z;
 
-                if (k1 == 0)
-                {
-                    j1 = p_147721_4_ - 1;
+                if (side == 0) {
+                    newZ = z - 1;
                 }
 
-                if (k1 == 1)
-                {
-                    ++j1;
+                if (side == 1) {
+                    ++newZ;
                 }
 
-                if (k1 == 2)
-                {
-                    l1 = p_147721_2_ - 1;
+                if (side == 2) {
+                    newX = x - 1;
                 }
 
-                if (k1 == 3)
-                {
-                    ++l1;
+                if (side == 3) {
+                    ++newX;
                 }
 
-                IIcon iicon1 = this.getBlockIconFromSideAndMetadata(p_147721_1_, k1 + 2, i1);
+                IIcon iicon1 = this.getBlockIconFromSideAndMetadata(liquid, side + 2, meta);
 
-                if (this.renderAllFaces || aboolean[k1])
-                {
-                    double d9;
-                    double d11;
+                if (this.renderAllFaces || shouldSidesBeRendered[side]) {
+                    double newLiquidHeight;
+                    double anotherNewLiquidHeight;
                     double d13;
                     double d15;
                     double d17;
                     double d19;
 
-                    if (k1 == 0)
-                    {
-                        d9 = d2;
-                        d11 = d5;
-                        d13 = (double)p_147721_2_;
-                        d17 = (double)(p_147721_2_ + 1);
-                        d15 = (double)p_147721_4_ + d6;
-                        d19 = (double)p_147721_4_ + d6;
-                    }
-                    else if (k1 == 1)
-                    {
-                        d9 = d4;
-                        d11 = d3;
-                        d13 = (double)(p_147721_2_ + 1);
-                        d17 = (double)p_147721_2_;
-                        d15 = (double)(p_147721_4_ + 1) - d6;
-                        d19 = (double)(p_147721_4_ + 1) - d6;
-                    }
-                    else if (k1 == 2)
-                    {
-                        d9 = d3;
-                        d11 = d2;
-                        d13 = (double)p_147721_2_ + d6;
-                        d17 = (double)p_147721_2_ + d6;
-                        d15 = (double)(p_147721_4_ + 1);
-                        d19 = (double)p_147721_4_;
-                    }
-                    else
-                    {
-                        d9 = d5;
-                        d11 = d4;
-                        d13 = (double)(p_147721_2_ + 1) - d6;
-                        d17 = (double)(p_147721_2_ + 1) - d6;
-                        d15 = (double)p_147721_4_;
-                        d19 = (double)(p_147721_4_ + 1);
+                    if (side == 0) {
+                        newLiquidHeight = liquidHeight;
+                        anotherNewLiquidHeight = liquidHeightPlusX;
+                        d13 = (double)x;
+                        d17 = (double)(x + 1);
+                        d15 = (double)z + longDouble;
+                        d19 = (double)z + longDouble;
+                    } else if (side == 1) {
+                        newLiquidHeight = liquidHeightPlusXPlusZ;
+                        anotherNewLiquidHeight = liquidHeightPlusZ;
+                        d13 = (double)(x + 1);
+                        d17 = (double)x;
+                        d15 = (double)(z + 1) - longDouble;
+                        d19 = (double)(z + 1) - longDouble;
+                    } else if (side == 2) {
+                        newLiquidHeight = liquidHeightPlusZ;
+                        anotherNewLiquidHeight = liquidHeight;
+                        d13 = (double)x + longDouble;
+                        d17 = (double)x + longDouble;
+                        d15 = (double)(z + 1);
+                        d19 = (double)z;
+                    } else {
+                        newLiquidHeight = liquidHeightPlusX;
+                        anotherNewLiquidHeight = liquidHeightPlusXPlusZ;
+                        d13 = (double)(x + 1) - longDouble;
+                        d17 = (double)(x + 1) - longDouble;
+                        d15 = (double)z;
+                        d19 = (double)(z + 1);
                     }
 
-                    flag2 = true;
+                    newRenderAllFaces = true;
                     float f8 = iicon1.getInterpolatedU(0.0D);
                     f9 = iicon1.getInterpolatedU(8.0D);
-                    f10 = iicon1.getInterpolatedV((1.0D - d9) * 16.0D * 0.5D);
-                    f11 = iicon1.getInterpolatedV((1.0D - d11) * 16.0D * 0.5D);
+                    f10 = iicon1.getInterpolatedV((1.0D - newLiquidHeight) * 16.0D * 0.5D);
+                    f11 = iicon1.getInterpolatedV((1.0D - anotherNewLiquidHeight) * 16.0D * 0.5D);
                     float f12 = iicon1.getInterpolatedV(8.0D);
-                    tessellator.setBrightness(p_147721_1_.getMixedBrightnessForBlock(this.blockAccess, l1, p_147721_3_, j1));
+                    tessellator.setBrightness(liquid.getMixedBrightnessForBlock(this.blockAccess, newX, y, newZ));
                     float f13 = 1.0F;
-                    f13 *= k1 < 2 ? f5 : f6;
+                    f13 *= side < 2 ? f5 : f6;
                     tessellator.setColorOpaque_F(f4 * f13 * f, f4 * f13 * f1, f4 * f13 * f2);
-                    tessellator.addVertexWithUV(d13, (double)p_147721_3_ + d9, d15, (double)f8, (double)f10);
-                    tessellator.addVertexWithUV(d17, (double)p_147721_3_ + d11, d19, (double)f9, (double)f11);
-                    tessellator.addVertexWithUV(d17, (double)(p_147721_3_ + 0), d19, (double)f9, (double)f12);
-                    tessellator.addVertexWithUV(d13, (double)(p_147721_3_ + 0), d15, (double)f8, (double)f12);
-                    tessellator.addVertexWithUV(d13, (double)(p_147721_3_ + 0), d15, (double)f8, (double)f12);
-                    tessellator.addVertexWithUV(d17, (double)(p_147721_3_ + 0), d19, (double)f9, (double)f12);
-                    tessellator.addVertexWithUV(d17, (double)p_147721_3_ + d11, d19, (double)f9, (double)f11);
-                    tessellator.addVertexWithUV(d13, (double)p_147721_3_ + d9, d15, (double)f8, (double)f10);
+                    tessellator.addVertexWithUV(d13, (double)y + newLiquidHeight, d15, (double)f8, (double)f10);
+                    tessellator.addVertexWithUV(d17, (double)y + anotherNewLiquidHeight, d19, (double)f9, (double)f11);
+                    tessellator.addVertexWithUV(d17, (double)(y + 0), d19, (double)f9, (double)f12);
+                    tessellator.addVertexWithUV(d13, (double)(y + 0), d15, (double)f8, (double)f12);
+                    tessellator.addVertexWithUV(d13, (double)(y + 0), d15, (double)f8, (double)f12);
+                    tessellator.addVertexWithUV(d17, (double)(y + 0), d19, (double)f9, (double)f12);
+                    tessellator.addVertexWithUV(d17, (double)y + anotherNewLiquidHeight, d19, (double)f9, (double)f11);
+                    tessellator.addVertexWithUV(d13, (double)y + newLiquidHeight, d15, (double)f8, (double)f10);
                 }
             }
 
-            this.renderMinY = d0;
-            this.renderMaxY = d1;
-            return flag2;
+            this.renderMinY = newRenderMinY;
+            this.renderMaxY = newRenderMaxY;
+            return newRenderAllFaces;
         }
     }
 
-    public float getLiquidHeight(int p_147729_1_, int p_147729_2_, int p_147729_3_, Material p_147729_4_)
-    {
+    public float getLiquidHeight(int x, int y, int z, Material material) {
         int l = 0;
-        float f = 0.0F;
+        float liquidHeightPercent = 0.0F;
 
-        for (int i1 = 0; i1 < 4; ++i1)
-        {
-            int j1 = p_147729_1_ - (i1 & 1);
-            int k1 = p_147729_3_ - (i1 >> 1 & 1);
+        for (int i1 = 0; i1 < 4; ++i1) {
+            int x1 = x - (i1 & 1);
+            int z1 = z - (i1 >> 1 & 1);
 
-            if (this.blockAccess.getBlock(j1, p_147729_2_ + 1, k1).getMaterial() == p_147729_4_)
-            {
+            if (this.blockAccess.getBlock(x1, y + 1, z1).getMaterial() == material) {
                 return 1.0F;
             }
 
-            Material material1 = this.blockAccess.getBlock(j1, p_147729_2_, k1).getMaterial();
+            Material material1 = this.blockAccess.getBlock(x1, y, z1).getMaterial();
 
-            if (material1 == p_147729_4_)
-            {
-                int l1 = this.blockAccess.getBlockMetadata(j1, p_147729_2_, k1);
+            if (material1 == material) {
+                int meta = this.blockAccess.getBlockMetadata(x1, y, z1);
 
-                if (l1 >= 8 || l1 == 0)
-                {
-                    f += BlockLiquid.getLiquidHeightPercent(l1) * 10.0F;
+                if (meta >= 8 || meta == 0) {
+                    liquidHeightPercent += BlockLiquid.getLiquidHeightPercent(meta) * 10.0F;
                     l += 10;
                 }
 
-                f += BlockLiquid.getLiquidHeightPercent(l1);
+                liquidHeightPercent += BlockLiquid.getLiquidHeightPercent(meta);
                 ++l;
-            }
-            else if (!material1.isSolid())
-            {
-                ++f;
+            } else if (!material1.isSolid()) {
+                ++liquidHeightPercent;
                 ++l;
             }
         }
 
-        return 1.0F - f / (float)l;
+        return 1.0F - liquidHeightPercent / (float)l;
     }
 
     public void renderBlockSandFalling(Block p_147749_1_, World p_147749_2_, int p_147749_3_, int p_147749_4_, int p_147749_5_, int p_147749_6_)

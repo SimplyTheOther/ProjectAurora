@@ -9,7 +9,7 @@ import projectaurora.world.AuroraTreeType;
 import projectaurora.world.biome.AuroraBiome;
 import projectaurora.world.biome.AuroraBiomeVariant;
 
-public class BiomeLavaOcean extends AuroraBiome {
+public class BiomeLavaOcean extends BiomeVulcan {
 
 	public BiomeLavaOcean(int id) {
 		super(id);
@@ -22,13 +22,11 @@ public class BiomeLavaOcean extends AuroraBiome {
 		this.dominantFluidBlock = Blocks.lava;
 		this.dominantFluidMeta = 0;
 		
-		//TODO this.spawnableWhateverCreatureList.add 
 		this.spawnableAmbientList.clear();
 		this.spawnableGoodList.clear();
 		this.spawnableEvilList.clear();
 		
-		//TODO this.decorator.WHATEVERPerChunk = 
-		
+		this.clearBiomeVariants();
 		this.addBiomeVariant(AuroraBiomeVariant.ISLAND);
 		
 		this.decorator.glowstonePerChunk = 1;
@@ -36,6 +34,8 @@ public class BiomeLavaOcean extends AuroraBiome {
 		this.decorator.clearTrees();
 		this.decorator.addTree(AuroraTreeType.GLOWSTONE, 1000000);
 		this.decorator.generateWater = false;
+		
+		this.isOcean = true;
 		
 		this.setBanditChance(0);
 		
