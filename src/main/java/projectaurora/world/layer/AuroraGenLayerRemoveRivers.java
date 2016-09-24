@@ -28,7 +28,7 @@ public class AuroraGenLayerRemoveRivers extends BaseGenLayer {
                 this.initChunkSeed((long)(x + i2), (long)(z + k2));
                 int biomeID = biomes[i2 + maxRange + (k2 + maxRange) * (xSize + maxRange * 2)];
                 
-                if (biomeID == AuroraBiome.lavaRiver.biomeID) {//TODO replace with generic river
+                if (AuroraBiome.auroraBiomeList[biomeID].isRiver) {
                     int replaceID = -1;
                     
                     for (int range = 1; range <= maxRange; ++range) {
@@ -42,7 +42,7 @@ public class AuroraGenLayerRemoveRivers extends BaseGenLayer {
                                     int subBiomeID = biomes[subIndex];
                                     AuroraBiome subBiome = AuroraBiome.auroraBiomeList[subBiomeID];
                                     
-                                    if (subBiome != AuroraBiome.lavaRiver) {//TODO replace with generic river
+                                    if (AuroraBiome.auroraBiomeList[subBiomeID].isRiver) {
                                         boolean wateryAdjacent = subBiome.heightBaseParameter < 0.0F && range == 1;
                                         Map<Integer, Integer> srcMap = wateryAdjacent ? viableBiomesWateryAdjacent : viableBiomes;
                                         int count = 0;

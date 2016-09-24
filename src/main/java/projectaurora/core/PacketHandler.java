@@ -6,7 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import projectaurora.world.biome.PacketBiomeVariantsUnwatch;
 import projectaurora.world.biome.PacketBiomeVariantsWatch;
 
-public class PacketHandler {//TODO packethandler stuff
+public class PacketHandler {
 	  public static final SimpleNetworkWrapper networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel("aurora_");
 	  
 	  public PacketHandler() {

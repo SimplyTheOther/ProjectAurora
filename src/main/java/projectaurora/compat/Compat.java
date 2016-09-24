@@ -22,7 +22,7 @@ public class Compat {
 	public static Block tFStorage = null;
 
 	public static void preInit() {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		
 	}
 
@@ -48,10 +48,9 @@ public class Compat {
 	}
 
 	public static void postInit() {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		
 	}
-
 
 	private static void putDimensionsInSlimeIslandBlacklist() {
 		String location = Loader.instance().getConfigDir().getPath();

@@ -47,7 +47,7 @@ public abstract class BaseWorldProvider extends WorldProvider {
 	@Override
 	public double getMovementFactor() {
 		return 0.1;
-		//TODO compared to space?
+		//compared to space?
 	}
 	
 	@Override

@@ -48,13 +48,13 @@ public class Content {
 		GameRegistry.registerBlock(block, itemclass, (block.getUnlocalizedName().substring(5)));
 	}
 
-	public static void init() {
-		// TODO Auto-generated method stub
+	public static void init() {//recipes?
+		// Auto-generated method stub
 		
 	}
 
 	public static void postInit() {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 		
 	}
 }
