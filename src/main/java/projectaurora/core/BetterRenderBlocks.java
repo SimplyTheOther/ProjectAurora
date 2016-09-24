@@ -7778,126 +7778,109 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
     /**
      * Is called to render the image of a block on an inventory, as a held item, or as a an item on the ground
      */
-    public void renderBlockAsItem(Block p_147800_1_, int p_147800_2_, float p_147800_3_)
-    {
+    public void renderBlockAsItem(Block block, int meta, float par3) {
         Tessellator tessellator = Tessellator.instance;
-        boolean flag = p_147800_1_ == Blocks.grass;
 
-        if (p_147800_1_ == Blocks.dispenser || p_147800_1_ == Blocks.dropper || p_147800_1_ == Blocks.furnace)
-        {
-            p_147800_2_ = 3;
-        }
-
-        int j;
+        int renderColour;
         float f1;
         float f2;
         float f3;
 
-        if (this.useInventoryTint)
-        {
-            j = p_147800_1_.getRenderColor(p_147800_2_);
+        if (this.useInventoryTint) {
+            renderColour = block.getRenderColor(meta);
 
-            if (flag)
-            {
-                j = 16777215;
-            }
-
-            f1 = (float)(j >> 16 & 255) / 255.0F;
-            f2 = (float)(j >> 8 & 255) / 255.0F;
-            f3 = (float)(j & 255) / 255.0F;
-            GL11.glColor4f(f1 * p_147800_3_, f2 * p_147800_3_, f3 * p_147800_3_, 1.0F);
+            f1 = (float)(renderColour >> 16 & 255) / 255.0F;
+            f2 = (float)(renderColour >> 8 & 255) / 255.0F;
+            f3 = (float)(renderColour & 255) / 255.0F;
+            GL11.glColor4f(f1 * par3, f2 * par3, f3 * par3, 1.0F);
         }
 
-        j = p_147800_1_.getRenderType();
-        this.setRenderBoundsFromBlock(p_147800_1_);
+        renderColour = block.getRenderType();
+        this.setRenderBoundsFromBlock(block);
         int k;
 
-        if (j != 0 && j != 31 && j != 39 && j != 16 && j != 26)
-        {
-            if (j == 1)
-            {
+        if (renderColour != 0 && renderColour != 31 && renderColour != 39 && renderColour != 16 && renderColour != 26) {
+            if (renderColour == 1) {
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                IIcon iicon = this.getBlockIconFromSideAndMetadata(p_147800_1_, 0, p_147800_2_);
+                IIcon iicon = this.getBlockIconFromSideAndMetadata(block, 0, meta);
                 this.drawCrossedSquares(iicon, -0.5D, -0.5D, -0.5D, 1.0F);
                 tessellator.draw();
+            } else if (renderColour == 19) {
+                tessellator.startDrawingQuads();
+                tessellator.setNormal(0.0F, -1.0F, 0.0F);
+                block.setBlockBoundsForItemRender();
+                this.renderBlockStemSmall(block, meta, this.renderMaxY, -0.5D, -0.5D, -0.5D);
+                tessellator.draw();
             }
-            else if (j == 19)
+            else if (renderColour == 23)
             {
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                p_147800_1_.setBlockBoundsForItemRender();
-                this.renderBlockStemSmall(p_147800_1_, p_147800_2_, this.renderMaxY, -0.5D, -0.5D, -0.5D);
+                block.setBlockBoundsForItemRender();
                 tessellator.draw();
             }
-            else if (j == 23)
+            else if (renderColour == 13)
             {
-                tessellator.startDrawingQuads();
-                tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                p_147800_1_.setBlockBoundsForItemRender();
-                tessellator.draw();
-            }
-            else if (j == 13)
-            {
-                p_147800_1_.setBlockBoundsForItemRender();
+                block.setBlockBoundsForItemRender();
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                 f1 = 0.0625F;
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                this.renderFaceYNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 0));
+                this.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 0));
                 tessellator.draw();
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, 1.0F, 0.0F);
-                this.renderFaceYPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 1));
+                this.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 1));
                 tessellator.draw();
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, 0.0F, -1.0F);
                 tessellator.addTranslation(0.0F, 0.0F, f1);
-                this.renderFaceZNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 2));
+                this.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 2));
                 tessellator.addTranslation(0.0F, 0.0F, -f1);
                 tessellator.draw();
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, 0.0F, 1.0F);
                 tessellator.addTranslation(0.0F, 0.0F, -f1);
-                this.renderFaceZPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 3));
+                this.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 3));
                 tessellator.addTranslation(0.0F, 0.0F, f1);
                 tessellator.draw();
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(-1.0F, 0.0F, 0.0F);
                 tessellator.addTranslation(f1, 0.0F, 0.0F);
-                this.renderFaceXNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 4));
+                this.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 4));
                 tessellator.addTranslation(-f1, 0.0F, 0.0F);
                 tessellator.draw();
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(1.0F, 0.0F, 0.0F);
                 tessellator.addTranslation(-f1, 0.0F, 0.0F);
-                this.renderFaceXPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 5));
+                this.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 5));
                 tessellator.addTranslation(f1, 0.0F, 0.0F);
                 tessellator.draw();
                 GL11.glTranslatef(0.5F, 0.5F, 0.5F);
             }
-            else if (j == 22)
+            else if (renderColour == 22)
             {
                 GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-                TileEntityRendererChestHelper.instance.renderChest(p_147800_1_, p_147800_2_, p_147800_3_);
+                TileEntityRendererChestHelper.instance.renderChest(block, meta, par3);
                 GL11.glEnable(GL12.GL_RESCALE_NORMAL);
             }
-            else if (j == 6)
+            else if (renderColour == 6)
             {
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                this.renderBlockCropsImpl(p_147800_1_, p_147800_2_, -0.5D, -0.5D, -0.5D);
+                this.renderBlockCropsImpl(block, meta, -0.5D, -0.5D, -0.5D);
                 tessellator.draw();
             }
-            else if (j == 2)
+            else if (renderColour == 2)
             {
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                this.renderTorchAtAngle(p_147800_1_, -0.5D, -0.5D, -0.5D, 0.0D, 0.0D, 0);
+                this.renderTorchAtAngle(block, -0.5D, -0.5D, -0.5D, 0.0D, 0.0D, 0);
                 tessellator.draw();
             }
-            else if (j == 10)
+            else if (renderColour == 10)
             {
                 for (k = 0; k < 2; ++k)
                 {
@@ -7914,32 +7897,32 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
                     GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                    this.renderFaceYNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 0));
+                    this.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 0));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 1.0F, 0.0F);
-                    this.renderFaceYPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 1));
+                    this.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 1));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, -1.0F);
-                    this.renderFaceZNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 2));
+                    this.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 2));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, 1.0F);
-                    this.renderFaceZPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 3));
+                    this.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 3));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-                    this.renderFaceXNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 4));
+                    this.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 4));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(1.0F, 0.0F, 0.0F);
-                    this.renderFaceXPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 5));
+                    this.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 5));
                     tessellator.draw();
                     GL11.glTranslatef(0.5F, 0.5F, 0.5F);
                 }
             }
-            else if (j == 27)
+            else if (renderColour == 27)
             {
                 k = 0;
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
@@ -8000,24 +7983,24 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
                     k += b1;
                     this.setRenderBounds((double)(0.5F - f5), (double)f7, (double)(0.5F - f5), (double)(0.5F + f5), (double)f6, (double)(0.5F + f5));
                     tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                    this.renderFaceYNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 0));
+                    this.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 0));
                     tessellator.setNormal(0.0F, 1.0F, 0.0F);
-                    this.renderFaceYPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 1));
+                    this.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 1));
                     tessellator.setNormal(0.0F, 0.0F, -1.0F);
-                    this.renderFaceZNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 2));
+                    this.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 2));
                     tessellator.setNormal(0.0F, 0.0F, 1.0F);
-                    this.renderFaceZPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 3));
+                    this.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 3));
                     tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-                    this.renderFaceXNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 4));
+                    this.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 4));
                     tessellator.setNormal(1.0F, 0.0F, 0.0F);
-                    this.renderFaceXPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 5));
+                    this.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 5));
                 }
 
                 tessellator.draw();
                 GL11.glTranslatef(0.5F, 0.5F, 0.5F);
                 this.setRenderBounds(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
             }
-            else if (j == 11)
+            else if (renderColour == 11)
             {
                 for (k = 0; k < 4; ++k)
                 {
@@ -8048,34 +8031,34 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
                     GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                    this.renderFaceYNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 0));
+                    this.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 0));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 1.0F, 0.0F);
-                    this.renderFaceYPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 1));
+                    this.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 1));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, -1.0F);
-                    this.renderFaceZNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 2));
+                    this.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 2));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, 1.0F);
-                    this.renderFaceZPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 3));
+                    this.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 3));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-                    this.renderFaceXNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 4));
+                    this.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 4));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(1.0F, 0.0F, 0.0F);
-                    this.renderFaceXPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 5));
+                    this.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 5));
                     tessellator.draw();
                     GL11.glTranslatef(0.5F, 0.5F, 0.5F);
                 }
 
                 this.setRenderBounds(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
             }
-            else if (j == 21)
+            else if (renderColour == 21)
             {
                 for (k = 0; k < 3; ++k)
                 {
@@ -8101,32 +8084,32 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
                     GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                    this.renderFaceYNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 0));
+                    this.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 0));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 1.0F, 0.0F);
-                    this.renderFaceYPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 1));
+                    this.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 1));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, -1.0F);
-                    this.renderFaceZNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 2));
+                    this.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 2));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, 1.0F);
-                    this.renderFaceZPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 3));
+                    this.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 3));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-                    this.renderFaceXNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 4));
+                    this.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 4));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(1.0F, 0.0F, 0.0F);
-                    this.renderFaceXPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(p_147800_1_, 5));
+                    this.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSide(block, 5));
                     tessellator.draw();
                     GL11.glTranslatef(0.5F, 0.5F, 0.5F);
                 }
             }
-            else if (j == 32)
+            else if (renderColour == 32)
             {
                 for (k = 0; k < 2; ++k)
                 {
@@ -8143,40 +8126,40 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
                     GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                    this.renderFaceYNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 0, p_147800_2_));
+                    this.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 0, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 1.0F, 0.0F);
-                    this.renderFaceYPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 1, p_147800_2_));
+                    this.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 1, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, -1.0F);
-                    this.renderFaceZNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 2, p_147800_2_));
+                    this.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 2, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, 1.0F);
-                    this.renderFaceZPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 3, p_147800_2_));
+                    this.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 3, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-                    this.renderFaceXNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 4, p_147800_2_));
+                    this.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 4, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(1.0F, 0.0F, 0.0F);
-                    this.renderFaceXPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 5, p_147800_2_));
+                    this.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 5, meta));
                     tessellator.draw();
                     GL11.glTranslatef(0.5F, 0.5F, 0.5F);
                 }
 
                 this.setRenderBounds(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
             }
-            else if (j == 35)
+            else if (renderColour == 35)
             {
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-                this.renderBlockAnvilOrient((BlockAnvil)p_147800_1_, 0, 0, 0, p_147800_2_ << 2, true);
+                this.renderBlockAnvilOrient((BlockAnvil)block, 0, 0, 0, meta << 2, true);
                 GL11.glTranslatef(0.5F, 0.5F, 0.5F);
             }
-            else if (j == 34)
+            else if (renderColour == 34)
             {
                 for (k = 0; k < 3; ++k)
                 {
@@ -8199,27 +8182,27 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
                     GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, -1.0F, 0.0F);
-                    this.renderFaceYNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 0, p_147800_2_));
+                    this.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 0, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 1.0F, 0.0F);
-                    this.renderFaceYPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 1, p_147800_2_));
+                    this.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 1, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, -1.0F);
-                    this.renderFaceZNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 2, p_147800_2_));
+                    this.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 2, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(0.0F, 0.0F, 1.0F);
-                    this.renderFaceZPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 3, p_147800_2_));
+                    this.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 3, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-                    this.renderFaceXNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 4, p_147800_2_));
+                    this.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 4, meta));
                     tessellator.draw();
                     tessellator.startDrawingQuads();
                     tessellator.setNormal(1.0F, 0.0F, 0.0F);
-                    this.renderFaceXPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 5, p_147800_2_));
+                    this.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 5, meta));
                     tessellator.draw();
                     GL11.glTranslatef(0.5F, 0.5F, 0.5F);
                 }
@@ -8227,67 +8210,50 @@ public class BetterRenderBlocks extends RenderBlocks {//TODO useless dead code
                 this.setRenderBounds(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
                 this.clearOverrideBlockTexture();
             }
-            else if (j == 38)
+            else if (renderColour == 38)
             {
                 GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-                this.renderBlockHopperMetadata((BlockHopper)p_147800_1_, 0, 0, 0, 0, true);
+                this.renderBlockHopperMetadata((BlockHopper)block, 0, 0, 0, 0, true);
                 GL11.glTranslatef(0.5F, 0.5F, 0.5F);
             }
             else
             {
-                FMLRenderAccessLibrary.renderInventoryBlock(this, p_147800_1_, p_147800_2_, j);
+                FMLRenderAccessLibrary.renderInventoryBlock(this, block, meta, renderColour);
             }
-        }
-        else
-        {
-            if (j == 16)
-            {
-                p_147800_2_ = 1;
+        } else {
+            if (renderColour == 16) {
+                meta = 1;
             }
 
-            p_147800_1_.setBlockBoundsForItemRender();
-            this.setRenderBoundsFromBlock(p_147800_1_);
+            block.setBlockBoundsForItemRender();
+            this.setRenderBoundsFromBlock(block);
             GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
             GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
             tessellator.startDrawingQuads();
             tessellator.setNormal(0.0F, -1.0F, 0.0F);
-            this.renderFaceYNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 0, p_147800_2_));
+            this.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 0, meta));
             tessellator.draw();
-
-            if (flag && this.useInventoryTint)
-            {
-                k = p_147800_1_.getRenderColor(p_147800_2_);
-                f2 = (float)(k >> 16 & 255) / 255.0F;
-                f3 = (float)(k >> 8 & 255) / 255.0F;
-                float f4 = (float)(k & 255) / 255.0F;
-                GL11.glColor4f(f2 * p_147800_3_, f3 * p_147800_3_, f4 * p_147800_3_, 1.0F);
-            }
 
             tessellator.startDrawingQuads();
             tessellator.setNormal(0.0F, 1.0F, 0.0F);
-            this.renderFaceYPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 1, p_147800_2_));
+            this.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 1, meta));
             tessellator.draw();
-
-            if (flag && this.useInventoryTint)
-            {
-                GL11.glColor4f(p_147800_3_, p_147800_3_, p_147800_3_, 1.0F);
-            }
 
             tessellator.startDrawingQuads();
             tessellator.setNormal(0.0F, 0.0F, -1.0F);
-            this.renderFaceZNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 2, p_147800_2_));
+            this.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 2, meta));
             tessellator.draw();
             tessellator.startDrawingQuads();
             tessellator.setNormal(0.0F, 0.0F, 1.0F);
-            this.renderFaceZPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 3, p_147800_2_));
+            this.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 3, meta));
             tessellator.draw();
             tessellator.startDrawingQuads();
             tessellator.setNormal(-1.0F, 0.0F, 0.0F);
-            this.renderFaceXNeg(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 4, p_147800_2_));
+            this.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 4, meta));
             tessellator.draw();
             tessellator.startDrawingQuads();
             tessellator.setNormal(1.0F, 0.0F, 0.0F);
-            this.renderFaceXPos(p_147800_1_, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(p_147800_1_, 5, p_147800_2_));
+            this.renderFaceXPos(block, 0.0D, 0.0D, 0.0D, this.getBlockIconFromSideAndMetadata(block, 5, meta));
             tessellator.draw();
             GL11.glTranslatef(0.5F, 0.5F, 0.5F);
         }

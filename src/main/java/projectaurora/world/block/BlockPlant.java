@@ -11,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -81,6 +82,22 @@ public class BlockPlant extends Block {
 				setBlockBounds(0F, 0F, 0F, 1F, 1F, 1F);
 		}
 	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
+        float f = 0;
+		
+		int meta = world.getBlockMetadata(x, y, z);
+		
+		switch(meta) {
+			case 0:
+		        f = 0.015625F;
+		        break;
+		}
+		
+		byte b0 = 0;
+        return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)((float)y + (float)b0 * f), (double)z + this.maxZ);
+    }
 
 	@Override
 	public int getRenderBlockPass() {

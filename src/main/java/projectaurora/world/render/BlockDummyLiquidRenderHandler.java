@@ -1,21 +1,65 @@
 package projectaurora.world.render;
 
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import projectaurora.core.ClientProxy;
+import projectaurora.core.Content;
 import projectaurora.world.block.BlockDummyLiquid;
 
 public class BlockDummyLiquidRenderHandler implements ISimpleBlockRenderingHandler {
 
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
-		renderer.renderBlockAsItem(block, metadata, 1F);
+		Tessellator tess = Tessellator.instance;
+		
+		block.setBlockBoundsForItemRender();
+		renderer.setRenderBoundsFromBlock(Content.dummyLiquid);
+		
+		GL11.glRotatef(90F, 0F, 1F, 0F);
+		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+		
+		//Render dummy liquid
+		tess.startDrawingQuads();
+		tess.setNormal(0F, -1F, 0F);
+		renderer.renderFaceYNeg(block, 0D, 0D, 0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
+        //renderer.renderFaceYNeg(liquid, (double)x, (double)y + longDouble, (double)z, renderer.getBlockIconFromSide(liquid, 0));
+		tess.draw();
+		
+		tess.startDrawingQuads();
+		tess.setNormal(0F, 1F, 0F);
+		renderer.renderFaceYPos(block, 0D, 0D, 0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
+		tess.draw();
+		
+		tess.startDrawingQuads();
+		tess.setNormal(0F, 0F, -1F);
+		renderer.renderFaceZNeg(block, 0D, 0D, 0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
+		tess.draw();
+		
+		tess.startDrawingQuads();
+		tess.setNormal(0F, 0F, 1F);
+		renderer.renderFaceZPos(block, 0D, 0D, 0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
+		tess.draw();
+		
+		tess.startDrawingQuads();
+		tess.setNormal(-1F, 0F, 0F);
+		renderer.renderFaceXNeg(block, 0D, 0D, 0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
+		tess.draw();
+		
+		tess.startDrawingQuads();
+		tess.setNormal(1F, 0F, 0F);
+		renderer.renderFaceXPos(block, 0D, 0D, 0D, renderer.getBlockIconFromSideAndMetadata(block, 5, metadata));
+		tess.draw();
+		
+		GL11.glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 
 	@Override
@@ -131,7 +175,7 @@ public class BlockDummyLiquidRenderHandler implements ISimpleBlockRenderingHandl
             if (renderer.renderAllFaces || shouldBlockUnderTopBeRendered) {
                 tessellator.setBrightness(liquid.getMixedBrightnessForBlock(renderer.blockAccess, x, y - 1, z));
                 tessellator.setColorOpaque_F(f3, f3, f3);
-                renderer.renderFaceYNeg(liquid, (double)x, (double)y + longDouble, (double)z, renderer.getBlockIconFromSide(liquid, 0));
+                renderer.renderFaceYNeg(liquid, (double)x, (double)y + longDouble, (double)z, renderer.getBlockIconFromSideAndMetadata(liquid, 0, meta));
                 newRenderAllFaces = true;
             }
 

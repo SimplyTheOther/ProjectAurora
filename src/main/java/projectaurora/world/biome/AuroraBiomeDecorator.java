@@ -289,7 +289,7 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	    
 	    if(this.generateCoal) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("coal.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("coal.molten").getBlock(), 0, WorldModule.coalGen, biome), WorldModule.coalGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 0, WorldModule.coalGen, biome), WorldModule.coalGen);
 	    	} else {
 	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.coalGen, biome), WorldModule.coalGen);	
 	    	}
@@ -297,99 +297,99 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	    
 	    if(this.generateIron) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("iron.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("iron.molten").getBlock(), 0, WorldModule.ironGen, biome), WorldModule.ironGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 1, WorldModule.ironGen, biome), WorldModule.ironGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.ironGen, biome), WorldModule.ironGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 1, WorldModule.ironGen, biome), WorldModule.ironGen);	
 	    	}
 	    }
 	    
 	    if(this.generateGold) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("gold.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("gold.molten").getBlock(), 0, WorldModule.goldGen, biome), WorldModule.goldGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 2, WorldModule.goldGen, biome), WorldModule.goldGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.goldGen, biome), WorldModule.goldGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 2, WorldModule.goldGen, biome), WorldModule.goldGen);	
 	    	}
 	    }
 	    
 	    if(this.generateLapis) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("lapis.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("lapis.molten").getBlock(), 0, WorldModule.lapisGen, biome), WorldModule.lapisGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 3, WorldModule.lapisGen, biome), WorldModule.lapisGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.lapisGen, biome), WorldModule.lapisGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 3, WorldModule.lapisGen, biome), WorldModule.lapisGen);	
 	    	}
 	    }
 	    
 	    if(this.generateDiamond) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("diamond.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("diamond.molten").getBlock(), 0, WorldModule.diamondGen, biome), WorldModule.diamondGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 4, WorldModule.diamondGen, biome), WorldModule.diamondGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.diamondGen, biome), WorldModule.diamondGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 4, WorldModule.diamondGen, biome), WorldModule.diamondGen);	
 	    	}
 	    }
 	    
 	    if(this.generateEmerald) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("emerald.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("emerald.molten").getBlock(), 0, WorldModule.emeraldGen, biome), WorldModule.emeraldGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 5, WorldModule.emeraldGen, biome), WorldModule.emeraldGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.emeraldGen, biome), WorldModule.emeraldGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 5, WorldModule.emeraldGen, biome), WorldModule.emeraldGen);	
 	    	}
 	    }
 	    
 	    if(this.generateCopper) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("copper.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("copper.molten").getBlock(), 0, WorldModule.copperGen, biome), WorldModule.copperGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 6, WorldModule.copperGen, biome), WorldModule.copperGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.copperGen, biome), WorldModule.copperGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 6, WorldModule.copperGen, biome), WorldModule.copperGen);	
 	    	}
 	    }
 	    
 	    if(this.generateAluminium) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("aluminium.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("aluminium.molten").getBlock(), 0, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 7, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);
 	    	} else if(this.moltenOres && FluidRegistry.getFluid("aluminum.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("aluminum.molten").getBlock(), 0, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 7, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 7, WorldModule.aluminiumGen, biome), WorldModule.aluminiumGen);	
 	    	}
 	    }
 	    
 	    if(this.generateLead) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("lead.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("lead.molten").getBlock(), 0, WorldModule.leadGen, biome), WorldModule.leadGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 8, WorldModule.leadGen, biome), WorldModule.leadGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.leadGen, biome), WorldModule.leadGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 8, WorldModule.leadGen, biome), WorldModule.leadGen);	
 	    	}
 	    }
 	    
 	    if(this.generateSilver) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("silver.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("silver.molten").getBlock(), 0, WorldModule.silverGen, biome), WorldModule.silverGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 9, WorldModule.silverGen, biome), WorldModule.silverGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.silverGen, biome), WorldModule.silverGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 9, WorldModule.silverGen, biome), WorldModule.silverGen);	
 	    	}
 	    }
 	    
 	    if(this.generateNickel) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("nickel.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("nickel.molten").getBlock(), 0, WorldModule.nickelGen, biome), WorldModule.nickelGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 10, WorldModule.nickelGen, biome), WorldModule.nickelGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.nickelGen, biome), WorldModule.nickelGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 10, WorldModule.nickelGen, biome), WorldModule.nickelGen);	
 	    	}
 	    }
 	    
 	    if(this.generateTin) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("tin.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("tin.molten").getBlock(), 0, WorldModule.tinGen, biome), WorldModule.tinGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 11, WorldModule.tinGen, biome), WorldModule.tinGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.tinGen, biome), WorldModule.tinGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 11, WorldModule.tinGen, biome), WorldModule.tinGen);	
 	    	}
 	    }
 	    
 	    if(this.generateQuartz) {
 	    	if(this.moltenOres && FluidRegistry.getFluid("quartz.molten") != null) {
-	    		addOre(new WorldGenMineable(FluidRegistry.getFluid("quartz.molten").getBlock(), 0, WorldModule.quartzGen, biome), WorldModule.quartzGen);
+	    		addOre(new WorldGenMineable(Content.dummyLiquid, 12, WorldModule.quartzGen, biome), WorldModule.quartzGen);
 	    	} else {
-	    		addOre(new WorldGenMineable(Content.ore, 0, WorldModule.quartzGen, biome), WorldModule.quartzGen);	
+	    		addOre(new WorldGenMineable(Content.ore, 12, WorldModule.quartzGen, biome), WorldModule.quartzGen);	
 	    	}
 	    }
 	    
@@ -739,7 +739,7 @@ public class AuroraBiomeDecorator {//TODO readd generation
 			boolean generate = oresToGenerate >= 1.0F || this.rand.nextFloat() < oresToGenerate;
 			--oresToGenerate;
 			
-			System.out.println("oresToGenerate=" + Float.toString(oresToGenerate));
+			//System.out.println("oresToGenerate=" + Float.toString(oresToGenerate));
 			
 /*			if (oresToGenerate >= 1.0F) {
 				generate = true;

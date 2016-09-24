@@ -40,8 +40,8 @@ public class BlockDummyLiquid extends Block {
 
 	public BlockDummyLiquid() {
 		super(Material.lava);
-		this.setCreativeTab(Aurora.tabWorld);//TODO for testing only
-		this.setHardness(3.0F);
+		//this.setCreativeTab(Aurora.tabWorld);
+		this.setHardness(-1.0F);
 		this.setResistance(5.0F);
 		this.setStepSound(soundTypeStone);
 		this.setBlockBounds(0F, 0F, 0F, 1F, 0.86174509995F, 1F);
@@ -77,11 +77,21 @@ public class BlockDummyLiquid extends Block {
 						if(filledBucket != null) {
 							player.inventory.setInventorySlotContents(player.inventory.currentItem, filledBucket);
 						}
-					}
-
+					} 
 					world.setBlock(x, y, z, Blocks.air);
 					return true;
-				}
+				} else if(FluidRegistry.getFluid("aluminum.molten") != null && i == 7) {
+					if(!player.capabilities.isCreativeMode) {
+						ItemStack original = player.getCurrentEquippedItem();
+						ItemStack filledBucket = FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.getFluid("aluminum.molten"), 1000), player.getCurrentEquippedItem());
+							
+						if(filledBucket != null) {
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, filledBucket);
+						}
+					}
+					world.setBlock(x, y, z, Blocks.air);
+					return true;
+				}		
 			}
 		}
 		return false;
@@ -314,46 +324,61 @@ public class BlockDummyLiquid extends Block {
 				case 1:
 					if(FluidRegistry.getFluid("iron.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("iron.molten").getIcon();
+					} else {
+						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
 					}
 					break;
 				case 2:
 					if(FluidRegistry.getFluid("gold.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("gold.molten").getIcon();
+					} else {
+						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
 					} 
 					break;
 				case 6:
 					if(FluidRegistry.getFluid("copper.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("copper.molten").getIcon();
+					} else {
+						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
 					} 
 					break;
 				case 7:
 					if(FluidRegistry.getFluid("aluminum.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("aluminum.molten").getIcon();
+					} else {
+						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
 					} 
 					break;
 				case 8:
 					if(FluidRegistry.getFluid("lead.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("lead.molten").getIcon();
+					} else {
+						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
 					} 
 					break;
 				case 9:
 					if(FluidRegistry.getFluid("silver.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("silver.molten").getIcon();
+					} else {
+						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
 					} 
 					break;
 				case 10:
 					if(FluidRegistry.getFluid("nickel.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("nickel.molten").getIcon();
+					} else {
+						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
 					} 
 					break;
 				case 11:
 					if(FluidRegistry.getFluid("tin.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("tin.molten").getIcon();
-					} 
+					} else {
+						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+					}
 					break;
 			}
 		}
-		System.out.println("Couldn't get tinker texture for " + texNames[meta]);
 		return icons[meta];
 	}
 
