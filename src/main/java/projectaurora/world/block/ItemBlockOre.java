@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import projectaurora.core.Reference;
 
 public class ItemBlockOre extends ItemBlock {
 
@@ -16,71 +17,14 @@ public class ItemBlockOre extends ItemBlock {
 	
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
-		String name = "";
-		switch(stack.getItemDamage()) {
-			case 0: {
-				name = "oreCoalAurora";
-				break;
-			}
-			case 1: {
-				name = "oreIronAurora";
-				break;
-			}
-			case 2: {
-				name = "oreGoldAurora";
-				break;
-			}
-			case 3: {
-				name = "oreLapisAurora";
-				break;
-			}
-			case 4: {
-				name = "oreDiamondAurora";
-				break;
-			}
-			case 5: {
-				name = "oreEmeraldAurora";
-				break;
-			}
-			case 6: {
-				name = "oreCopperAurora";
-				break;
-			}
-			case 7: {
-				name = "oreAluminiumAurora";
-				break;
-			}
-			case 8: {
-				name = "oreLeadAurora";
-				break;
-			}
-			case 9: {
-				name = "oreSilverAurora";
-				break;
-			}
-			case 10: {
-				name = "oreNickelAurora";
-				break;
-			}
-			case 11: {
-				name = "oreTinAurora";
-				break;
-			}
-			case 12: {
-				name = "oreQuartzAurora";
-				break;
-			}
-			default: {
-				name = "congratsYouBrokeTheGame";
-				break;
-			}
-		}
+		String name = "ore" + Reference.oreTexNames[stack.getItemDamage()] + "Aurora";
+		
 		return this.getUnlocalizedName() + "." + name;
 	}
 
 	@Override
-	public int getMetadata(int par1) {
-		return par1;
+	public int getMetadata(int itemBlockMeta) {
+		return itemBlockMeta;
 	}
 	
 	@Override

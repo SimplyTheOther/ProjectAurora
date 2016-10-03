@@ -24,7 +24,12 @@ public class BlockPlant extends Block {
 	@SideOnly(Side.CLIENT)
 	public IIcon[] icons = new IIcon[texNames.length];
 	
+	@SideOnly(Side.CLIENT)
+	public IIcon[] glowstoneIcons = new IIcon[sideNames.length];
+	
 	public static final String[] texNames = new String[] {"Glowstone"};
+	
+	public static final String[] sideNames = new String[] {"B", "T", "L", "R"};
 	
 	public static int pass;
 	
@@ -133,6 +138,25 @@ public class BlockPlant extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
+		switch(meta) {
+			case 0: {
+				switch(side) {
+					case 0:
+					case 1:
+						return icons[meta];
+					case 2:
+						return glowstoneIcons[1];
+					case 3:
+						return glowstoneIcons[0];
+					case 4:
+						return glowstoneIcons[2];
+					case 5:
+						return glowstoneIcons[3];
+				}
+				break;
+			}
+		}
+		
 		return icons[meta];
 	}
 
@@ -141,6 +165,10 @@ public class BlockPlant extends Block {
 	public void registerBlockIcons(IIconRegister register) {
 		for(int i = 0; i < texNames.length; i++) {
 			this.icons[i] = register.registerIcon(Reference.modidLowerCase + ":plants/plant" + texNames[i]);
+		}
+		
+		for(int j = 0; j < sideNames.length; j++) {
+			this.glowstoneIcons[j] = register.registerIcon(Reference.modidLowerCase + ":plants/plant" + texNames[0] + sideNames[j]);
 		}
 	}
 

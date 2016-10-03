@@ -32,9 +32,9 @@ import projectaurora.core.Reference;
 public class BlockDummyLiquid extends Block {
 
 	@SideOnly(Side.CLIENT)
-	public IIcon[] icons = new IIcon[texNames.length];
+	public IIcon[] icons = new IIcon[Reference.oreTexNames.length];
 
-	public static final String[] texNames = new String[] {"Coal", "Iron", "Gold", "Lapis", "Diamond", "Emerald", "Copper", "Aluminium", "Lead", "Silver", "Nickel", "Tin", "Quartz"};
+	//public static final String[] oreTexNames = new String[] {"Coal", "Iron", "Gold", "Lapis", "Diamond", "Emerald", "Copper", "Aluminium", "Lead", "Silver", "Nickel", "Tin", "Quartz"};
 
 	public static int pass;
 
@@ -45,6 +45,7 @@ public class BlockDummyLiquid extends Block {
 		this.setResistance(5.0F);
 		this.setStepSound(soundTypeStone);
 		this.setBlockBounds(0F, 0F, 0F, 1F, 0.86174509995F, 1F);
+		this.setLightLevel(13F);
 	}
 	
 	@Override
@@ -55,6 +56,10 @@ public class BlockDummyLiquid extends Block {
 			ItemStack currentItem = player.getCurrentEquippedItem();
 			
 			if(currentItem == null) {
+				System.out.println("lightLevelOf" + world.getBlock(1799, 11, -1684).getUnlocalizedName() + "=" + world.getBlock(1799, 11, -1684).getLightValue());
+				System.out.println("lightLevelOf" + world.getBlock(1799, 10, -1684).getUnlocalizedName() + "=" + world.getBlock(1799, 10, -1684).getLightValue());
+				System.out.println("lightLevelOf" + world.getBlock(1799, 9, -1684).getUnlocalizedName() + "=" + world.getBlock(1799, 9, -1684).getLightValue());
+				
 				return true;
 			} else {
 				if(currentItem.getItem() == Items.bucket) {
@@ -67,33 +72,30 @@ public class BlockDummyLiquid extends Block {
     }
 
 	private boolean putLiquidInBucket(World world, int x, int y, int z, EntityPlayer player) {
-		for(int i = 0; i < texNames.length; i++) {
-			if(world.getBlockMetadata(x, y, z) == i) {
-				if(FluidRegistry.getFluid(texNames[i].toLowerCase() + ".molten") != null) {
-					if(!player.capabilities.isCreativeMode) {
-						ItemStack original = player.getCurrentEquippedItem();
-						ItemStack filledBucket = FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.getFluid(texNames[i].toLowerCase() + ".molten"), 1000), player.getCurrentEquippedItem());
-						
-						if(filledBucket != null) {
-							player.inventory.setInventorySlotContents(player.inventory.currentItem, filledBucket);
-						}
-					} 
-					world.setBlock(x, y, z, Blocks.air);
-					return true;
-				} else if(FluidRegistry.getFluid("aluminum.molten") != null && i == 7) {
-					if(!player.capabilities.isCreativeMode) {
-						ItemStack original = player.getCurrentEquippedItem();
-						ItemStack filledBucket = FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.getFluid("aluminum.molten"), 1000), player.getCurrentEquippedItem());
-							
-						if(filledBucket != null) {
-							player.inventory.setInventorySlotContents(player.inventory.currentItem, filledBucket);
-						}
-					}
-					world.setBlock(x, y, z, Blocks.air);
-					return true;
-				}		
+		if(FluidRegistry.getFluid(Reference.oreTexNames[world.getBlockMetadata(x, y, z)].toLowerCase() + ".molten") != null) {
+			if(!player.capabilities.isCreativeMode) {
+				ItemStack original = player.getCurrentEquippedItem();
+				ItemStack filledBucket = FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.getFluid(Reference.oreTexNames[world.getBlockMetadata(x, y, z)].toLowerCase() + ".molten"), 1000), player.getCurrentEquippedItem());
+				
+				if(filledBucket != null) {
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, filledBucket);
+				}
+			} 
+			world.setBlock(x, y, z, Blocks.air);
+			return true;
+		} else if(FluidRegistry.getFluid("aluminum.molten") != null && world.getBlockMetadata(x, y, z) == 7) {
+			if(!player.capabilities.isCreativeMode) {
+				ItemStack original = player.getCurrentEquippedItem();
+				ItemStack filledBucket = FluidContainerRegistry.fillFluidContainer(new FluidStack(FluidRegistry.getFluid("aluminum.molten"), 1000), player.getCurrentEquippedItem());
+					
+				if(filledBucket != null) {
+					player.inventory.setInventorySlotContents(player.inventory.currentItem, filledBucket);
+				}
 			}
-		}
+			world.setBlock(x, y, z, Blocks.air);
+			return true;
+		}		
+	
 		return false;
 	}
 
@@ -325,56 +327,56 @@ public class BlockDummyLiquid extends Block {
 					if(FluidRegistry.getFluid("iron.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("iron.molten").getIcon();
 					} else {
-						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+						System.out.println("Couldn't get tinker texture for " + Reference.oreTexNames[meta]);
 					}
 					break;
 				case 2:
 					if(FluidRegistry.getFluid("gold.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("gold.molten").getIcon();
 					} else {
-						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+						System.out.println("Couldn't get tinker texture for " + Reference.oreTexNames[meta]);
 					} 
 					break;
 				case 6:
 					if(FluidRegistry.getFluid("copper.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("copper.molten").getIcon();
 					} else {
-						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+						System.out.println("Couldn't get tinker texture for " + Reference.oreTexNames[meta]);
 					} 
 					break;
 				case 7:
 					if(FluidRegistry.getFluid("aluminum.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("aluminum.molten").getIcon();
 					} else {
-						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+						System.out.println("Couldn't get tinker texture for " + Reference.oreTexNames[meta]);
 					} 
 					break;
 				case 8:
 					if(FluidRegistry.getFluid("lead.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("lead.molten").getIcon();
 					} else {
-						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+						System.out.println("Couldn't get tinker texture for " + Reference.oreTexNames[meta]);
 					} 
 					break;
 				case 9:
 					if(FluidRegistry.getFluid("silver.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("silver.molten").getIcon();
 					} else {
-						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+						System.out.println("Couldn't get tinker texture for " + Reference.oreTexNames[meta]);
 					} 
 					break;
 				case 10:
 					if(FluidRegistry.getFluid("nickel.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("nickel.molten").getIcon();
 					} else {
-						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+						System.out.println("Couldn't get tinker texture for " + Reference.oreTexNames[meta]);
 					} 
 					break;
 				case 11:
 					if(FluidRegistry.getFluid("tin.molten").getIcon() != null) {
 						return FluidRegistry.getFluid("tin.molten").getIcon();
 					} else {
-						System.out.println("Couldn't get tinker texture for " + texNames[meta]);
+						System.out.println("Couldn't get tinker texture for " + Reference.oreTexNames[meta]);
 					}
 					break;
 			}
@@ -385,15 +387,15 @@ public class BlockDummyLiquid extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister register) {
-		for(int i = 0; i < texNames.length; i++) {
-			this.icons[i] = register.registerIcon(Reference.modidLowerCase + ":liquids/molten" + texNames[i]);
+		for(int i = 0; i < Reference.oreTexNames.length; i++) {
+			this.icons[i] = register.registerIcon(Reference.modidLowerCase + ":liquids/molten" + Reference.oreTexNames[i]);
 		}
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item item, CreativeTabs tab, List list) {
-		for(int i = 0; i < texNames.length; i++) {
+		for(int i = 0; i < Reference.oreTexNames.length; i++) {
 			list.add(new ItemStack(item, 1, i));
 		}
 	}

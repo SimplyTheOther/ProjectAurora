@@ -42,7 +42,9 @@ public class AuroraGenLayerRemoveRivers extends BaseGenLayer {
                                     int subBiomeID = biomes[subIndex];
                                     AuroraBiome subBiome = AuroraBiome.auroraBiomeList[subBiomeID];
                                     
-                                    if (AuroraBiome.auroraBiomeList[subBiomeID].isRiver) {
+                                    if (subBiome.isRiver) {
+                                        //System.out.println("removeRivers subBiome.isRiver");
+                                    	
                                         boolean wateryAdjacent = subBiome.heightBaseParameter < 0.0F && range == 1;
                                         Map<Integer, Integer> srcMap = wateryAdjacent ? viableBiomesWateryAdjacent : viableBiomes;
                                         int count = 0;

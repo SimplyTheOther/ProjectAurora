@@ -23,6 +23,8 @@ public class AuroraGenLayerExtractRivers extends BaseGenLayer {
 	    		int biomeID = biomes[(i1 + k1 * xSize)];
 	        
 	    		if (AuroraBiome.auroraBiomeList[biomeID].isRiver == true) {
+                    //System.out.println("extractRivers isRiver");
+	    			
 	    			ints[(i1 + k1 * xSize)] = 2;
 	    		} else {
 	    			ints[(i1 + k1 * xSize)] = 0;

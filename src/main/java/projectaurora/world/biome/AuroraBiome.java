@@ -30,11 +30,13 @@ import net.minecraft.world.gen.feature.WorldGenTallGrass;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.EnumHelper;
 import projectaurora.core.Aurora;
+import projectaurora.core.Content;
 import projectaurora.core.MusicType;
 import projectaurora.entity.AmbientCreature;
 import projectaurora.world.AuroraTreeType;
 import projectaurora.world.BaseChunkManager;
 import projectaurora.world.WorldModule;
+import projectaurora.world.gen.WorldGenAlgae;
 import projectaurora.world.vulcan.BiomeLavaOcean;
 import projectaurora.world.vulcan.BiomeVulcan;
 import projectaurora.world.vulcan.BiomeVulcanRiver;
@@ -99,8 +101,8 @@ public class AuroraBiome extends BiomeGenBase {
 
 	public boolean isOcean = false;
 	
-	private static Color waterColorCold = new Color(602979); //TODO water colours?
-	private static Color waterColorTropical = new Color(4973293);
+	private static Color waterColourCold = new Color(602979); //water colours?
+	private static Color waterColourTropical = new Color(4973293);
 	
 	public AuroraBiome(int biomeID) {
 		super(biomeID, false);
@@ -116,13 +118,11 @@ public class AuroraBiome extends BiomeGenBase {
 		this.spawnableCaveCreatureList.clear();
 		
 		//this.spawnableWhateverList.add
-		
-		//setBanditChance(BanditSpawner.NEVER);TODO own bandits
 	}
 	
 	public static void initBiomes() {
 		lavaOcean = new BiomeLavaOcean(0).setTemperatureRainfall(2F, 0F).setMinMaxHeight(testDeepOcean, testNormalTop/*deepOcean, shoresTop*/).setColor(1).setBiomeName("lavaOcean").setDisableRain();
-		lavaRiver = new BiomeVulcanRiver(1).setTemperatureRainfall(2F, 0F).setMinMaxHeight(river, river).setColor(32234).setBiomeName("vulcanRiver").setDisableRain();
+		lavaRiver = new BiomeVulcanRiver(1).setTemperatureRainfall(2F, 0F).setMinMaxHeight(0F, 0F).setColor(32234).setBiomeName("vulcanRiver").setDisableRain();
 		vulcan = new BiomeVulcan(2).setTemperatureRainfall(2F, 0F).setMinMaxHeight(testNormalBottom, testNormalTop/*shoresTop, highPlains*/).setColor(0).setBiomeName("vulcanMain").setDisableRain();
 	}
 	
@@ -344,8 +344,15 @@ public class AuroraBiome extends BiomeGenBase {
                 }
                 for (int j = height; j >= prevHeight; --j) {
                     int index = xzIndex * ySize + j;
+                    
+                    if(index >= 65536) {
+                    	index = 65535;
+                    	System.out.println("Over 65535");
+                    }
+                    
                     blocks[index] = this.stoneBlock;
                     meta[index] = (byte)this.stoneBlockMeta;
+                    //System.out.println("index=" + index + ",blocks=" + blocks[index].getUnlocalizedName());
                 }
             }
         }
@@ -460,7 +467,6 @@ public class AuroraBiome extends BiomeGenBase {
 
 	    				/*if ((fillerDepth == 0) && (filler == Blocks.sand)) {
 	    					if (fillerMeta == 1) {
-	    						//TODO Own desert fillers?
 	    						filler = Blocks.hardened_clay;
 	    						fillerMeta = 0;
 	    					} else {
@@ -527,19 +533,6 @@ public class AuroraBiome extends BiomeGenBase {
 	    this.decorator.decorate(world, random, i, k);
 	}
 
-/*	protected void setGoodEvilWeight(int good, int evil) {
-	    this.goodWeight = good;
-	    this.evilWeight = evil;
-    }*///TODO good/evil weight for RPG system?
-
-  /*public List getNPCSpawnList(World world, Random random, int i, int j, int k, AuroraBiomeVariant variant) {
-	    if (random.nextInt(this.goodWeight + this.evilWeight) < this.goodWeight) {
-	      	return this.spawnableGoodList;
-	    }
-
-	    return this.spawnableEvilList;
-  	}*/ //TODO custom spawn list for npcs
-
 	@Override
 	public List getSpawnableList(EnumCreatureType creatureType) {
 		if (creatureType == creatureType_Ambient) {
@@ -576,71 +569,102 @@ public class AuroraBiome extends BiomeGenBase {
 	public final WorldGenerator getRandomWorldGenForGrass(Random random) {
 	    GrassBlockAndMeta obj = getRandomGrass(random);
 	    return new WorldGenTallGrass(obj.block, obj.meta);
-	}//TODO Change tall grass based on planet?
+	}
 
 	public GrassBlockAndMeta getRandomGrass(Random random) {
 	    boolean fern = this.decorator.enableFern;
 	    boolean special = this.decorator.enableSpecialGrasses;
 
-	    if ((fern) && (random.nextInt(3) == 0)) {
-	    	return new GrassBlockAndMeta(Blocks.tallgrass, 2);
-	    }
+	    switch(AuroraBiome.auroraBiomeList.length) {
+	    	case 0:
+	    		return new GrassBlockAndMeta(Content.plant, 0);
+	    	case 1:
+	    		return new GrassBlockAndMeta(Content.plant, 0);
+	    	case 2:
+	    		return new GrassBlockAndMeta(Content.plant, 0);
+    		default:
+    			if ((fern) && (random.nextInt(3) == 0)) {
+    		    	return new GrassBlockAndMeta(Blocks.tallgrass, 2);
+    		    }
 
-	    if ((special) && (random.nextInt(500) == 0)) {
-	    	return new GrassBlockAndMeta(/*flax TODO*/Blocks.tallgrass, 0);
-	    }
-	    
-	    if (random.nextInt(4) > 0) {
-	    	if (special) {
-	    		if (random.nextInt(200) == 0) {
-	    			return new GrassBlockAndMeta(Blocks.tallgrass, 0);//tallGrass, 3);
-	    		}
-	    		if (random.nextInt(16) == 0) {
-	    			return new GrassBlockAndMeta(Blocks.tallgrass, 0);//tallGrass, 1);
-	    		}
-	    		if (random.nextInt(10) == 0) {
-	    			return new GrassBlockAndMeta(Blocks.tallgrass, 0);//tallGrass, 2);
-	    		}
-	    	}
-	    	return new GrassBlockAndMeta(Blocks.tallgrass, 0);//tallGrass, 0);
-	    }
-	    
-	    if (random.nextInt(3) == 0) {
-	    	return new GrassBlockAndMeta(Blocks.yellow_flower, 0);//clover, 0);
-	    }
+    		    if ((special) && (random.nextInt(500) == 0)) {
+    		    	return new GrassBlockAndMeta(/*flax*/Blocks.tallgrass, 0);
+    		    }
+    		    
+    		    if (random.nextInt(4) > 0) {
+    		    	if (special) {
+    		    		if (random.nextInt(200) == 0) {
+    		    			return new GrassBlockAndMeta(Blocks.tallgrass, 0);//tallGrass, 3);
+    		    		}
+    		    		
+    		    		if (random.nextInt(16) == 0) {
+    		    			return new GrassBlockAndMeta(Blocks.tallgrass, 0);//tallGrass, 1);
+    		    		}
+    		    		
+    		    		if (random.nextInt(10) == 0) {
+    		    			return new GrassBlockAndMeta(Blocks.tallgrass, 0);//tallGrass, 2);
+    		    		}
+    		    	}
+    		    	return new GrassBlockAndMeta(Blocks.tallgrass, 0);//tallGrass, 0);
+    		    }
+    		    
+    		    if (random.nextInt(3) == 0) {
+    		    	return new GrassBlockAndMeta(Blocks.yellow_flower, 0);//clover, 0);
+    		    }
 
-	    return new GrassBlockAndMeta(Blocks.tallgrass, 1);
-	}//TODO Tall grass on different planets?
+    		    return new GrassBlockAndMeta(Blocks.tallgrass, 1);
+	    } 
+	}
 
 	public WorldGenerator getRandomWorldGenForDoubleGrass(Random random) {
 	    WorldGenDoublePlant generator = new WorldGenDoublePlant();
-	    
-	    if ((this.decorator.enableFern) && (random.nextInt(4) == 0)) {
-	    	generator.func_150548_a(3);
-	    } else {
-	    	generator.func_150548_a(2);
-	    }
-	    
-	    return generator;
-	}//TODO Tall grass on different planets?
+	    WorldGenAlgae algae = new WorldGenAlgae(true, Content.plant, 0, Blocks.lava, 0);
+		
+		switch(AuroraBiome.auroraBiomeList.length) {
+			case 0:
+				return algae;
+			case 1:
+				return algae;
+			case 2:
+				return algae;
+			default:			    
+			    if ((this.decorator.enableFern) && (random.nextInt(4) == 0)) {
+			    	generator.func_150548_a(3);
+			    } else {
+			    	generator.func_150548_a(2);
+			    }
+			    
+			    return generator;
+		}	
+	}
 
 	public WorldGenerator getRandomWorldGenForDoubleFlower(Random random) {
 	    WorldGenDoublePlant doubleFlowerGen = new WorldGenDoublePlant();
-	    int i = random.nextInt(3);
+	    WorldGenAlgae algae = new WorldGenAlgae(true, Content.plant, 0, Blocks.lava, 0);
 	    
-	    switch (i) {
+	    switch(AuroraBiome.auroraBiomeList.length) {
 	    	case 0:
-	    		doubleFlowerGen.func_150548_a(1);
-	    		break;
+	    		return algae;
 	    	case 1:
-	    		doubleFlowerGen.func_150548_a(4);
-	    		break;
+	    		return algae;
 	    	case 2:
-	    		doubleFlowerGen.func_150548_a(5);
+	    		return algae;
+	    	default:		    
+	    	    switch (random.nextInt(3)) {
+	    	    	case 0:
+	    	    		doubleFlowerGen.func_150548_a(1);
+	    	    		break;
+	    	    	case 1:
+	    	    		doubleFlowerGen.func_150548_a(4);
+	    	    		break;
+	    	    	case 2:
+	    	    		doubleFlowerGen.func_150548_a(5);
+	    	    }  
+	    	   
+	    	    return doubleFlowerGen;
 	    }
 
-	    return doubleFlowerGen;
-	}//TODO Double flowers on different planets?
+	}
 
 	public int spawnCountMultiplier() {
 	    return 1;
@@ -709,16 +733,12 @@ public class AuroraBiome extends BiomeGenBase {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public final int getSkyColorByTemp(float f){
-	   /* if (TickHandlerClient.scrapTraderMisbehaveTick > 0) {//TODO Custom tick handler scrap trader?
-	    	return 0;
-	    }*/
-
+	public final int getSkyColorByTemp(float temp){
 	    if (this.biomeColors.sky != null) {
 	    	return this.biomeColors.sky.getRGB();
 	    }
 
-	    return super.getSkyColorByTemp(f);
+	    return super.getSkyColorByTemp(temp);
 	}
 
 	public final Vec3 getCloudColor(Vec3 clouds) {
@@ -748,8 +768,8 @@ public class AuroraBiome extends BiomeGenBase {
 	public static void updateWaterColor(int i, int j, int k) {
 	    int min = 0;
 
-	    float[] coldColors = waterColorCold.getColorComponents(null);
-	    float[] tropicalColors = waterColorTropical.getColorComponents(null);
+	    float[] coldColors = waterColourCold.getColorComponents(null);
+	    float[] tropicalColors = waterColourTropical.getColorComponents(null);
 
 	    float dR = tropicalColors[0] - coldColors[0];
 	    float dG = tropicalColors[1] - coldColors[1];

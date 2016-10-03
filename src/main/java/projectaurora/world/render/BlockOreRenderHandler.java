@@ -109,7 +109,6 @@ public class BlockOreRenderHandler implements ISimpleBlockRenderingHandler {
 				} else if(Minecraft.getMinecraft().theWorld.provider.dimensionId == -1) {
 					renderer.renderStandardBlock(Blocks.netherrack, x, y, z);
 				} else if(Minecraft.getMinecraft().theWorld.provider.dimensionId == WorldModule.vulcanID) {
-					//renderer.renderStandardBlock(Content.rock, x, y, z);
 					renderStandardBlockWithBackgroundMetadata(Content.rock, x, y, z, 0, world, renderer);
 				} else {
 					renderer.renderStandardBlock(Blocks.stone, x, y, z);

@@ -77,7 +77,6 @@ public abstract class BaseWorldProvider extends WorldProvider {
 	@Override
 	public boolean isSurfaceWorld() {
 		return true;
-		//TODO What does 'isSurfaceWorld' even mean?
 	}
 	
 	@SideOnly(Side.CLIENT)

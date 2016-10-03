@@ -21,7 +21,5 @@ public class BiomeVulcanRiver extends BiomeVulcan {
 		this.decorator.generateWater = false;
 		
 		this.isRiver = true;
-		
-		super.vulcanList.add(this);
 	}
 }
