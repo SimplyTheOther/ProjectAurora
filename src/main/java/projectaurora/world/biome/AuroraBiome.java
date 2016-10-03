@@ -47,6 +47,7 @@ public class AuroraBiome extends BiomeGenBase {
 	public static EnumCreatureType creatureType_Ambient = (EnumCreatureType)EnumHelper.addEnum(correctCreatureTypeParams, EnumCreatureType.class, "AuroraAmbient", new Object[] { AmbientCreature.class, Integer.valueOf(50), Material.air, Boolean.valueOf(true), Boolean.valueOf(false)});
 	
 	public static AuroraBiome[] auroraBiomeList = new AuroraBiome[256];
+	public static List<AuroraBiome> unusedList = new ArrayList();
 	public static List<AuroraBiome> vulcanList = new ArrayList();
 	
 	public static BiomeGenBase lavaOcean;
@@ -915,6 +916,7 @@ public class AuroraBiome extends BiomeGenBase {
 		if(dimensionID == WorldModule.vulcanID) {
 			return vulcanList;
 		}
+		
 		System.out.println("Couldn't get biomeList, defaulting to vulcan");
 		return vulcanList;
 	}

@@ -7,6 +7,7 @@ import projectaurora.world.layer.AuroraGenLayerZoomVoronoi;
 import projectaurora.world.layer.BaseGenLayer;
 
 public class VulcanChunkManager extends BaseChunkManager {
+	
 	public VulcanChunkManager(World world) {
 		this.worldObj = world;
 		this.biomeCacheAurora = new BiomeCache(this);

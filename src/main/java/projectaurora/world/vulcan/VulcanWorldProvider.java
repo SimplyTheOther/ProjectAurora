@@ -210,6 +210,6 @@ public class VulcanWorldProvider extends BaseWorldProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float[] calcSunriseSunsetColors(float par1, float par2) {
-            return null;
+		return null;
 	}
 }

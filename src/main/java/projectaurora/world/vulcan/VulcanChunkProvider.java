@@ -207,14 +207,14 @@ public class VulcanChunkProvider implements IChunkProvider {
                                 	BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
 	    							
 	    							if(biome instanceof AuroraBiome) {
-    									blocks[blockIndex] = ((AuroraBiome)biome).stoneBlock;//TODO meta
+    									blocks[blockIndex] = ((AuroraBiome)biome).stoneBlock;//meta
     									//meta[blockIndex] = (byte)((AuroraBiome)biome).stoneBlockMeta;
 	    							}
                                 } else if (k2 * 8 + l1 <= 62) {
                                 	BiomeGenBase biome = worldObj.getBiomeGenForCoords(chunkX, chunkZ);
 	    							
 	    							if(biome instanceof AuroraBiome) {
-    									blocks[blockIndex] = ((AuroraBiome)biome).dominantFluidBlock;//TODO meta
+    									blocks[blockIndex] = ((AuroraBiome)biome).dominantFluidBlock;//meta
     									//meta[blockIndex] = (byte)((AuroraBiome)biome).dominantFluidMeta;
 	    							}
                                 } else {
@@ -250,14 +250,17 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    		AuroraBiomeVariant variant = variantArray[xzIndexBiome];
 
 	    		int height = 0;
-                for (int j = ySize - 1; j >= 0; --j) {
+                
+	    		for (int j = ySize - 1; j >= 0; --j) {
                     int index = xzIndex * ySize + j;
                     Block block = blocks[index];
+                    
                     if (block.isOpaqueCube()) {
                         height = j;
                         break;
                     }
                 }
+	    		
                 biome.generateBiomeTerrain(this.worldObj, this.rand, blocks, metadata, x, z, this.stoneNoise[xzIndex], height, variant);
                 
                 /*if (FixedStructures.hasMapFeatures(this.worldObj)) {
@@ -308,6 +311,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    Chunk chunk = new Chunk(this.worldObj, x, z);
 
 	    ExtendedBlockStorage[] blockStorage = chunk.getBlockStorageArray();
+	   
 	    for (int i1 = 0; i1 < 16; i1++) {
 	    	for (int k1 = 0; k1 < 16; k1++) {
 	    		for (int j1 = 0; j1 < 256; j1++) {
@@ -318,25 +322,30 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    				byte meta = metadata[blockIndex];
 
 	    				int j2 = j1 >> 4;
-	    			if (blockStorage[j2] == null) {
-	    				blockStorage[j2] = new ExtendedBlockStorage(j2 << 4, true);
-	    			}
+	    			
+	    				if (blockStorage[j2] == null) {
+	    					blockStorage[j2] = new ExtendedBlockStorage(j2 << 4, true);
+	    				}
 
-	    			blockStorage[j2].func_150818_a(i1, j1 & 0xF, k1, block);
-	    			blockStorage[j2].setExtBlockMetadata(i1, j1 & 0xF, k1, meta & 0xF);
+	    				blockStorage[j2].func_150818_a(i1, j1 & 0xF, k1, block);
+	    				blockStorage[j2].setExtBlockMetadata(i1, j1 & 0xF, k1, meta & 0xF);
 	    			}
 	    		}
 	    	}
 	    }
+	    
 	    byte[] biomes = chunk.getBiomeArray();
+	    
 	    for (int l = 0; l < biomes.length; l++) {
 	    	biomes[l] = ((byte)this.biomesForGeneration[l].biomeID);
 	    }
 
 	    byte[] variants = new byte[256];
+	    
 	    for (int l = 0; l < variants.length; l++) {
 	    	variants[l] = ((byte)this.variantsForGeneration[l].variantID);
 	    }
+	    
 	    AuroraBiomeVariantStorage.setChunkBiomeVariants(this.worldObj, chunk, variants);
 
 	    chunk.generateSkylightMap();
@@ -380,6 +389,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	        	AuroraBiomeVariant centreVariant = this.variantsForGeneration[centreBiomeIndex];
 
 	        	float centreHeight = centreBiome.rootHeight + centreVariant.heightBoost;
+	        	
 	        	if (centreVariant.absoluteHeight) {
 	        		centreHeight = centreVariant.heightBoost;
 	        	}
@@ -481,17 +491,21 @@ public class VulcanChunkProvider implements IChunkProvider {
 	        
 	        	if (heightNoise < 0.0D) {
 	        		heightNoise /= 2.0D;
+	        		
 	        		if (heightNoise < -1.0D) {
 	        			heightNoise = -1.0D;
 	        		}
+	        		
 	        		heightNoise /= 1.4D;
 	        		heightNoise /= 2.0D;
 	        	} else {
 	        		if (heightNoise > 1.0D) {
 	        			heightNoise = 1.0D;
 	        		}
+	        		
 	        		heightNoise /= 8.0D;
 	        	}
+	        	
 	        	noiseIndexXZ++;
 	        	
 	        	for (int j1 = 0; j1 < ySize; j1++) {
@@ -520,6 +534,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	        		} else {
 	        			totalNoise = var34 + (var36 - var34) * var38;
 	        		}
+	        		
 	        		totalNoise -= var32;
 	        		
 	        		if (j1 > ySize - 4) {
@@ -558,7 +573,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    	int k1 = l + this.rand.nextInt(16) + 8;
 	      
 	    	if (j1 < 60) {
-	    		new WorldGenLakes(Blocks.lava).generate(this.worldObj, this.rand, i1, j1, k1);
+	    		new WorldGenLakes(Blocks.lava).generate(this.worldObj, this.rand, i1, j1, k1);//TODO new worldgenlakes without stone
     		}
 	    }
 
@@ -568,7 +583,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    	int k1 = l + this.rand.nextInt(16) + 8;
 	    	
 	    	if (j1 < 60) {
-	    		new WorldGenLakes(Blocks.lava).generate(this.worldObj, this.rand, i1, j1, k1);
+	    		new WorldGenLakes(Blocks.lava).generate(this.worldObj, this.rand, i1, j1, k1);//TODO new worldgenlakes without stone
 	    	}
 	    }
 
@@ -639,9 +654,11 @@ public class VulcanChunkProvider implements IChunkProvider {
 		}
 	}
 
+	/**
+	 * Might be 'find stronghold?'
+	 */
 	@Override
-	public ChunkPosition func_147416_a(World world, String p_147416_2_, int p_147416_3_, int p_147416_4_,
-			int p_147416_5_) {//no idea what this does, but apparently it's 'find stronghold'
+	public ChunkPosition func_147416_a(World world, String string, int x, int y, int z) {//no idea what this does, but apparently it's 'find stronghold'
 		return null;
 	}
 

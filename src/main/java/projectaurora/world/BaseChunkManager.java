@@ -55,6 +55,7 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	    AuroraIntCache.get(this.worldObj).resetIntCache();
 
 	    BiomeGenBase[] biomes = new BiomeGenBase[xSize * zSize];
+	    
 	    if (biomeSource != null) {
 	    	biomes = biomeSource;
 	    } else {
@@ -100,15 +101,18 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	        
 	        	if (!mountainNear) {
 	        		float variantChance = biome.variantChance;
+	        		
 	        		if (variantChance > 0.0F) {
 	        			for (int pass = 0; pass <= 1; pass++) {
 	        				List biomeVariants = pass == 0 ? biome.getBiomeVariantsLarge() : biome.getBiomeVariantsSmall();
 	        				int variantCount = biomeVariants.size();
+	        				
 	        				if (variantCount > 0) {
 	        					int[] sourceInts = pass == 0 ? variantsLargeInts : variantsSmallInts;
 	        					int variantCode = sourceInts[index];
 
 	        					float variantF = variantCode / AuroraGenLayerBiomeVariants.RANDOM_MAX;
+	        					
 	        					if (variantF < variantChance) {
 	        						variantF /= variantChance;
 	        						float increment = 1.0F / variantCount;
@@ -127,14 +131,17 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	        		if (!structureNear) {
 	        			if (biome.getEnableRiver()) {
 	        				int variantCode = variantsLakesInts[index];
+	        				
 	        				if (AuroraGenLayerBiomeVariantsLake.getFlag(variantCode, 1)) {
 	        					variant = AuroraBiomeVariant.LAKE;
 	        				}
+	        				
 	        				if (AuroraGenLayerBiomeVariantsLake.getFlag(variantCode, 2)) {
 	        					//if (((biome instanceof AuroraBiomeGenJungle)) && (((AuroraBiomeGenJungle)biome).hasJungleLakes())) {
 	        						variant = AuroraBiomeVariant.LAKE;
 	        					//}
 	        				}
+	        				
 	        				if (AuroraGenLayerBiomeVariantsLake.getFlag(variantCode, 4)) {
 	        					//if ((biome instanceof AuroraBiomeGenMangrove)) {
 	        						variant = AuroraBiomeVariant.LAKE;
@@ -143,7 +150,9 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	        			}
 	        		}
 	        	}
+	        	
 	        	int riverCode = variantsRiversInts[index];
+	        	
 	        	if(riverCode == 2) {
 	        		variant = AuroraBiomeVariant.RIVER;
 	        	} else if(riverCode == 1 && biome.getEnableRiver() && (!structureNear) && (!mountainNear)) {
@@ -182,6 +191,9 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	    return AuroraBiomeVariant.STANDARD;
     }
 	
+    /**
+     * Return an adjusted version of a given temperature based on the y height. Except every time it's used.
+     */
   	@SideOnly(Side.CLIENT)
   	@Override
   	public float getTemperatureAtHeight(float originalTemp, int height) {
@@ -189,8 +201,8 @@ public abstract class BaseChunkManager extends WorldChunkManager {
   	}
   	
 	@Override  
-  	public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] biomes, int i, int k, int xSize, int zSize) {
-	    return getBiomeGenAt(biomes, i, k, xSize, zSize, true);
+  	public BiomeGenBase[] loadBlockGeneratorData(BiomeGenBase[] oldBiomeList, int x, int z, int width, int depth) {
+	    return getBiomeGenAt(oldBiomeList, x, z, width, depth, true);
 	}
 	
 	@Override
@@ -234,24 +246,27 @@ public abstract class BaseChunkManager extends WorldChunkManager {
     }
 
 	@Override  
-	public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] biomes, int i, int k, int xSize, int zSize, boolean useCache) {
+	public BiomeGenBase[] getBiomeGenAt(BiomeGenBase[] biomeList, int x, int z, int width, int length, boolean useCache) {
 		AuroraIntCache.get(this.worldObj).resetIntCache();
 
-	    if ((biomes == null) || (biomes.length < xSize * zSize)) {
-	    	biomes = new BiomeGenBase[xSize * zSize];
+	    if ((biomeList == null) || (biomeList.length < width * length)) {
+	    	biomeList = new BiomeGenBase[width * length];
 	    }
 
-	    if ((useCache) && (xSize == 16) && (zSize == 16) && ((i & 0xF) == 0) && ((k & 0xF) == 0)) {
-	    	BiomeGenBase[] cachedBiomes = this.biomeCacheAurora.getCachedBiomes(i, k);
-	    	System.arraycopy(cachedBiomes, 0, biomes, 0, xSize * zSize);
-	    	return biomes;
+	    if ((useCache) && (width == 16) && (length == 16) && ((x & 0xF) == 0) && ((z & 0xF) == 0)) {
+	    	BiomeGenBase[] cachedBiomes = this.biomeCacheAurora.getCachedBiomes(x, z);
+	    	System.arraycopy(cachedBiomes, 0, biomeList, 0, width * length);
+	    	
+	    	return biomeList;
 	    }
 
-	    int[] ints = this.worldLayers[LAYER_BIOME].getInts(this.worldObj, i, k, xSize, zSize);
-	    for (int l = 0; l < xSize * zSize; l++) {
-	    	biomes[l] = AuroraBiome.auroraBiomeList[ints[l]];
+	    int[] ints = this.worldLayers[LAYER_BIOME].getInts(this.worldObj, x, z, width, length);
+	    
+	    for (int l = 0; l < width * length; l++) {
+	    	biomeList[l] = AuroraBiome.auroraBiomeList[ints[l]];
 	    }
-	    return biomes;
+	    
+	    return biomeList;
     }
 
 	@Override
@@ -296,6 +311,7 @@ public abstract class BaseChunkManager extends WorldChunkManager {
 	    	int xPos = i1 + l % i3 << 2;
 	    	int zPos = k1 + l / i3 << 2;
 	    	BiomeGenBase biome = AuroraBiome.auroraBiomeList[ints[l]];
+	    	
 	    	if ((list.contains(biome)) && ((chunkpos == null) || (random.nextInt(j + 1) == 0))) {
 	    		chunkpos = new ChunkPosition(xPos, 0, zPos);
 	    		j++;
