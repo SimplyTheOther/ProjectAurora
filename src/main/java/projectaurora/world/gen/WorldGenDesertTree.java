@@ -61,7 +61,7 @@ public class WorldGenDesertTree extends WorldGenAbstractTree {
 	    }
 
 	    Block below = world.getBlock(x, y - 1, z);
-	    boolean isSoil = (below.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, (IPlantable)Blocks.sapling)) || ((this.isNatural) && ((below == Blocks.sand) || (below == Blocks.stone))); //TODO change sapling
+	    boolean isSoil = (below.canSustainPlant(world, x, y - 1, z, ForgeDirection.UP, (IPlantable)Blocks.sapling)) || ((this.isNatural) && ((below == Blocks.sand) || (below == Blocks.stone))); 
 	    
 	    if (!isSoil) {
 	    	flag = false;

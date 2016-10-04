@@ -133,7 +133,7 @@ public class AuroraBiomeDecorator {//TODO readd generation
 	    this.surfaceGravelGen = new WorldGenSurfaceGravel(Blocks.gravel, 0);
 
 	    this.flowerGen = new WorldGenBiomeFlowers();
-	    this.logGen = new WorldGenLogs();
+	    this.logGen = new WorldGenLogs(Blocks.log, 0);
 	    this.mushroomBrownGen = new WorldGenFlowers(Blocks.brown_mushroom);
 	    this.mushroomRedGen = new WorldGenFlowers(Blocks.red_mushroom);
 	    this.caneGen = new WorldGenReed();

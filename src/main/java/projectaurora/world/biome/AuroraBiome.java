@@ -91,7 +91,6 @@ public class AuroraBiome extends BiomeGenBase {
 	protected List spawnableAmbientList = new ArrayList();
 	private List spawnableTraders = new ArrayList();
 	private int banditChance;
-	//private Class<? extends EntityBandit> banditEntityClass;//TODO own bandits
 	public List invasionSpawns = new ArrayList();
 
 	public BiomeColors biomeColors = new BiomeColors(this);
@@ -266,14 +265,6 @@ public class AuroraBiome extends BiomeGenBase {
 	public final int getBanditChance() {
 	    return this.banditChance;
 	}
-
-	/*protected final void setBanditEntityClass(Class<? extends EntityBandit> c) {
-	    this.banditEntityClass = c;
-	}//TODO own bandits
-
-	public final Class<? extends EntityBandit> getBanditEntityClass() {
-	    return this.banditEntityClass;
-	}*/
 
 	public void addBiomeF3(List info, World world, AuroraBiomeVariant variant, int i, int j, int k) {
 	    int colorRGB = this.color & 0xFFFFFF;
@@ -482,7 +473,7 @@ public class AuroraBiome extends BiomeGenBase {
 	    				/*if ((((this instanceof BiomeGenWhiteRock)) || ((this instanceof BiomeGenWhiteRock2)) || ((this instanceof BiomeGenWhiteRock3))) && (fillerDepth == 0) && (filler == this.fillerBlock)) {
 	    					fillerDepth = 8 + random.nextInt(3);
 	    					filler = whiteRock;
-	    					fillerMeta = 1;//TODO Example of rock fillers at certain depths
+	    					fillerMeta = 1;//EXamples of rock fillers
 	    				}*/
 	    			}
 	    		}

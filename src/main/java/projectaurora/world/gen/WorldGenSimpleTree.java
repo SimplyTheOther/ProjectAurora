@@ -3,6 +3,7 @@ package projectaurora.world.gen;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
@@ -19,6 +20,7 @@ public class WorldGenSimpleTree extends WorldGenAbstractTree {
 	private Block leaf;
 	private int leafMeta;
 	private int extraTrunkWidth;
+	private boolean isVanillaLog = false;
 
 	public WorldGenSimpleTree(boolean flag, int min, int max, Block woodBlock, int woodBMeta, Block leafBlock, int leafBMeta) {
 		super(flag);
@@ -37,12 +39,17 @@ public class WorldGenSimpleTree extends WorldGenAbstractTree {
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
+		if(wood instanceof BlockLog) {
+			this.isVanillaLog = true;
+		}
+		
 		int height = MathHelper.getRandomIntegerInRange(rand, minHeight, maxHeight);
 		boolean flag = true;
 		
 		if((y >= 1) && (y + height + 1 <= 256)) {
 			for(int j1 = y; j1 <= y + 1 + height; j1++) {
 				int range = 1;
+				
 				if(j1 == y) {
 					range = 0;
 				}
@@ -68,11 +75,17 @@ public class WorldGenSimpleTree extends WorldGenAbstractTree {
 			}
 			
 			boolean flag1 = true;
+			
 			for(int i1 = x; (i1 <= x + this.extraTrunkWidth) && (flag1); i1++) {
 				for(int k1 = z; (k1 <= z + this.extraTrunkWidth) && (flag1); k1++) {
 					Block block = world.getBlock(i1, y - 1, k1);
-					if(!block.canSustainPlant(world, i1, y - 1, k1, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {//TODO custom saplings
-						flag1 = false;
+					
+					if(isVanillaLog) {
+						if(!block.canSustainPlant(world, i1, y - 1, k1, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {
+							flag1 = false;
+						}
+					} else {
+						//PUT CUSTOM SAPLING HERE
 					}
 				}
 			}
@@ -86,20 +99,25 @@ public class WorldGenSimpleTree extends WorldGenAbstractTree {
 				
 				byte leafStart = 3;
 				byte leafRangeMin = 0;
+				
 				for(int j1 = y - leafStart + height; j1 <= y + height; j1++) {
 					int j2 = j1 - (y + height);
 					int leafRange = leafRangeMin + 1 - j2 / 2;
 					
 					for(int i1 = x - leafRange; i1 <= x + leafRange + this.extraTrunkWidth; i1++) {
 						int i2 = i1 - x;
+						
 						if(i2 > 0) {
 							i2 -= this.extraTrunkWidth;
 						}
+						
 						for(int k1 = z - leafRange; k1 <= z + leafRange + this.extraTrunkWidth; k1++) {
 							int k2 = k1 - z;
+							
 							if(k2 > 0) {
 								k2 -= this.extraTrunkWidth;
 							}
+							
 							Block block = world.getBlock(i1, j1, k1);
 							
 							if(((Math.abs(i2) != leafRange) || (Math.abs(k2) != leafRange) || ((rand.nextInt(2) != 0) && (j2 != 0))) && (block.canBeReplacedByLeaves(world, i1, j1, k1))) {

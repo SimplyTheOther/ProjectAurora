@@ -3,6 +3,7 @@ package projectaurora.world.gen;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.MathHelper;
@@ -17,6 +18,7 @@ public class WorldGenHugeTree extends WorldGenAbstractTree {
 	private Block leaf;
 	private int leafMeta;
 	private boolean restrictions = true;
+	private boolean isVanillaLog = false;
 
 	public WorldGenHugeTree(Block block, int meta, Block block2, int meta2) {
 		super(false);
@@ -33,6 +35,10 @@ public class WorldGenHugeTree extends WorldGenAbstractTree {
 
 	@Override
 	public boolean generate(World world, Random rand, int x, int y, int z) {
+		if(wood instanceof BlockLog) {
+			this.isVanillaLog = true;
+		}
+		
 		int trunkWidth = 1;
 	    int height = rand.nextInt(12) + 12;
 	    boolean flag = true;
@@ -62,8 +68,13 @@ public class WorldGenHugeTree extends WorldGenAbstractTree {
 	    		for (int i1 = x - trunkWidth; (i1 <= x + trunkWidth) && (flag); i1++) {
 	    			for (int k1 = z - trunkWidth; (k1 <= z + trunkWidth) && (flag); k1++) {
 	    				Block block = world.getBlock(i1, y - 1, k1);
-	    				if (!block.canSustainPlant(world, i1, y - 1, k1, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {//TODO custom sapling 
-	    					flag = false;
+	    				
+	    				if(isVanillaLog) {
+		    				if (!block.canSustainPlant(world, i1, y - 1, k1, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {
+		    					flag = false;
+		    				}
+	    				} else {
+	    					//PUT CUSTOM SAPLINGS HERE
 	    				}
 	    			}
 	    		}

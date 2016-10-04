@@ -31,9 +31,9 @@ public class AuroraBiomeVariant {
 	public static AuroraBiomeVariant HILLS_FOREST = new AuroraBiomeVariant(7, "hills_forest", VariantScale.ALL).setTemperatureRainfall(-0.1F, 0.0F).setHeight(0.5F, 1.5F).setTrees(3.0F);
 	public static AuroraBiomeVariant MOUNTAIN = new AuroraBiomeVariant(8, "mountain", VariantScale.ALL).setTemperatureRainfall(-0.1F, -0.2F).setHeight(1.2F, 3.0F);
 	public static AuroraBiomeVariant CLEARING = new AuroraBiomeVariant(9, "clearing", VariantScale.SMALL).setHeight(0.0F, 0.5F).setTrees(0.0F).setGrass(2.0F).setFlowers(3.0F);
-	public static AuroraBiomeVariant DENSEFOREST = new AuroraBiomeVariant(10, "denseForest", VariantScale.LARGE).setTemperatureRainfall(0.1F, 0.3F).setHeight(0.5F, 2.0F).setTrees(8.0F).setGrass(2.0F).addTreeTypes(0.5F, new Object[] { AuroraTreeType.OAK_LARGE, Integer.valueOf(600), AuroraTreeType.OAK_HUGE, Integer.valueOf(100) });//TODO change tree type
-  	public static AuroraBiomeVariant DEADFOREST = new AuroraBiomeVariant(11, "deadForest", VariantScale.ALL).setTemperatureRainfall(0.0F, -0.3F).setTrees(3.0F).setGrass(0.5F).addTreeTypes(0.5F, new Object[] { AuroraTreeType.OAK_DEAD, Integer.valueOf(100) });//TODO change tree type
-  	public static AuroraBiomeVariant SHRUBLAND = new AuroraBiomeVariant(12, "shrubland", VariantScale.ALL).setTemperatureRainfall(0.0F, 0.3F).setTrees(6.0F).addTreeTypes(0.7F, new Object[] { AuroraTreeType.OAK_SHRUB, Integer.valueOf(100) });//TODO change tree type
+	public static AuroraBiomeVariant DENSEFOREST = new AuroraBiomeVariant(10, "denseForest", VariantScale.LARGE).setTemperatureRainfall(0.1F, 0.3F).setHeight(0.5F, 2.0F).setTrees(8.0F).setGrass(2.0F).setLargeTrees(600).setHugeTrees(100)/*.addTreeTypes(0.5F, new Object[] { AuroraTreeType.OAK_LARGE, Integer.valueOf(600), AuroraTreeType.OAK_HUGE, Integer.valueOf(100) })*/;
+  	public static AuroraBiomeVariant DEADFOREST = new AuroraBiomeVariant(11, "deadForest", VariantScale.ALL).setTemperatureRainfall(0.0F, -0.3F).setTrees(3.0F).setGrass(0.5F).setDeadTrees(100)/*.addTreeTypes(0.5F, new Object[] { AuroraTreeType.OAK_DEAD, Integer.valueOf(100) })*/;
+  	public static AuroraBiomeVariant SHRUBLAND = new AuroraBiomeVariant(12, "shrubland", VariantScale.ALL).setTemperatureRainfall(0.0F, 0.3F).setTrees(6.0F).setShrubs(100)/*.addTreeTypes(0.7F, new Object[] { AuroraTreeType.OAK_SHRUB, Integer.valueOf(100) })*/;
   	public static AuroraBiomeVariant SWAMP_LOWLAND = new AuroraBiomeVariant(13, "swampLowland", VariantScale.SMALL).setHeight(-0.12F, 0.2F).setTrees(0.5F).setGrass(5.0F).setMarsh();
   	public static AuroraBiomeVariant SWAMP_UPLAND = new AuroraBiomeVariant(14, "swampUpland", VariantScale.SMALL).setHeight(0.12F, 1.0F).setTrees(6.0F).setGrass(5.0F);
   	public static AuroraBiomeVariant LAKE = new AuroraBiomeVariant(15, "lake", VariantScale.NONE).setHeight(-2.1F, 0.05F).setAbsoluteHeight(-0.5f, 0.05f);
@@ -61,6 +61,11 @@ public class AuroraBiomeVariant {
 	public float treeFactor = 1.0F;
 	public float grassFactor = 1.0F;
 	public float flowerFactor = 1.0F;
+	
+	public float largeTreeFactor = 0.0F;
+	public float hugeTreeFactor = 0.0F;
+	public float deadTreeFactor = 0.0F;
+	public float shrubFactor = 0.0F;
 
 	public boolean hasMarsh = false;
     public boolean disableStructures;
@@ -118,6 +123,26 @@ public class AuroraBiomeVariant {
 	    this.treeFactor = factor;
 	    return this;
 	}
+	
+	private AuroraBiomeVariant setLargeTrees(float factor) {
+		this.largeTreeFactor  = factor * 0.5F;
+		return this;
+	}
+	
+	private AuroraBiomeVariant setHugeTrees(float factor) {
+		this.hugeTreeFactor  = factor * 0.5F;
+		return this;
+	}
+	
+	private AuroraBiomeVariant setDeadTrees(float factor) {
+		this.deadTreeFactor  = factor * 0.5F;
+		return this;
+	}
+	
+	private AuroraBiomeVariant setShrubs(float factor) {
+		this.shrubFactor  = factor * 0.7F;
+		return this;
+	}
 
 	private AuroraBiomeVariant setGrass(float factor) {
 	    this.grassFactor = factor;
@@ -144,6 +169,36 @@ public class AuroraBiomeVariant {
     public AuroraTreeType getRandomTree(Random random) {
         WeightedRandom.Item item = WeightedRandom.getRandomItem(random, (Collection)this.treeTypes);
         return ((AuroraTreeType.WeightedTreeType)item).treeType;
+    }
+    
+    public AuroraTreeType getRandomLargeTree(Random random) {
+        WeightedRandom.Item item = WeightedRandom.getRandomItem(random, (Collection)this.treeTypes);
+        
+        if(((AuroraTreeType.WeightedTreeType)item).treeType.toString().contains("LARGE") || ((AuroraTreeType.WeightedTreeType)item).treeType.toString().contains("HUGE")) {
+            return ((AuroraTreeType.WeightedTreeType)item).treeType;
+        } else {
+        	return AuroraTreeType.OAK_LARGE;
+        }
+    }
+
+    public AuroraTreeType getRandomDeadTree(Random random) {
+        WeightedRandom.Item item = WeightedRandom.getRandomItem(random, (Collection)this.treeTypes);
+        
+        if(((AuroraTreeType.WeightedTreeType)item).treeType.toString().contains("DEAD")) {
+            return ((AuroraTreeType.WeightedTreeType)item).treeType;
+        } else {
+        	return AuroraTreeType.OAK_DEAD;
+        }
+    }
+    
+    public AuroraTreeType getRandomShrub(Random random) {
+        WeightedRandom.Item item = WeightedRandom.getRandomItem(random, (Collection)this.treeTypes);
+        
+        if(((AuroraTreeType.WeightedTreeType)item).treeType.toString().contains("SHRUB")) {
+            return ((AuroraTreeType.WeightedTreeType)item).treeType;
+        } else {
+        	return AuroraTreeType.OAK_SHRUB;
+        }
     }
 
   	private AuroraBiomeVariant setMarsh() {
@@ -174,7 +229,7 @@ public class AuroraBiomeVariant {
 		NONE;
 	}
 
-	public void generateVariantTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, int height, AuroraBiome auroraBiome) {
+	public void generateVariantTerrain(World world, Random random, Block[] blocks, byte[] meta, int x, int z, int height, AuroraBiome auroraBiome) {
 		
 	}
 	

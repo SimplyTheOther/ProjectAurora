@@ -16,7 +16,7 @@ import projectaurora.world.gen.WorldGenSimpleTree;
 public enum AuroraTreeType {
 	OAK(new ITreeFactory() {
 		public WorldGenAbstractTree createTree(boolean flag) {//NOTE: MERGED WITH TALL AND TALLER
-			return new WorldGenSimpleTree(flag, 4, 16, Blocks.log, 0, Blocks.leaves, 0);//TODO Other types of equivalent sized trees
+			return new WorldGenSimpleTree(flag, 4, 16, Blocks.log, 0, Blocks.leaves, 0);
 		}
 	}),
 	OAK_LARGE(new ITreeFactory() {
@@ -53,7 +53,7 @@ public enum AuroraTreeType {
 		public WorldGenAbstractTree createTree(boolean flag) {
 			return new WorldGenAlgae(flag, Content.plant, 0, Blocks.lava, 0);
 		}
-	}),//TODO more custom trees
+	}),
 	NULL((ITreeFactory)null);
 	
 	public static AuroraTreeType[] SET_OAK = { OAK, OAK_LARGE, OAK_HUGE, OAK_SWAMP, OAK_DEAD, OAK_DESERT, OAK_SHRUB };
