@@ -18,12 +18,12 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
-import net.minecraft.world.gen.feature.WorldGenLakes;
 import projectaurora.world.biome.AuroraBiome;
 import projectaurora.world.biome.AuroraBiomeVariant;
 import projectaurora.world.biome.AuroraBiomeVariantStorage;
 import projectaurora.world.gen.MapGenCaves;
 import projectaurora.world.gen.MapGenRavine;
+import projectaurora.world.gen.WorldGenLake;
 
 public class VulcanChunkProvider implements IChunkProvider {
 	//Kepler-10b, 1833K (~1560C), above iron melting point
@@ -573,7 +573,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    	int k1 = l + this.rand.nextInt(16) + 8;
 	      
 	    	if (j1 < 60) {
-	    		new WorldGenLakes(Blocks.lava).generate(this.worldObj, this.rand, i1, j1, k1);//TODO new worldgenlakes without stone
+	    		new WorldGenLake(Blocks.lava, 0, biome).generate(this.worldObj, this.rand, i1, j1, k1);
     		}
 	    }
 
@@ -583,7 +583,7 @@ public class VulcanChunkProvider implements IChunkProvider {
 	    	int k1 = l + this.rand.nextInt(16) + 8;
 	    	
 	    	if (j1 < 60) {
-	    		new WorldGenLakes(Blocks.lava).generate(this.worldObj, this.rand, i1, j1, k1);//TODO new worldgenlakes without stone
+	    		new WorldGenLake(Blocks.lava, 0, biome).generate(this.worldObj, this.rand, i1, j1, k1);
 	    	}
 	    }
 
