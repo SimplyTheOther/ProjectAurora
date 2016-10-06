@@ -30,8 +30,6 @@ public class WorldGenAlgae extends WorldGenAbstractTree {
 			
 			if(world.isAirBlock(i, j, k) && world.getBlock(i, j - 1, k) == growableBase && world.getBlockMetadata(i, j - 1, k) == baseMeta) {
 				world.setBlock(i, j, k, growable, growableMeta, 2);
-				
-				System.out.println("algaed");
 			}
 		}
 		return true;

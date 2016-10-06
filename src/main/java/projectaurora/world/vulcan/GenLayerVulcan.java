@@ -119,7 +119,7 @@ public class GenLayerVulcan extends BaseGenLayer {
 	
 	public static BaseGenLayer[] createWorld(long seed) {
 		BaseGenLayer rivers = new AuroraGenLayerRiverInit(100L);
-	    rivers = AuroraGenLayerZoom.magnify(1000L, rivers, 10);
+	    rivers = AuroraGenLayerZoom.magnify(1000L, rivers, /*10*/1);
 	    rivers = new AuroraGenLayerRiver(1L, rivers);
 	    rivers = new AuroraGenLayerSmooth(1000L, rivers);
 	    rivers = AuroraGenLayerZoom.magnify(1000L, rivers, 1);
@@ -137,6 +137,7 @@ public class GenLayerVulcan extends BaseGenLayer {
 	    biomes = AuroraGenLayerZoom.magnify(300L, biomes, 2);
 
 	    BaseGenLayer mapRivers = new AuroraGenLayerExtractRivers(5000L, biomes);
+	    
 	    biomes = new AuroraGenLayerRemoveRivers(1000L, biomes);
 	    biomes = new AuroraGenLayerBiomeSubTypes(1000L, biomes, biomeSubtypes);
 

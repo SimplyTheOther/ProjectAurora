@@ -16,7 +16,7 @@ public class AuroraGenLayerRiverInit extends BaseGenLayer {
 		for(int k1 = 0; k1 < zSize; k1++) {
 			for(int i1 = 0; i1 < xSize; i1++) {
 				initChunkSeed(x + i1, z + k1);
-				ints[i1 + k1 * xSize] = 2 + this.nextInt(299999);//TODO see if river works
+				ints[i1 + k1 * xSize] = 2 + this.nextInt(1);
 			}
 		}
 		return ints;
