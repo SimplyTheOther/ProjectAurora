@@ -49,6 +49,7 @@ public class AuroraBiome extends BiomeGenBase {
 	public static AuroraBiome[] auroraBiomeList = new AuroraBiome[256];
 	public static List<AuroraBiome> unusedList = new ArrayList();
 	public static List<AuroraBiome> vulcanList = new ArrayList();
+	public static List<AuroraBiome> thalassaList = new ArrayList();
 	
 	public static BiomeGenBase lavaOcean;
 	public static BiomeGenBase lavaRiver;
@@ -906,7 +907,7 @@ public class AuroraBiome extends BiomeGenBase {
 		
 		if(dimensionID == WorldModule.vulcanID) {
 			return vulcanList;
-		}
+		} 
 		
 		System.out.println("Couldn't get biomeList, defaulting to vulcan");
 		return vulcanList;
