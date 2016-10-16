@@ -1,10 +1,13 @@
 package projectaurora.compat;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 
 import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional.Method;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -20,9 +23,11 @@ public class Compat {
 	
 	public static boolean isThermalFoundationLoaded = false;
 	public static Block tFStorage = null;
+	
+	public static int[] otherModSpaceDimensions = null;
+	private static List<Integer> otherModSpaceDimensionsList = new ArrayList();
 
 	public static void preInit() {
-		// Auto-generated method stub
 		
 	}
 
@@ -45,11 +50,47 @@ public class Compat {
 			isThermalFoundationLoaded = true;
 			tFStorage = GameRegistry.findBlock("ThermalFoundation", "Storage");
 		}
+		
+		if(Loader.isModLoaded("WarpDrive")) {
+			addWarpDriveDimensions();
+		}
+		//More space dimensions from other mods here
+		if(otherModSpaceDimensionsList != null) {
+			otherModSpaceDimensions = ArrayUtils.toPrimitive(otherModSpaceDimensionsList.toArray(new Integer[otherModSpaceDimensionsList.size()]));
+		}
 	}
 
 	public static void postInit() {
 		// Auto-generated method stub
 		
+	}
+
+	private static void addWarpDriveDimensions() {
+		String location = Loader.instance().getConfigDir().getPath();
+		File warpdriveConfig = new File(location + File.separator + "WarpDrive" + File.separator + "WarpDrive.cfg");
+	
+		try {
+			if(warpdriveConfig.exists()) {
+				Configuration config = new Configuration(warpdriveConfig);
+				int spaceDimId;
+				int hyperspaceDimId;
+				
+				config.load();
+				
+				spaceDimId = config.get("general", "space_dimension_id", -2, "Space dimension world ID").getInt();
+				hyperspaceDimId = config.get("general", "hyperspace_dimension_id", -3, "Hyperspace dimension world ID").getInt();
+			
+				config.save();
+				
+				otherModSpaceDimensionsList.add(spaceDimId);
+				otherModSpaceDimensionsList.add(hyperspaceDimId);
+				
+				System.out.println("addWarpDriveDimensions");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("addWarpDriveDimensionsFailed");
+		}
 	}
 
 	private static void putDimensionsInSlimeIslandBlacklist() {

@@ -1,5 +1,11 @@
 
+generator.aurora=Space
+
 itemGroup.projectaurora=Project Aurora
+
+death.attack.aurora.space.suffocate=%1$s suffocated.
+death.attack.aurora.space.freeze=%1$s froze.
+death.attack.aurora.space.heat=%1$s melted.
 
 item.projectaurora.teleporter.overworld.name=Overworld Teleporter
 item.projectaurora.teleporter.vulcan.name=Vulcan Teleporter
@@ -19,6 +25,7 @@ tile.projectaurora.ore.oreSilverAurora.name=Argentite
 tile.projectaurora.ore.oreNickelAurora.name=Millerite
 tile.projectaurora.ore.oreTinAurora.name=Cassiterite
 tile.projectaurora.ore.oreQuartzAurora.name=Quartz
+tile.projectaurora.ore.oreTitaniumAurora.name=Haven’t got an ore for this, report to The_Other
 
 tile.projectaurora.rock.rockBasaltAurora.name=Basalt
 

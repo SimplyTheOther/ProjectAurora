@@ -18,7 +18,7 @@ import net.minecraftforge.common.config.Configuration;
 import projectaurora.compat.Compat;
 import projectaurora.world.WorldModule;
 
-@Mod(modid = Reference.modidUpperCase, name = Reference.name, version = Reference.version, dependencies = "required-after:Forge;after:TConstruct;after:ImmersiveEngineering")
+@Mod(modid = Reference.modidUpperCase, name = Reference.name, version = Reference.version, dependencies = "required-after:Forge;after:TConstruct;after:ImmersiveEngineering;after:WarpDrive")
 public class Aurora {
 
 	@Mod.Instance(Reference.modidUpperCase)
@@ -31,6 +31,10 @@ public class Aurora {
 	public static CommonProxy proxy;
 	
 	private static PacketHandler packetHandler;
+	
+	public static DamageSourceFreeze damageFreeze;
+	public static DamageSourceHeat damageHeat;
+	public static DamageSourceSuffocation damageSuffocate;
 	
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -50,6 +54,10 @@ public class Aurora {
 	
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
+		damageFreeze = new DamageSourceFreeze();
+		damageHeat = new DamageSourceHeat();
+		damageSuffocate = new DamageSourceSuffocation();
+		
 		packetHandler = new PacketHandler();
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 		

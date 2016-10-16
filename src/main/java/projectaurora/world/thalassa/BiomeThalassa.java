@@ -28,7 +28,7 @@ public class BiomeThalassa extends AuroraBiome {
 		
 		this.decorator.clearTrees();
 		this.decorator.addTree(/*TODO flower*/null, 50);
-		this.decorator.generateWater = false;
+		this.decorator.generateWater = true;
 		this.decorator.cactiPerChunk = 0;
 		this.decorator.canePerChunk = 0;
 		this.decorator.clayPerChunk = 0;

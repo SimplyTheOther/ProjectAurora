@@ -4,12 +4,15 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -17,6 +20,9 @@ import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import projectaurora.api.IArmourFreezeResistant;
+import projectaurora.api.IArmourHeatResistant;
+import projectaurora.api.IArmourOxygenMask;
 import projectaurora.compat.Compat;
 
 public class EventHandler {
@@ -246,402 +252,6 @@ public class EventHandler {
 			event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
 		}
 	}
-
-	/*private void vulcanBlockPlace(PlaceEvent event) {
-		//System.out.println("biome=" + event.world.getBiomeGenForCoords(event.x, event.z));
-		//System.out.println("variant=" + ((projectaurora.world.vulcan.VulcanChunkManager)event.world.getWorldChunkManager()).getBiomeVariantAt(event.x, event.z));
-		System.out.println("block=" + event.block + ", meta=" + event.world.getBlockMetadata(event.x, event.y, event.z));
-		
-		if(event.block.getMaterial() == Material.water) {
-			event.world.setBlock(event.x, event.y, event.z, Blocks.air);
-			event.world.spawnParticle("largesmoke", (double)event.x + Math.random(), (double)event.y + 1.2D, (double)event.z + Math.random(), 0.0D, 0.0D, 0.0D);
-		}
-		
-		if(event.block == Blocks.iron_block && event.world.getBlockMetadata(event.x, event.y, event.z) == 0) {
-			if(FluidRegistry.getFluid("iron.molten") != null) {
-				event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("iron.molten").getBlock());
-			} else {
-				event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-			}
-		}
-		
-		if(event.block == Blocks.gold_block && event.world.getBlockMetadata(event.x, event.y, event.z) == 0) {
-			if(FluidRegistry.getFluid("gold.molten") != null) {
-				event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("gold.molten").getBlock());
-			} else {
-				event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockTin")) {
-			for(ItemStack ore : OreDictionary.getOres("blockTin")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("tin.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("tin.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("tin.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockLead")) {
-			for(ItemStack ore : OreDictionary.getOres("blockLead")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("lead.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("lead.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("lead.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockAluminium")) {
-			for(ItemStack ore : OreDictionary.getOres("blockAluminium")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-
-						if(FluidRegistry.getFluid("aluminium.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("aluminium.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("aluminium.molten").getBlock());
-						} else if(FluidRegistry.getFluid("aluminum.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("aluminum.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("aluminum.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockAluminum")) {
-			for(ItemStack ore : OreDictionary.getOres("blockAluminum")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-
-						if(FluidRegistry.getFluid("aluminium.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("aluminium.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("aluminium.molten").getBlock());
-						} else if(FluidRegistry.getFluid("aluminum.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("aluminum.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("aluminum.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockSilver")) {
-			for(ItemStack ore : OreDictionary.getOres("blockSilver")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-
-						if(FluidRegistry.getFluid("silver.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("silver.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("silver.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		else if(OreDictionary.doesOreNameExist("blockCopper")) {
-			for(ItemStack ore : OreDictionary.getOres("blockCopper")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-
-						if(FluidRegistry.getFluid("copper.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("copper.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("copper.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockNickel")) {
-			for(ItemStack ore : OreDictionary.getOres("blockNickel")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-
-						if(FluidRegistry.getFluid("nickel.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("nickel.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("nickel.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockBrass")) {
-			for(ItemStack ore : OreDictionary.getOres("blockBrass")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("brass.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("brass.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("brass.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockBronze")) {
-			for(ItemStack ore : OreDictionary.getOres("blockBronze")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("bronze.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("bronze.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("bronze.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		else if(OreDictionary.doesOreNameExist("blockCobalt")) {
-			for(ItemStack ore : OreDictionary.getOres("blockCobalt")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("cobalt.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("cobalt.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("cobalt.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockCupronickel")) {
-			for(ItemStack ore : OreDictionary.getOres("blockCupronickel")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("cupronickel.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("cupronickel.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("cupronickel.molten").getBlock());
-						} else if(FluidRegistry.getFluid("constantan.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("constantan.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("constantan.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockConstantan")) {
-			for(ItemStack ore : OreDictionary.getOres("blockConstantan")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("cupronickel.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("cupronickel.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("cupronickel.molten").getBlock());
-						} else if(FluidRegistry.getFluid("constantan.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("constantan.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("constantan.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockElectrum")) {
-			for(ItemStack ore : OreDictionary.getOres("blockElectrum")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("electrum.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("electrum.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("electrum.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockInvar")) {
-			for(ItemStack ore : OreDictionary.getOres("blockInvar")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("invar.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("invar.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("invar.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockMithril")) {
-			for(ItemStack ore : OreDictionary.getOres("blockMithril")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("mithril.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("mithril.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("mithril.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockPlutonium")) {
-			for(ItemStack ore : OreDictionary.getOres("blockPlutonium")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("plutonium.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("plutonium.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("plutonium.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockSteel")) {
-			for(ItemStack ore : OreDictionary.getOres("blockSteel")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("steel.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("steel.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("steel.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockTerrasteel")) {
-			for(ItemStack ore : OreDictionary.getOres("blockTerrasteel")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("terrasteel.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("terrasteel.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("terrasteel.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockThaumium")) {
-			for(ItemStack ore : OreDictionary.getOres("blockThaumium")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("thaumium.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("thaumium.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("thaumium.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockUranium")) {
-			for(ItemStack ore : OreDictionary.getOres("blockUranium")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("uranium.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("uranium.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("uranium.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-		
-		if(OreDictionary.doesOreNameExist("blockZinc")) {
-			for(ItemStack ore : OreDictionary.getOres("blockZinc")) {
-				if(ore != null) {
-					if(event.block == Block.getBlockFromItem(ore.getItem()) && event.world.getBlockMetadata(event.x, event.y, event.z) == ore.getItemDamage()) {
-						System.out.println("block=" + Block.getBlockFromItem(ore.getItem()) + ", meta=" + ore.getItemDamage());
-						
-						if(FluidRegistry.getFluid("zinc.molten") != null) {
-							event.world.setBlock(event.x, event.y, event.z, FluidRegistry.getFluid("zinc.molten").getBlock());
-							System.out.println("block=" + FluidRegistry.getFluid("zinc.molten").getBlock());
-						} else {
-							event.world.setBlock(event.x, event.y, event.z, Blocks.lava);
-						}
-					}
-				}
-			}
-		}
-	}*/
 	
 	private void meltBlock(String blockName, PlaceEvent event) {
 		if(OreDictionary.doesOreNameExist("block" + blockName)) {
@@ -696,14 +306,8 @@ public class EventHandler {
 			if(event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
 				try {
 					if(event.entityPlayer != null) {
-						System.out.println("entityplayernotnull");
-						
 						if(event.entityPlayer.getCurrentEquippedItem() != null) {
-							System.out.println("itemstacknotnull");
-							
 							if(event.entityPlayer.getCurrentEquippedItem().getItem() != null) {
-								System.out.println("itemnotnull");
-								
 								if(event.entityPlayer.getCurrentEquippedItem().getItem() == Items.water_bucket) {
 									if(!event.entityPlayer.capabilities.isCreativeMode) {
 										ItemStack prevEquipped = event.entityPlayer.getCurrentEquippedItem();
@@ -736,49 +340,177 @@ public class EventHandler {
 		}
 	}
 	
-	/*@SubscribeEvent
-	public void onFillBucket(FillBucketEvent event) {
-		if(event.world.provider.dimensionId == projectaurora.world.WorldModule.vulcanID) {
-			System.out.println("block at targetBW=" + event.world.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ).getUnlocalizedName());
-			System.out.println("current=" + event.current.getItem().getUnlocalizedName());
-			if(event.current.getItem() == Items.water_bucket) {
-				System.out.println("block at target=" + event.world.getBlock(event.target.blockX, event.target.blockY, event.target.blockZ).getUnlocalizedName());
+	@SubscribeEvent
+	public void onLivingUpdateEvent(LivingUpdateEvent event) {
+		if (event.entityLiving == null || event.entityLiving.worldObj.isRemote) {
+			return;
+		}
 		
-				event.result = new ItemStack(Items.bucket);
-				event.setCanceled(true);
-				event.result = new ItemStack(Items.bucket);
-				/*switch(event.target.sideHit) {
-					case 0:
-						evaporateWater(event, 0, -1, 0);
-						break;
-					case 1:
-						evaporateWater(event, 0, 1, 0);
-						break;
-					case 2:
-						evaporateWater(event, 0, 0, -1);
-						break;
-					case 3:
-						evaporateWater(event, 0, 0, 1);
-						break;
-					case 4:
-						evaporateWater(event, -1, 0, 0);
-						break;
-					case 5:
-						evaporateWater(event, 1, 0, 0);
-						break;
-					default:
-						break;
+		EntityLivingBase entity = event.entityLiving;
+		int x = MathHelper.floor_double(entity.posX);
+		int y = MathHelper.floor_double(entity.posY);
+		int z = MathHelper.floor_double(entity.posZ);
+		
+		boolean isAirBlock = event.entityLiving.worldObj.getBlock(x, y + 1, z) == Content.oxygen;
+		boolean isSolidBlockAbove = event.entityLiving.worldObj.getBlock(x, y + 2, z).getMaterial().isSolid();
+		
+		if(event.entityLiving.worldObj.provider.dimensionId == projectaurora.world.WorldModule.vulcanID) {
+			if(isAirBlock) {
+				if(entity instanceof EntityPlayer) {
+					ItemStack helmet = ((EntityPlayer)entity).getCurrentArmor(3);
+					
+					if(!isSolidBlockAbove) {
+						if(helmet != null) {
+							if(helmet.getItem() instanceof IArmourHeatResistant && ((IArmourHeatResistant)helmet.getItem()).isHeatModuleActive()) {
+								if(helmet.getItem() instanceof IArmourFreezeResistant && ((IArmourFreezeResistant)helmet.getItem()).isFreezeModuleActive()) {
+									//do nothing
+								} else {
+									if(!event.entityLiving.worldObj.provider.isDaytime()) {
+										entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+									}
+								} 
+							} else if(helmet.getItem() instanceof IArmourFreezeResistant && ((IArmourFreezeResistant)helmet.getItem()).isFreezeModuleActive()) {
+								if(event.entityLiving.worldObj.provider.isDaytime()) {
+									entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+								}
+							} else {
+								if(event.entityLiving.worldObj.provider.isDaytime()) {
+									entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+								} else {
+									entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+								}
+							}
+						} else {
+							if(event.entityLiving.worldObj.provider.isDaytime()) {
+								entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+							} else {
+								entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+							}
+						}
+					} //fine
+				} else {
+					if(!isSolidBlockAbove) {
+						if(event.entityLiving.worldObj.provider.isDaytime()) {
+							entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+						} else {
+							entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+						}
+					}
+				}
+			} else {
+				if(entity instanceof EntityPlayer) {
+					ItemStack helmet = ((EntityPlayer)entity).getCurrentArmor(3);
+					
+					if(!isSolidBlockAbove) {
+						if(helmet != null) {
+							if(helmet.getItem() instanceof IArmourOxygenMask && ((IArmourOxygenMask)helmet.getItem()).isOxygenModuleActive()) {
+								if(((IArmourOxygenMask)helmet.getItem()).getAir() > 0) {
+									((IArmourOxygenMask)helmet.getItem()).decreaseAir();
+									
+									if(helmet.getItem() instanceof IArmourHeatResistant && ((IArmourHeatResistant)helmet.getItem()).isHeatModuleActive()) {
+										if(helmet.getItem() instanceof IArmourFreezeResistant && ((IArmourFreezeResistant)helmet.getItem()).isFreezeModuleActive()) {
+											//do nothing
+										} else {
+											if(!event.entityLiving.worldObj.provider.isDaytime()) {
+												entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+											}
+										} 
+									} else if(helmet.getItem() instanceof IArmourFreezeResistant && ((IArmourFreezeResistant)helmet.getItem()).isFreezeModuleActive()) {
+										if(event.entityLiving.worldObj.provider.isDaytime()) {
+											entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+										}
+									} else {
+										if(event.entityLiving.worldObj.provider.isDaytime()) {
+											entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+										} else {
+											entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+										}
+									}
+								} else {
+									entity.attackEntityFrom(Aurora.damageSuffocate, 2.0F);
+									
+									if(helmet.getItem() instanceof IArmourHeatResistant && ((IArmourHeatResistant)helmet.getItem()).isHeatModuleActive()) {
+										if(helmet.getItem() instanceof IArmourFreezeResistant && ((IArmourFreezeResistant)helmet.getItem()).isFreezeModuleActive()) {
+											//do nothing
+										} else {
+											if(!event.entityLiving.worldObj.provider.isDaytime()) {
+												entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+											}
+										} 
+									} else if(helmet.getItem() instanceof IArmourFreezeResistant && ((IArmourFreezeResistant)helmet.getItem()).isFreezeModuleActive()) {
+										if(event.entityLiving.worldObj.provider.isDaytime()) {
+											entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+										}
+									} else {
+										if(event.entityLiving.worldObj.provider.isDaytime()) {
+											entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+										} else {
+											entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+										}
+									}
+								}
+							} else {
+								entity.attackEntityFrom(Aurora.damageSuffocate, 2.0F);
+								
+								if(helmet.getItem() instanceof IArmourHeatResistant && ((IArmourHeatResistant)helmet.getItem()).isHeatModuleActive()) {
+									if(helmet.getItem() instanceof IArmourFreezeResistant && ((IArmourFreezeResistant)helmet.getItem()).isFreezeModuleActive()) {
+										//do nothing
+									} else {
+										if(!event.entityLiving.worldObj.provider.isDaytime()) {
+											entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+										}
+									} 
+								} else if(helmet.getItem() instanceof IArmourFreezeResistant && ((IArmourFreezeResistant)helmet.getItem()).isFreezeModuleActive()) {
+									if(event.entityLiving.worldObj.provider.isDaytime()) {
+										entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+									}
+								} else {
+									if(event.entityLiving.worldObj.provider.isDaytime()) {
+										entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+									} else {
+										entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+									}
+								}
+							}
+						} else {
+							entity.attackEntityFrom(Aurora.damageSuffocate, 2.0F);
+							
+							if(event.entityLiving.worldObj.provider.isDaytime()) {
+								entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+							} else {
+								entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+							}
+						}
+					} else {
+						if(helmet != null) {
+							if(helmet.getItem() instanceof IArmourOxygenMask && ((IArmourOxygenMask)helmet.getItem()).isOxygenModuleActive()) {
+								if(((IArmourOxygenMask)helmet.getItem()).getAir() > 0) {
+									((IArmourOxygenMask)helmet.getItem()).decreaseAir();
+								} else {
+									entity.attackEntityFrom(Aurora.damageSuffocate, 2.0F);
+								}
+							} else {
+								entity.attackEntityFrom(Aurora.damageSuffocate, 2.0F);
+							}
+						} else {
+							entity.attackEntityFrom(Aurora.damageSuffocate, 2.0F);
+						}
+					}
+				} else {
+					//if(entity != suffocation resistant) {
+					//} else {
+					entity.attackEntityFrom(Aurora.damageSuffocate, 2.0F);
+					
+					if(!isSolidBlockAbove) {
+						if(event.entityLiving.worldObj.provider.isDaytime()) {
+							entity.attackEntityFrom(Aurora.damageHeat, 2.0F);
+						} else {
+							entity.attackEntityFrom(Aurora.damageFreeze, 2.0F);
+						}
+					}
+					//}
 				}
 			}
 		}
-	}*/
-
-	/*private void evaporateWater(FillBucketEvent event, int x, int y, int z) {
-		System.out.println("sidehit=" + event.target.sideHit);
-		System.out.println("block at target2=" + event.world.getBlock(event.target.blockX + x, event.target.blockY + y, event.target.blockZ + z).getUnlocalizedName());
-		if(event.world.getBlock(event.target.blockX + x, event.target.blockY + y, event.target.blockZ + z).getMaterial() == Material.water) {
-			event.world.setBlock(event.target.blockX + x, event.target.blockY + y, event.target.blockZ + z, Blocks.air, 0, 3);
-			System.out.println("Aired");
-		}
-	}*/
+	}
 }
