@@ -19,7 +19,7 @@ import projectaurora.core.Reference;
 public class BlockOre extends Block { // NOTE TO SELF: Platinum? Cobalt? Ardite? Uranium/Yellorite? Iridium? Apatite? Zinc?
 
 	@SideOnly(Side.CLIENT)
-	public IIcon[] icons = new IIcon[Reference.oreTexNames.length];
+	public IIcon[] icons = new IIcon[Reference.oreTexNames.length];//-0.20, 1.15
 
 	//public static final String[] Reference.oreTexNames = new String[] {"Coal", "Iron", "Gold", "Lapis", "Diamond", "Emerald", "Copper", "Aluminium", "Lead", "Silver", "Nickel", "Tin", "Quartz", "Titanium"};
 

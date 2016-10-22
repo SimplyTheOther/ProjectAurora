@@ -7,11 +7,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -24,6 +26,9 @@ import projectaurora.world.WorldModule;
 
 public class BlockOxygen extends Block implements IFluidBlock {
 	private String fluidName;
+	
+	@SideOnly(Side.CLIENT)
+	public IIcon icon;
 
 	public BlockOxygen(Fluid fluid) {
 		super(Material.fire);
@@ -35,6 +40,11 @@ public class BlockOxygen extends Block implements IFluidBlock {
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
+	}
+	
+	@Override
+	public int getRenderBlockPass() {
+		return 1;
 	}
 	
 	@Override
@@ -84,24 +94,41 @@ public class BlockOxygen extends Block implements IFluidBlock {
 	
 	@Override
 	public void onBlockAdded(World world, int x, int y, int z) {
+		boolean isInSpace = false;
+		
 		for(int i = 0; i < WorldModule.allDimensionIds.length; i++) {
 			for(int j = 0; j < Compat.otherModSpaceDimensions.length; j++) {
-				if(world.provider.dimensionId == WorldModule.allDimensionIds[i]) {
+				/*if(world.provider.dimensionId == WorldModule.allDimensionIds[i]) {
 					//if(dimensionId == planet with atmosphere) {
 					//world.setBlock(x, y, z, Blocks.air, 0, 3);
 					//} else {
 					world.scheduleBlockUpdate(x, y, z, this, tickRate(world));
-					System.out.println("updated");
+					System.out.println("updated" + i + "," + j);
+					System.out.println(WorldModule.allDimensionIds[i]);
 					//}
 				} else if(world.provider.dimensionId == Compat.otherModSpaceDimensions[j]) {
 					world.scheduleBlockUpdate(x, y, z, this, tickRate(world));
-					System.out.println("updated");
-				} else {
-					System.out.println(WorldModule.allDimensionIds[i]);
+					System.out.println("updated" + i + "," + j);
+					System.out.println(Compat.otherModSpaceDimensions[j]);*/
+				if(world.provider.dimensionId == WorldModule.allDimensionIds[i] || world.provider.dimensionId == Compat.otherModSpaceDimensions[j]) {
+					//if(world.provider.dimensionId == planets with atmospheres) {
+					//isInSpace = false;
+					//} else {
+					isInSpace = true;
+					//}
+				}
+				/*} else {
+					System.out.println("currentdim=" +world.provider.dimensionId);
 					world.setBlock(x, y, z, Blocks.air, 0, 3);
 					System.out.println("aired");
-				}
+				}*/
 			}
+		}
+		
+		if(isInSpace) {
+			world.scheduleBlockUpdate(x, y, z, this, tickRate(world));
+		} else {
+			world.setBlock(x, y, z, Blocks.air, 0, 3);
 		}
 	}
 	
@@ -120,9 +147,11 @@ public class BlockOxygen extends Block implements IFluidBlock {
 		
 		for(int i = 0; i < WorldModule.allDimensionIds.length; i++) {
 			for(int j = 0; j < Compat.otherModSpaceDimensions.length; j++) {
-				if(world.provider.dimensionId != WorldModule.allDimensionIds[i] || world.provider.dimensionId != Compat.otherModSpaceDimensions[j]) {
-					isInSpace = false;
-				} else {
+				System.out.println("Spacedim=" + WorldModule.allDimensionIds[i]);
+				System.out.println("Spacedim=" + Compat.otherModSpaceDimensions[j]);
+				System.out.println("currentdim=" + world.provider.dimensionId);
+				
+				if(world.provider.dimensionId == WorldModule.allDimensionIds[i] || world.provider.dimensionId == Compat.otherModSpaceDimensions[j]) {
 					//if(world.provider.dimensionId == planets with atmospheres) {
 					//isInSpace = false;
 					//} else {
@@ -131,6 +160,8 @@ public class BlockOxygen extends Block implements IFluidBlock {
 				}
 			}
 		}
+		
+		System.out.println("isInSpace=" + isInSpace);
 		
 		int meta = world.getBlockMetadata(x, y, z);
 
@@ -144,6 +175,8 @@ public class BlockOxygen extends Block implements IFluidBlock {
 	}
 	
 	private void spreadAir(World world, int x, int y, int z) {
+		System.out.println("spreadedAir at " + x + "," + y + "," + z);
+		
 		int meta = world.getBlockMetadata(x, y, z);
 		
 		int airCount = 1;
@@ -403,6 +436,18 @@ public class BlockOxygen extends Block implements IFluidBlock {
 		for(int i = 0; i < 16; i++) {
 			list.add(new ItemStack(item, 1, i));
 		}
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+		return icon;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister register) {
+		this.icon = register.registerIcon(Reference.modidLowerCase + ":gases/oxygen");
 	}
 
 	@Override
