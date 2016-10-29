@@ -36,8 +36,6 @@ public class BlockDummyLiquid extends Block {
 
 	//public static final String[] oreTexNames = new String[] {"Coal", "Iron", "Gold", "Lapis", "Diamond", "Emerald", "Copper", "Aluminium", "Lead", "Silver", "Nickel", "Tin", "Quartz"};
 
-	public static int pass;
-
 	public BlockDummyLiquid() {
 		super(Material.lava);
 		//this.setCreativeTab(Aurora.tabWorld);
@@ -97,17 +95,6 @@ public class BlockDummyLiquid extends Block {
 		}		
 	
 		return false;
-	}
-
-	@Override
-	public int getRenderBlockPass() {
-		return this.pass;
-	}
-
-	@Override
-	public boolean canRenderInPass(int pass) {
-		this.pass = pass;
-		return true;
 	}
 
 	@Override

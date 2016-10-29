@@ -53,6 +53,8 @@ public class Compat {
 		
 		if(Loader.isModLoaded("WarpDrive")) {
 			addWarpDriveDimensions();
+			
+			editWarpDrivePlanets();
 		}
 		//More space dimensions from other mods here
 		if(otherModSpaceDimensionsList != null) {
@@ -65,6 +67,28 @@ public class Compat {
 		
 	}
 
+	private static void editWarpDrivePlanets() {
+		String location = Loader.instance().getConfigDir().getPath();
+		File warpdriveConfig = new File(location + File.separator + "WarpDrive" + File.separator + "WarpDrive.cfg");
+	
+		try {
+			if(warpdriveConfig.exists()) {
+				Configuration config = new Configuration(warpdriveConfig);
+				
+				config.load();
+				
+				config.get("planets", "overworld", new int[] { 0, 0, 0, 100000, 100000, 0, 0 }, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(new int[] { 0, 0, 0, 1000, 1000, 0, 0 });
+			
+				config.save();
+				
+				System.out.println("editWarpDrivePlanets");
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("editWarpDrivePlanetsFailed");
+		}
+	}
+	
 	private static void addWarpDriveDimensions() {
 		String location = Loader.instance().getConfigDir().getPath();
 		File warpdriveConfig = new File(location + File.separator + "WarpDrive" + File.separator + "WarpDrive.cfg");

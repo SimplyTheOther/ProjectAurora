@@ -116,6 +116,12 @@ public class BlockOreRenderHandler implements ISimpleBlockRenderingHandler {
 			default:
 				renderer.renderStandardBlock(block, x, y, z);
 		}
+		
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		
 		return true;
 	}
 

@@ -88,6 +88,11 @@ public class BlockPlantRenderHandler implements ISimpleBlockRenderingHandler {
 				}
 		}
 		
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		Tessellator.instance.addVertex(0, 0, 0);
+		
 		return true;
 	}
 
