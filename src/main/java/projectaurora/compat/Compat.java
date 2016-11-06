@@ -12,6 +12,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Configuration;
+import projectaurora.world.WorldModule;
 
 public class Compat {
 	
@@ -85,14 +86,14 @@ public class Compat {
 				
 				auroraWorldConfig.load();
 				
-				configVulcan = auroraWorldConfig.get("planets", "vulcan", new int[] { 1000, 1000, 1000, 100, 100, 0, 0}, "WarpDrive use - dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").getIntList();
+				configVulcan = auroraWorldConfig.get("planets", "vulcan", new int[] { WorldModule.vulcanID, 0, 0, 1000, 1000, 0, 0 }, "WarpDrive use - dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").getIntList();
 				
 				auroraWorldConfig.save();
 				
 				warpDriveConfig.load();
 				
-				warpDriveConfig.get("planets", "overworld", new int[] { 0, 0, 0, 100000, 100000, 0, 0 }, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(new int[] { 0, 0, 0, 100, 100, 0, 0 });
-				warpDriveConfig.get("planets", "vulcan", new int[] { 1000, 1000, 1000, 100, 100, 0, 0}, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(configVulcan);
+				warpDriveConfig.get("planets", "overworld", new int[] { 0, 0, 0, 100000, 100000, 0, 0 }, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(new int[] {/* 0, 0, 0, 100, 100, 0, 0 */ 0, 0, 0, 0, 0, 0, 0});
+				warpDriveConfig.get("planets", "vulcan", new int[] { WorldModule.vulcanID, 0, 0, 1000, 1000, 0, 0 }, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(/*configVulcan*/new int[] { WorldModule.vulcanID, 0, 0, 100000, 100000, 0, 0 });
 			
 				warpDriveConfig.save();
 				
