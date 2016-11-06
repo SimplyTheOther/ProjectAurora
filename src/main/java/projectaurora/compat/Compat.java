@@ -24,6 +24,8 @@ public class Compat {
 	public static boolean isThermalFoundationLoaded = false;
 	public static Block tFStorage = null;
 	
+	public static boolean isWarpDriveLoaded = false;
+	
 	public static int[] otherModSpaceDimensions = null;
 	private static List<Integer> otherModSpaceDimensionsList = new ArrayList();
 
@@ -52,8 +54,9 @@ public class Compat {
 		}
 		
 		if(Loader.isModLoaded("WarpDrive")) {
-			addWarpDriveDimensions();
+			isWarpDriveLoaded = true;
 			
+			addWarpDriveDimensions();
 			editWarpDrivePlanets();
 		}
 		//More space dimensions from other mods here
@@ -77,7 +80,7 @@ public class Compat {
 				
 				config.load();
 				
-				config.get("planets", "overworld", new int[] { 0, 0, 0, 100000, 100000, 0, 0 }, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(new int[] { 0, 0, 0, 1000, 1000, 0, 0 });
+				config.get("planets", "overworld", new int[] { 0, 0, 0, 100000, 100000, 0, 0 }, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(new int[] { 0, 0, 0, 100, 100, 0, 0 });
 			
 				config.save();
 				
