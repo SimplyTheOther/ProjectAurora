@@ -73,16 +73,28 @@ public class Compat {
 	private static void editWarpDrivePlanets() {
 		String location = Loader.instance().getConfigDir().getPath();
 		File warpdriveConfig = new File(location + File.separator + "WarpDrive" + File.separator + "WarpDrive.cfg");
+		
+		File worldConfig = new File(location + File.separator + "ProjectAuroraWorld.cfg");
+		
+		int[] configVulcan;
 	
 		try {
-			if(warpdriveConfig.exists()) {
-				Configuration config = new Configuration(warpdriveConfig);
+			if(warpdriveConfig.exists() && worldConfig.exists()) {
+				Configuration warpDriveConfig = new Configuration(warpdriveConfig);
+				Configuration auroraWorldConfig = new Configuration(worldConfig);
 				
-				config.load();
+				auroraWorldConfig.load();
 				
-				config.get("planets", "overworld", new int[] { 0, 0, 0, 100000, 100000, 0, 0 }, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(new int[] { 0, 0, 0, 100, 100, 0, 0 });
+				configVulcan = auroraWorldConfig.get("planets", "vulcan", new int[] { 1000, 1000, 1000, 100, 100, 0, 0}, "WarpDrive use - dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").getIntList();
+				
+				auroraWorldConfig.save();
+				
+				warpDriveConfig.load();
+				
+				warpDriveConfig.get("planets", "overworld", new int[] { 0, 0, 0, 100000, 100000, 0, 0 }, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(new int[] { 0, 0, 0, 100, 100, 0, 0 });
+				warpDriveConfig.get("planets", "vulcan", new int[] { 1000, 1000, 1000, 100, 100, 0, 0}, "dimensionId, dimensionCenterX, dimensionCenterZ, radiusX, radiusZ, spaceCenterX, spaceCenterZ").set(configVulcan);
 			
-				config.save();
+				warpDriveConfig.save();
 				
 				System.out.println("editWarpDrivePlanets");
 			}
