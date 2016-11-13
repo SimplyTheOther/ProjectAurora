@@ -6,10 +6,12 @@ import cpw.mods.fml.common.Optional.Method;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.World;
 import projectaurora.core.Aurora;
 import projectaurora.core.Reference;
 
@@ -24,9 +26,10 @@ public class ItemNote7 extends Item implements IEnergyContainerItem {
 	
 	public ItemNote7() {
 		//TODO
-		capacity = 0;
-		maxReceive = 0;
-		maxExtract = 0;
+		this.capacity = 0;
+		this.maxReceive = 0;
+		this.maxExtract = 0;
+		this.maxStackSize = 1;
 		setCreativeTab(Aurora.tabWorld);
 	}
 	
@@ -36,8 +39,29 @@ public class ItemNote7 extends Item implements IEnergyContainerItem {
 		icons = new IIcon[2];
 		
 		for(int i = 0; i < 1/*blowingup*/; i++) {
-			icons[i] = register.registerIcon(Reference.modidLowerCase + ":note7" + i);
+			icons[i] = register.registerIcon(Reference.modidLowerCase + ":phone" + i);
 		}
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconFromDamage(int meta) {
+		return icons[0];
+	}
+	
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if(!player.capabilities.isCreativeMode) {
+			--stack.stackSize;
+		}
+		
+		if(!world.isRemote) {
+			world.spawnEntityInWorld(new EntityNote7(world, player));
+			
+			System.out.println("Tried to spawn entity");
+		}
+		
+		return stack;
 	}
 
 	//IEnergyContainerItem

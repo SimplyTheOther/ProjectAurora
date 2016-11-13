@@ -1,11 +1,13 @@
 package projectaurora.core;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import projectaurora.compat.immersiveengineering.EntityNote7;
 import projectaurora.compat.immersiveengineering.ItemNote7;
 import projectaurora.world.block.BlockDummyLiquid;
 import projectaurora.world.block.BlockOxygen;
@@ -64,10 +66,20 @@ public class Content {
 		
 		teleporter = new ItemTeleporter().setUnlocalizedName(Reference.modidLowerCase + ".teleporter");
 		GameRegistry.registerItem(teleporter, (teleporter.getUnlocalizedName().substring(5)));
+		
+		registerEntity(EntityNote7.class, "noteseven", 0, 0);
 	}
 
 	public static void metaRegister(Block block, Class<? extends ItemBlock> itemclass) {
 		GameRegistry.registerBlock(block, itemclass, (block.getUnlocalizedName().substring(5)));
+	}
+	
+	public static void registerEntity(Class entity, String name, int primaryColour, int secondaryColour) {
+		int id = EntityRegistry.findGlobalUniqueEntityId();
+		
+		EntityRegistry.registerGlobalEntityID(entity, name, id, primaryColour, secondaryColour);
+		
+		EntityRegistry.registerModEntity(entity, name, id, Aurora.instance, 5, 3, false);
 	}
 
 	public static void init() {//recipes?
