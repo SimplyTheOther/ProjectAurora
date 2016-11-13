@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import projectaurora.compat.immersiveengineering.ItemNote7;
 import projectaurora.world.block.BlockDummyLiquid;
 import projectaurora.world.block.BlockOxygen;
 import projectaurora.world.block.BlockOre;
@@ -28,6 +29,7 @@ public class Content {
 	public static Block plant;
 	public static Block dummyLiquid;
 	public static Block oxygen;
+	public static Item note7;
 	public static Item teleporter;
 	
 	public static Fluid fluidOxygen;
@@ -56,6 +58,9 @@ public class Content {
 		
 		oxygen = new BlockOxygen(fluidOxygen).setCreativeTab(Aurora.tabWorld).setBlockName(Reference.modidLowerCase + ".oxygen");
 		metaRegister(oxygen, ItemBlockOxygen.class);
+		
+		note7 = new ItemNote7().setUnlocalizedName(Reference.modidLowerCase + ".note7");
+		GameRegistry.registerItem(note7, (note7.getUnlocalizedName().substring(5)));
 		
 		teleporter = new ItemTeleporter().setUnlocalizedName(Reference.modidLowerCase + ".teleporter");
 		GameRegistry.registerItem(teleporter, (teleporter.getUnlocalizedName().substring(5)));
