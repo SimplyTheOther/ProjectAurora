@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import projectaurora.compat.Compat;
 import projectaurora.core.Aurora;
 import projectaurora.core.Reference;
 
@@ -56,7 +57,11 @@ public class ItemNote7 extends Item implements IEnergyContainerItem {
 		}
 		
 		if(!world.isRemote) {
-			world.spawnEntityInWorld(new EntityNote7(world, player));
+			if(Compat.isImmersiveEngineeringLoaded) {
+				world.spawnEntityInWorld(new EntityNote7(world, player, getEnergyStored(stack)));
+			} else {
+				world.spawnEntityInWorld(new EntityNote7(world, player, 1000));
+			}
 			
 			System.out.println("Tried to spawn entity");
 		}

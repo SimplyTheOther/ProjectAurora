@@ -6,6 +6,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 
 public class EntityNote7 extends EntityThrowable {
+	private int energy = 0;
 
 	public EntityNote7(World world) {
 		super(world);
@@ -21,6 +22,12 @@ public class EntityNote7 extends EntityThrowable {
 		super(world, x, y, z);
 		System.out.println("World, x,y,z " + this.posX + "," + this.posY + "," + this.posZ + ",");
 	}
+	
+	public EntityNote7(World world, EntityLivingBase entity, int energyStored) {
+		super(world, entity);
+		this.energy = energyStored;
+		System.out.println("World EntityLivingBaseEnergy " + this.posX + "," + this.posY + "," + this.posZ + ",");
+	}
 
 	@Override
 	protected void onImpact(MovingObjectPosition position) {
@@ -34,6 +41,6 @@ public class EntityNote7 extends EntityThrowable {
             this.setDead();
         }
         
-        this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 4.0F, true);
+        this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, energy + 0.1F, true);
 	}
 }
