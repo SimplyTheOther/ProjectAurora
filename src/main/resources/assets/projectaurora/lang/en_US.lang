@@ -12,6 +12,8 @@ item.projectaurora.teleporter.vulcan.name=Vulcan Teleporter
 item.projectaurora.teleporter.leporidae.name=Leporidae Teleporter
 item.projectaurora.teleporter.broken.name=You Stuffed Up The Teleporter
 
+item.projectaurora.note7.name=Samsung Note 7
+
 tile.projectaurora.ore.oreCoalAurora.name=Bituminous Coal
 tile.projectaurora.ore.oreIronAurora.name=Limonite
 tile.projectaurora.ore.oreGoldAurora.name=Calaverite
@@ -32,6 +34,26 @@ tile.projectaurora.rock.rockBasaltAurora.name=Basalt
 tile.projectaurora.dust.dustAshAurora.name=Ash
 
 tile.projectaurora.plant.plantGlowstoneAurora.name=Glow Algae
+
+tile.projectaurora.oxygen.name=Oxygen
+tile.projectaurora.oxygen.concentration.0.name=Oxygen
+tile.projectaurora.oxygen.concentration.1.name=Oxygen
+tile.projectaurora.oxygen.concentration.2.name=Oxygen
+tile.projectaurora.oxygen.concentration.3.name=Oxygen
+tile.projectaurora.oxygen.concentration.4.name=Oxygen
+tile.projectaurora.oxygen.concentration.5.name=Oxygen
+tile.projectaurora.oxygen.concentration.6.name=Oxygen
+tile.projectaurora.oxygen.concentration.7.name=Oxygen
+tile.projectaurora.oxygen.concentration.8.name=Oxygen
+tile.projectaurora.oxygen.concentration.9.name=Oxygen
+tile.projectaurora.oxygen.concentration.10.name=Oxygen
+tile.projectaurora.oxygen.concentration.11.name=Oxygen
+tile.projectaurora.oxygen.concentration.12.name=Oxygen
+tile.projectaurora.oxygen.concentration.13.name=Oxygen
+tile.projectaurora.oxygen.concentration.14.name=Oxygen
+tile.projectaurora.oxygen.concentration.15.name=Oxygen
+
+entity.projectaurora.noteseven.name=Pocket TNT
 
 aurora.biome.lavaOcean.name=Lava Ocean
 aurora.biome.vulcanMain.name=Vulcan

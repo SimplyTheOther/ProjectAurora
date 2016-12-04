@@ -1,6 +1,7 @@
 package projectaurora.core;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraft.client.renderer.entity.RenderSnowball;
 import projectaurora.compat.immersiveengineering.EntityNote7;
 import projectaurora.compat.immersiveengineering.RenderEntityNote7;
 import projectaurora.world.render.BlockDummyLiquidRenderHandler;
@@ -22,6 +23,6 @@ public class ClientProxy extends CommonProxy {
 		liquidRenderID = RenderingRegistry.getNextAvailableRenderId();
 		RenderingRegistry.registerBlockHandler(liquidRenderID, new BlockDummyLiquidRenderHandler());
 		
-		RenderingRegistry.registerEntityRenderingHandler(EntityNote7.class, new RenderEntityNote7());
+		RenderingRegistry.registerEntityRenderingHandler(EntityNote7.class, new RenderSnowball(Content.note7)/*EntityNote7()*/);
 	}
 }

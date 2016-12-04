@@ -77,9 +77,9 @@ public class Content {
 	public static void registerEntity(Class entity, String name, int primaryColour, int secondaryColour) {
 		int id = EntityRegistry.findGlobalUniqueEntityId();
 		
-		EntityRegistry.registerGlobalEntityID(entity, name, id, primaryColour, secondaryColour);
+		EntityRegistry.registerGlobalEntityID(entity, Reference.modidLowerCase + "." + name, id, primaryColour, secondaryColour);
 		
-		EntityRegistry.registerModEntity(entity, name, id, Aurora.instance, 5, 3, false);
+		EntityRegistry.registerModEntity(entity, Reference.modidLowerCase + "." + name, id, Aurora.instance, 5, 3, false);
 	}
 
 	public static void init() {//recipes?
