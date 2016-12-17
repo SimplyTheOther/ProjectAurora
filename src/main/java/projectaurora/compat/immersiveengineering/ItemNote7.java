@@ -58,9 +58,9 @@ public class ItemNote7 extends Item implements IEnergyContainerItem {
 		
 		if(!world.isRemote) {
 			if(Compat.isImmersiveEngineeringLoaded) {
-				world.spawnEntityInWorld(new EntityNote7(world, player, /*getEnergyStored(stack)*/10000));
+				world.spawnEntityInWorld(new EntityNote7(world, player, /*getEnergyStored(stack)*/10));
 			} else {
-				world.spawnEntityInWorld(new EntityNote7(world, player, 1000));
+				world.spawnEntityInWorld(new EntityNote7(world, player, 10));
 			}
 			
 			System.out.println("Tried to spawn entity");
