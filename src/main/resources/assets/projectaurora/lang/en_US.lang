@@ -35,6 +35,21 @@ tile.projectaurora.dust.dustAshAurora.name=Ash
 
 tile.projectaurora.plant.plantGlowstoneAurora.name=Glow Algae
 
+tile.projectaurora.dummyliquid.dummyLiquidCoalAurora.name=Molten Coal
+tile.projectaurora.dummyliquid.dummyLiquidIronAurora.name=Molten Limonite
+tile.projectaurora.dummyliquid.dummyLiquidGoldAurora.name=Molten Calaverite
+tile.projectaurora.dummyliquid.dummyLiquidLapisAurora.name=Molten Lapis Lazuli
+tile.projectaurora.dummyliquid.dummyLiquidDiamondAurora.name=Molten Diamond
+tile.projectaurora.dummyliquid.dummyLiquidEmeraldAurora.name=Molten Emerald
+tile.projectaurora.dummyliquid.dummyLiquidCopperAurora.name=Molten Chalcopyrite
+tile.projectaurora.dummyliquid.dummyLiquidAluminiumAurora.name=Molten Gibbsite
+tile.projectaurora.dummyliquid.dummyLiquidLeadAurora.name=Molten Galena
+tile.projectaurora.dummyliquid.dummyLiquidSilverAurora.name=Molten Argentite
+tile.projectaurora.dummyliquid.dummyLiquidNickelAurora.name=Molten Millerite
+tile.projectaurora.dummyliquid.dummyLiquidTinAurora.name=Molten Cassiterite
+tile.projectaurora.dummyliquid.dummyLiquidQuartzAurora.name=Molten Quartz
+tile.projectaurora.dummyliquid.dummyLiquidTitaniumAurora.name=Haven’t got an dummy liquid for this, report to The_Other
+
 tile.projectaurora.oxygen.name=Oxygen
 tile.projectaurora.oxygen.concentration.0.name=Oxygen
 tile.projectaurora.oxygen.concentration.1.name=Oxygen

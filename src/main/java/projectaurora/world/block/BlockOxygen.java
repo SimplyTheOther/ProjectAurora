@@ -17,10 +17,12 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import projectaurora.compat.Compat;
+import projectaurora.core.Content;
 import projectaurora.core.Reference;
 import projectaurora.world.WorldModule;
 
@@ -457,7 +459,17 @@ public class BlockOxygen extends Block implements IFluidBlock {
 
 	@Override
 	public FluidStack drain(World world, int x, int y, int z, boolean doDrain) {
-		// TODO Auto-generated method stub
+		if((world.getBlock(x, y, z) == Content.oxygen || world.getBlock(x, y, z) == getFluid().getBlock()) && doDrain) {
+			int meta = world.getBlockMetadata(x, y, z);
+			
+			if(meta > 0) {
+				world.setBlock(x, y, z, Content.oxygen, meta - 1, 3);
+			} else {
+				world.setBlock(x, y, z, Blocks.air);
+			}
+			
+			return new FluidStack(getFluid(), FluidContainerRegistry.BUCKET_VOLUME);
+		}
 		return null;
 	}
 

@@ -3,6 +3,7 @@ package projectaurora.core;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fluids.Fluid;
@@ -10,6 +11,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import projectaurora.compat.immersiveengineering.EntityNote7;
 import projectaurora.compat.immersiveengineering.ItemNote7;
 import projectaurora.world.block.BlockDummyLiquid;
+import projectaurora.api.BlockFiniteFluid;
 import projectaurora.world.block.BlockOxygen;
 import projectaurora.world.block.BlockOre;
 import projectaurora.world.block.BlockOxygen;
@@ -31,17 +33,26 @@ public class Content {
 	public static Block plant;
 	public static Block dummyLiquid;
 	public static Block oxygen;
+	public static Block saltWater;
 	public static Item note7;
 	public static Item teleporter;
 	
 	public static Fluid fluidOxygen;
+	public static Fluid fluidSaltWater;
 
 	public static void preInit() {
 		fluidOxygen = FluidRegistry.getFluid("oxygen");
 		if(fluidOxygen == null) {
 			fluidOxygen = new Fluid("oxygen").setBlock(oxygen).setGaseous(true).setDensity(500).setViscosity(1000);
 			FluidRegistry.registerFluid(fluidOxygen);
-		}	
+		}
+		
+		//TFC compat required lowercase
+		fluidSaltWater = FluidRegistry.getFluid("saltwater");
+		if(fluidSaltWater == null) {
+			fluidSaltWater = new Fluid("saltwater").setBlock(saltWater);
+			FluidRegistry.registerFluid(fluidSaltWater);
+		}
 		
 		ore = new BlockOre().setBlockName(Reference.modidLowerCase + ".ore");
 		metaRegister(ore, ItemBlockOre.class);
@@ -60,6 +71,9 @@ public class Content {
 		
 		oxygen = new BlockOxygen(fluidOxygen).setCreativeTab(Aurora.tabWorld).setBlockName(Reference.modidLowerCase + ".oxygen");
 		metaRegister(oxygen, ItemBlockOxygen.class);
+		
+		saltWater = new BlockFiniteFluid(fluidSaltWater, Material.water).setCreativeTab(Aurora.tabWorld).setBlockName(Reference.modidLowerCase + ".saltwater");
+		GameRegistry.registerBlock(saltWater, saltWater.getUnlocalizedName().substring(5));
 		
 		note7 = new ItemNote7().setUnlocalizedName(Reference.modidLowerCase + ".note7");
 		GameRegistry.registerItem(note7, (note7.getUnlocalizedName().substring(5)));

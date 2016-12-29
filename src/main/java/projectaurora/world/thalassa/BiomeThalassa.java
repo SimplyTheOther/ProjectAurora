@@ -11,20 +11,20 @@ public class BiomeThalassa extends AuroraBiome {
 	public BiomeThalassa(int biomeID) {//TODO thalassa, unimplemented
 		super(biomeID);
 		
-		this.topBlock = null;
+		this.topBlock = Blocks.sand;
 		this.topBlockMeta = 0;
-		this.fillerBlock = null; 
+		this.fillerBlock = Blocks.sand; 
 		this.fillerBlockMeta = 0;
-		this.stoneBlock = null;
+		this.stoneBlock = Blocks.stone;
 		this.stoneBlockMeta = 0;
-		this.dominantFluidBlock = null;
+		this.dominantFluidBlock = Content.saltWater;
 		this.dominantFluidMeta = 0;
 		
 		this.spawnableAmbientList.clear();
 		this.spawnableGoodList.clear();
 		this.spawnableEvilList.clear();
 		
-		this.addBiomeVariantSet(AuroraBiomeVariant.SET_NORMAL);
+		this.addBiomeVariant(AuroraBiomeVariant.ISLAND);
 		
 		this.decorator.clearTrees();
 		this.decorator.addTree(/*TODO flower*/null, 50);
