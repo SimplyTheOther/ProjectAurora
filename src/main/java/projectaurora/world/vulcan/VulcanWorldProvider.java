@@ -18,6 +18,7 @@ public class VulcanWorldProvider extends BaseWorldProvider {
 	
 	public VulcanWorldProvider() {
 		super.dayLength = 4800L;
+		isHellWorld = true;
 	}
 
 	@Override

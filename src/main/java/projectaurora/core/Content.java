@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import projectaurora.compat.immersiveengineering.EntityNote7;
 import projectaurora.compat.immersiveengineering.ItemNote7;
+import projectaurora.core.item.ItemUniversalBucket;
 import projectaurora.world.block.BlockDummyLiquid;
 import projectaurora.api.BlockFiniteFluid;
 import projectaurora.world.block.BlockOxygen;
@@ -34,6 +35,8 @@ public class Content {
 	public static Block dummyLiquid;
 	public static Block oxygen;
 	public static Block saltWater;
+	
+	public static Item universalBucket;
 	public static Item note7;
 	public static Item teleporter;
 	
@@ -74,6 +77,9 @@ public class Content {
 		
 		saltWater = new BlockFiniteFluid(fluidSaltWater, Material.water).setCreativeTab(Aurora.tabWorld).setBlockName(Reference.modidLowerCase + ".saltwater");
 		GameRegistry.registerBlock(saltWater, saltWater.getUnlocalizedName().substring(5));
+
+		universalBucket = new ItemUniversalBucket().setUnlocalizedName(Reference.modidLowerCase + ".bucket").setCreativeTab(Aurora.tabWorld);
+		GameRegistry.registerItem(universalBucket, (universalBucket.getUnlocalizedName().substring(5)));
 		
 		note7 = new ItemNote7().setUnlocalizedName(Reference.modidLowerCase + ".note7");
 		GameRegistry.registerItem(note7, (note7.getUnlocalizedName().substring(5)));

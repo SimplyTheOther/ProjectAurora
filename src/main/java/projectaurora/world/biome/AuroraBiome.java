@@ -50,6 +50,7 @@ public class AuroraBiome extends BiomeGenBase {
 	public static List<AuroraBiome> unusedList = new ArrayList();
 	public static List<AuroraBiome> vulcanList = new ArrayList();
 	public static List<AuroraBiome> thalassaList = new ArrayList();
+	public static List<AuroraBiome> chioneList = new ArrayList();
 	
 	public static BiomeGenBase lavaOcean;
 	public static BiomeGenBase lavaRiver;

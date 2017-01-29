@@ -18,6 +18,7 @@ import projectaurora.core.Reference;
 
 @Interface(modid="ImmersiveEngineering", iface="cofh.api.energy.IEnergyContainerItem")
 public class ItemNote7 extends Item implements IEnergyContainerItem {
+	
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
 	

@@ -1,34 +1,32 @@
-package projectaurora.world.thalassa;
+package projectaurora.world.chione;
 
 import net.minecraft.init.Blocks;
 import projectaurora.core.Content;
-import projectaurora.world.AuroraTreeType;
 import projectaurora.world.biome.AuroraBiome;
 import projectaurora.world.biome.AuroraBiomeVariant;
 
-public class BiomeThalassa extends AuroraBiome {
+public class BiomeChione extends AuroraBiome {
 
-	public BiomeThalassa(int biomeID) {//TODO thalassa, unimplemented
+	public BiomeChione(int biomeID) {//TODO chione, unimplemented
 		super(biomeID);
 		
-		this.topBlock = Blocks.sand;
+		this.topBlock = Blocks.dirt;//TODO infertile dirt? ice?
 		this.topBlockMeta = 0;
-		this.fillerBlock = Blocks.sand; 
+		this.fillerBlock = Blocks.dirt; 
 		this.fillerBlockMeta = 0;
 		this.stoneBlock = Blocks.stone;
 		this.stoneBlockMeta = 0;
-		this.dominantFluidBlock = Content.saltWater;
+		this.dominantFluidBlock = Blocks.ice;//TODO salt water ice?
 		this.dominantFluidMeta = 0;
 		
 		this.spawnableAmbientList.clear();
 		this.spawnableGoodList.clear();
 		this.spawnableEvilList.clear();
 		
-		this.addBiomeVariant(AuroraBiomeVariant.ISLAND);
+		this.addBiomeVariantSet(AuroraBiomeVariant.SET_NORMAL);
 		this.clearBiomeVariants();
 		
 		this.decorator.clearTrees();
-		this.decorator.addTree(/*TODO flower*/null, 50);
 		this.decorator.generateWater = true;
 		this.decorator.cactiPerChunk = 0;
 		this.decorator.canePerChunk = 0;
@@ -42,7 +40,7 @@ public class BiomeThalassa extends AuroraBiome {
 		this.decorator.enableRandomMushroom = false;
 		this.decorator.flowersPerChunk = 0;
 		this.decorator.generateCobwebs = false;
-		this.decorator.generateLava = true;
+		this.decorator.generateLava = false;
 		this.decorator.grassPerChunk = 0;
 		this.decorator.logsPerChunk = 0;
 		this.decorator.melonPerChunk = 0;
@@ -59,6 +57,6 @@ public class BiomeThalassa extends AuroraBiome {
 	    this.decorator.generateCoal = true;
 	    this.decorator.moltenOres = false;
 		
-		super.thalassaList.add(this);
+		super.chioneList.add(this);
 	}
 }
