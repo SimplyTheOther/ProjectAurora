@@ -1,6 +1,7 @@
 package projectaurora.core.item;
 
 import cpw.mods.fml.common.eventhandler.Event;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -66,16 +67,16 @@ public class ItemUniversalBucket extends Item {//TODO
                         return stack;
                     }
 
-                    Material material = world.getBlock(i, j, k).getMaterial();
+                    Block block = world.getBlock(i, j, k);
                     int meta = world.getBlockMetadata(i, j, k);
 
                     //Put fluid in general below
-                    if (material == Material.water && meta == 0) {
+                    if (block == Blocks.water && meta == 0) {
                         world.setBlockToAir(i, j, k);
                         //return addItemToInventory(stack, player, Items.water_bucket); TODO
                     }
 
-                    if (material == Material.lava && meta == 0) {
+                    if (block == Blocks.lava && meta == 0) {
                         world.setBlockToAir(i, j, k);
                         //return addItemToInventory(stack, player, Items.lava_bucket); TODO
                     }
@@ -179,5 +180,24 @@ public class ItemUniversalBucket extends Item {//TODO
 				}
 			}
 		}
+	}
+	
+	protected boolean addFluidNBTToBucket(ItemStack bucket, EntityPlayer player, String fluidName) {
+		NBTTagCompound nbt = bucket.getTagCompound();
+		
+		if(nbt == null) {
+			nbt = new NBTTagCompound();
+			bucket.setTagCompound(nbt);
+		}
+		
+		NBTTagCompound tag = nbt.getCompoundTag("fluidstorage");
+
+        if (!nbt.hasKey("fluidstorage", 10)) {
+            nbt.setTag("fluidstorage", tag);
+        }
+
+        tag.setString("fluidtype", fluidName);
+        
+		return false;
 	}
 }
